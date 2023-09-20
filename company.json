@@ -1,0 +1,49 @@
+{
+  "status": "success",
+  "message": "Company retrieved successfully.",
+  "data": [
+    {
+      "name": "companyName",
+      "poBox": "qwe",
+      "tel": "+971503131842",
+      "email": "abdulrahmanshatter@gmail.com",
+      "trn": "7891321651233286165",
+      "address": "Abu Dhabi",
+      "debit": 10000,
+      "cridit": 7000,
+      "balance": 3000,
+      "user": [
+        {
+          "firstName": "example",
+          "lastName": "without addresses",
+          "phoneNumber": "+971503333333",
+          "email": "info@example.com",
+          "amount": [
+            {
+              "invoice_number": "INV_000022",
+              "patient_name": "jhon",
+              "file_number": "1615",
+              "job_order": "4919156",
+              "shade": "white",
+              "paid": true,
+              "sell": true,
+              "discount": 20,
+              "invoice_payments": [],
+              "total_amount": 200,
+              "invoice_item": [
+                {
+                  "quantity": 2,
+                  "unit_price": 100,
+                  "Item": {
+                    "name": "item1",
+                    "price1": "jhon"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

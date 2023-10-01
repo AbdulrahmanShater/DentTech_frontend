@@ -240,6 +240,7 @@ const config: Config = {
         2: "0px 1px 4px rgba(0, 0, 0, 0.12)",
       },
 
+
       keyframes: {
         rotating: {
           "0%, 100%": { transform: "rotate(360deg)" },
@@ -255,6 +256,9 @@ const config: Config = {
       },
       flex: {
         "2": "2"
+      },
+      grid: {
+        "max-auto": "max-content auto"
       }
     },
   },

@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { AiOutlinePlus } from "react-icons/ai";
+import { AiFillSave, AiOutlineArrowLeft, AiOutlineInfoCircle, AiOutlinePlus, AiOutlineSave } from "react-icons/ai";
 import React, { InputHTMLAttributes } from "react";
 import CreateCompanyContainer from "@/container/company/CreateCompanyContainer";
 import { MyItemInput } from "@/components/Input/Input";
@@ -23,37 +23,43 @@ const CreateCompany = () => {
                         lableText: "Name",
                         name: myTools.propToString<typeof container.data>(container.data).name,
                         onChange: container.inputHandeler,
-                        value: container.data.name
+                        value: container.data.name,
+                        error: container.errors?.name,
                     },
                     {
                         lableText: "Tel",
                         name: myTools.propToString<typeof container.data>(container.data).tel,
                         onChange: container.inputHandeler,
-                        value: container.data.tel
+                        value: container.data.tel,
+                        error: container.errors?.tel,
                     },
                     {
                         lableText: "poBox",
                         name: myTools.propToString<typeof container.data>(container.data).poBox,
                         onChange: container.inputHandeler,
-                        value: container.data.poBox
+                        value: container.data.poBox,
+                        error: container.errors?.poBox,
                     },
                     {
                         lableText: "Email",
                         name: myTools.propToString<typeof container.data>(container.data).email,
                         onChange: container.inputHandeler,
-                        value: container.data.email
+                        value: container.data.email,
+                        error: container.errors?.email,
                     },
                     {
                         lableText: "Address",
                         name: myTools.propToString<typeof container.data>(container.data).address,
                         onChange: container.inputHandeler,
-                        value: container.data.address
+                        value: container.data.address,
+                        error: container.errors?.address,
                     },
                     {
                         lableText: "Trn",
                         name: myTools.propToString<typeof container.data>(container.data).trn,
                         onChange: container.inputHandeler,
-                        value: container.data.trn
+                        value: container.data.trn,
+                        error: container.errors?.trn,
                     }
                 ]} />
 
@@ -64,21 +70,23 @@ const CreateCompany = () => {
 
 
 interface MyInputsInterface extends InputHTMLAttributes<HTMLInputElement> {
-    lableText: string
+    lableText: string,
+    error?: string,
 }
 const TableThree = (props: { inputsProps: MyInputsInterface[] }) => {
 
     return (
+        // <div className={`flex-1 rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1`}>
+        //     <div className="max-w-full overflow-x-auto flex flex-row flex-wrap items-center gap-7 gap-x-14"
+        //     // className="max-w-full overflow-x-auto grid grid-cols-[max-content,1fr,max-content,1fr] items-center gap-7 gap-x-14"
+        //     >
         <div className={`flex-1 rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1`}>
-            <div
-                className="max-w-full overflow-x-auto flex flex-row flex-wrap items-center gap-7 gap-x-14"
-            // className="max-w-full overflow-x-auto grid grid-cols-[max-content,1fr,max-content,1fr] items-center gap-7 gap-x-14"
-            >
+            <div className="max-w-full overflow-x-auto grid xs:grid-cols-input_grid-xs md:grid-cols-input_grid-md   items-center gap-7 gap-x-14">
                 {
                     props.inputsProps.map((inp) => {
                         return (<>
-                            <GridItem name={inp.lableText} >
-                                <MyItemInput {...inp} />
+                            <GridItem name={inp.lableText} error={inp.error}>
+                                <MyItemInput {...inp} error={inp.error} />
                             </GridItem>
                         </>)
                     })
@@ -87,13 +95,22 @@ const TableThree = (props: { inputsProps: MyInputsInterface[] }) => {
         </div>
     );
 };
-const GridItem = (props: { name: string, children: React.ReactNode }) => {
+
+const GridItem = (props: { error?: string, name: string, children: React.ReactNode }) => {
     return (
         <>
-            <div className="flex flex-row items-center justify-around ">
-                <label htmlFor="">{props.name}</label>
-                {props.children}
+            <div className="flex flex-row items-center justify-start">
+                <div className="w-5 h-5 text-danger" title={props.error}>
+                    {
+                        props.error && <AiOutlineInfoCircle />
+                    }
+                </div>
+                <div className="flex flex-row items-center justify-between flex-1">
+                    <label htmlFor="">{props.name}</label>
+                    {props.children}
+                </div>
             </div>
+
         </>
     );
 };
@@ -105,7 +122,7 @@ const Header = (props: { onClickSave: () => void }) => {
 
             <div className="flex flex-row items-center gap-2">
                 <Link href="/company" className="cursor-pointer">
-                    <AiOutlinePlus />
+                    <AiOutlineArrowLeft />
                 </Link>
                 <h1 className="font-extrabold text-2xl">{"New Company"}</h1>
             </div>
@@ -114,7 +131,7 @@ const Header = (props: { onClickSave: () => void }) => {
             <div className="flex">
 
                 <button onClick={props.onClickSave} className="inline-flex items-center justify-center gap-2.5 rounded-md bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-4 xl:px-5">
-                    <AiOutlinePlus />
+                    <AiOutlineSave />
                     Save
                 </button>
 

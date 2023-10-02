@@ -4,7 +4,7 @@ import { Company } from "@/models/company";
 export interface CreateCompanyInterface {
     name?: string,
     tel?: string,
-    poBox?: string,
+    poBox?: number,
     email?: string,
     address?: string,
     trn?: string,

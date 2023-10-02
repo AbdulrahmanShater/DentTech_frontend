@@ -10,9 +10,9 @@ const URL = async () => {
 
     const COMPANY_URL = {
         GET_ALL: COMPANY_URL_PREFIX,
-        CREATE: COMPANY_URL_PREFIX ,
-        UPDATE: COMPANY_URL_PREFIX + "/update",
-        DELETE: COMPANY_URL_PREFIX + "/delete",
+        CREATE: COMPANY_URL_PREFIX,
+        UPDATE: COMPANY_URL_PREFIX,
+        DELETE: COMPANY_URL_PREFIX,
     };
 
 

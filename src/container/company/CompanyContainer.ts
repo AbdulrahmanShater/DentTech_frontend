@@ -1,49 +1,40 @@
-import { UpdateJsonR, EditCompanyInterface, EditCompanyInterfaceER } from "@/api/interface/company/edit"
-import { GetOneJsonR } from "@/api/interface/company/get";
+import { CreateCompanyER, CreateCompanyInterface, CreateJsonR } from "@/api/interface/company/create"
 import CompanyService from "@/api/services/CompanyService";
-import { httpErrorHandler } from "@/hooks/httpErrorHandler";
 import MyToast from "@/hooks/toast";
-import { Company } from "@/models/company";
 import { useEffect, useState } from "react"
+import { GetServerSideProps } from 'next';
+import { GetAllJsonR, DeleteCompanyInterface, } from "@/api/interface/company";
+import { Company } from "@/models/company";
+import { httpErrorHandler } from "@/hooks/httpErrorHandler";
+import { DeleteJsonR } from "@/api/interface/company/delete";
 
-export default function EditCompanyContainer(props: { comapny_id: number }) {
+export default function CompanyContainer() {
 
 
-    const [loading, setLoading] = useState<boolean>(false);
+    const [data, setData] = useState<Company[]>([]);
 
-
-    const [data, setData] = useState<EditCompanyInterface>({});
-
-    const [errors, setErrors] = useState<EditCompanyInterfaceER | undefined>();
-
-    const [company, setCompany] = useState<Company | null>(null);
+    const [loading, setLoading] = useState<false>(false);
 
     useEffect(() => {
-        if (props.comapny_id) {
-            getCompanyHandler()
-        }
-    }, [props.comapny_id])
+        getCompaniesHandler()
+    }, [])
 
 
-    const getCompanyHandler = () => {
-        CompanyService.getById({ id: props.comapny_id })
+    const getCompaniesHandler = () => {
+        CompanyService.getAll()
             .then(response => {
-                const res: GetOneJsonR = response.data;
-                setCompany(res.data)
-                setData((prev) => ({ ...res.data }));
+                const res: GetAllJsonR = response.data;
+                setData(res.data)
                 new MyToast(res.message).success();
             })
             .catch((error) => {
+
                 httpErrorHandler(error, {
                     onStatusCode: function (status: number): void {
-                        const res: GetOneJsonR = error.response.data;
+                        const res: GetAllJsonR = error.response.data;
                         switch (status) {
                             case 404:
                                 new MyToast("Sorry, the requested resource could not be found. Please check your API endpoint or try again late").error()
-                                break;
-                            case 422:
-                            case 400:
-                                setErrors(res.errors)
                                 break;
                             case 500:
                                 break;
@@ -59,36 +50,24 @@ export default function EditCompanyContainer(props: { comapny_id: number }) {
             });
     }
 
-
-    const inputHandeler = (event: any) => {
-        var value = event.target.value;
-        const name = event.target.name;
-        if (value == "" || value == null) {
-            value = undefined;
-        }
-        setErrors(undefined)
-        setData((prev) => ({ ...prev, [name]: value }));
-    }
-
-
-    const submitHandler = () => {
-        CompanyService.update(data)
+    const submitDeleteHandler = (data: { id: number }) => {
+        CompanyService.trash(data)
             .then(response => {
-                const res: UpdateJsonR = response.data;
-                setData({})
+                const res: DeleteJsonR = response.data;
+                setData((prev) => (prev.filter((f) => f.id.toString() != data.id.toString())))
                 new MyToast(res.message).success();
-                window.history.back()
             })
             .catch((error) => {
+
                 httpErrorHandler(error, {
                     onStatusCode: function (status: number): void {
-                        const res: UpdateJsonR = error.response.data;
+                        const res: DeleteJsonR = error.response.data;
                         switch (status) {
+                            case 204:
+                                setData((prev) => (prev.filter((f) => f.id.toString() != data.id.toString())))
+                                break;
                             case 404:
                                 new MyToast("Sorry, the requested resource could not be found. Please check your API endpoint or try again late").error()
-                                break;
-                            case 422:
-                                setErrors(res.errors)
                                 break;
                             case 500:
                                 break;
@@ -105,12 +84,8 @@ export default function EditCompanyContainer(props: { comapny_id: number }) {
     }
 
     return {
-        inputHandeler,
-        submitHandler,
         data,
-        errors,
         loading,
-        company,
-
+        submitDeleteHandler,
     }
 }

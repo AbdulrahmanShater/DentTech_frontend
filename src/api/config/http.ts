@@ -22,7 +22,8 @@ export default async function http(multipart?: boolean): Promise<AxiosInstance> 
             "Content-type": "application/json",
             "Accept": "application/json",
             "Authorization": "Bearer " + Cookies.get("token"),
-            'Access-Control-Allow-Credentials': true
+            'Access-Control-Allow-Credentials': true,
+            'Access-Control-Allow-Origin':"*"
         };
 
     return axios.create({

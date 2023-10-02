@@ -50,6 +50,7 @@ const config: Config = {
       warning: "#FFA70B",
     },
     screens: {
+      xs: "250px",
       "2xsm": "375px",
       xsm: "425px",
       "3xl": "2000px",
@@ -234,6 +235,7 @@ const config: Config = {
         6: "0px 3px 15px rgba(0, 0, 0, 0.1)",
         7: "-5px 0 0 #313D4A, 5px 0 0 #313D4A",
         8: "1px 0 0 #313D4A, -1px 0 0 #313D4A, 0 1px 0 #313D4A, 0 -1px 0 #313D4A, 0 3px 13px rgb(0 0 0 / 8%)",
+        "dialog": "0 20px 75px rgba(0, 0, 0, 0.13)"
       },
       dropShadow: {
         1: "0px 1px 0px #E2E8F0",
@@ -259,6 +261,11 @@ const config: Config = {
       },
       grid: {
         "max-auto": "max-content auto"
+      },
+      gridTemplateColumns: {
+        'input_grid-lg': 'repeat(3, minmax(150px, 1fr))',
+        'input_grid-md': 'repeat(2, minmax(150px, 1fr))',
+        'input_grid-xs': 'repeat(1, minmax(150px, 1fr))',
       }
     },
   },

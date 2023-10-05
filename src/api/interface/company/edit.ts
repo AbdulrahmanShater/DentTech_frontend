@@ -5,7 +5,7 @@ export interface EditCompanyInterface {
     id?: number,
     name?: string,
     tel?: string,
-    poBox?: number,
+    poBox?: string,
     email?: string,
     address?: string,
     trn?: string,

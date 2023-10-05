@@ -6,6 +6,8 @@ import { CgProfile } from "react-icons/cg";
 import { AiOutlineContacts } from "react-icons/ai";
 import { FiSettings } from "react-icons/fi";
 import { TbDoorExit } from "react-icons/tb";
+import { useDispatch } from "react-redux";
+import { logout } from "@/redux/reducers/auth/authSlice";
 
 interface DropDownListItemModel {
   title: string,
@@ -31,6 +33,9 @@ const DropDownListItem = (props: DropDownListItemModel) => {
 }
 
 const DropdownUser = () => {
+
+  const dispatch = useDispatch();
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef<any>(null);
@@ -142,7 +147,11 @@ const DropdownUser = () => {
             })
           }
         </ul>
-        <button className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <button
+          onClick={() => {
+            dispatch(logout())
+          }}
+          className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
           <TbDoorExit />
           Log Out
         </button>

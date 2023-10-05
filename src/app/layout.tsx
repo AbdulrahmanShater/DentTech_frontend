@@ -4,10 +4,9 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { useEffect, useState } from 'react'
-import Sidebar from '@/components/Sidebar';
-import Header from '@/components/Header';
 import { ToastContainer } from 'react-toastify'
-
+import { Provider } from 'react-redux';
+import store from '@/redux/store';
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -17,7 +16,6 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -28,40 +26,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="dark:bg-boxdark-2 dark:text-bodydark">
+        <div className="dark:bg-boxdark-2 dark:text-bodydark min-h-screen">
           {loading ?
             <>
               <Loader />
             </> :
             <>
-              <ToastContainer />
-              <div className="flex h-screen overflow-hidden">
-                {/* <!-- ===== Sidebar Start ===== --> */}
-                <Sidebar
-                  sidebarOpen={sidebarOpen}
-                  setSidebarOpen={setSidebarOpen}
-                />
-                {/* <!-- ===== Sidebar End ===== --> */}
-
-                {/* <!-- ===== Content Area Start ===== --> */}
-                <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-                  {/* <!-- ===== Header Start ===== --> */}
-                  <Header
-                    sidebarOpen={sidebarOpen}
-                    setSidebarOpen={setSidebarOpen}
-                  />
-                  {/* <!-- ===== Header End ===== --> */}
-
-                  {/* <!-- ===== Main Content Start ===== --> */}
-                  <main className='md:p-6 2xl:p-10'>
-                    {/* <div className="mx-auto max-w-screen-2xl p-3 md:p-6 2xl:p-10 bg-meta-7"> */}
-                    {children}
-                    {/* </div> */}
-                  </main>
-                  {/* <!-- ===== Main Content End ===== --> */}
-                </div>
-                {/* <!-- ===== Content Area End ===== --> */}
-              </div>
+              <Provider store={store}>
+                <ToastContainer />
+                {children}
+              </Provider>
             </>
           }
         </div>

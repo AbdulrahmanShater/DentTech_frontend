@@ -1,8 +1,12 @@
+import Applayout from "@/components/layout/Applayout";
+
 export default function Dashbord() {
 
     return (
         <>
-            Dashbord Page
+            <Applayout>
+                Dashbord Page
+            </Applayout>
         </>
     );
 }

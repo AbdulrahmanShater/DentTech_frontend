@@ -1,10 +1,12 @@
 "use client";
 import Link from "next/link";
 import { AiFillSave, AiOutlineArrowLeft, AiOutlineInfoCircle, AiOutlinePlus, AiOutlineSave } from "react-icons/ai";
-import React, { InputHTMLAttributes } from "react";
+import React, { InputHTMLAttributes, useRef } from "react";
 import CreateCompanyContainer from "@/container/company/CreateCompanyContainer";
 import { MyItemInput } from "@/components/Input/Input";
 import MyTools from "@/hooks/MyTools";
+import ToolTip from "@/components/ToolTip";
+import Applayout from "@/components/layout/Applayout";
 
 const CreateCompany = () => {
 
@@ -15,56 +17,58 @@ const CreateCompany = () => {
 
 
     return (<>
-        <div className="flex flex-col gap-5">
-            <Header onClickSave={() => container.submitHandler()} />
-            <div className="flex gap-3">
-                <TableThree inputsProps={[
-                    {
-                        lableText: "Name",
-                        name: myTools.propToString<typeof container.data>(container.data).name,
-                        onChange: container.inputHandeler,
-                        value: container.data.name,
-                        error: container.errors?.name,
-                    },
-                    {
-                        lableText: "Tel",
-                        name: myTools.propToString<typeof container.data>(container.data).tel,
-                        onChange: container.inputHandeler,
-                        value: container.data.tel,
-                        error: container.errors?.tel,
-                    },
-                    {
-                        lableText: "poBox",
-                        name: myTools.propToString<typeof container.data>(container.data).poBox,
-                        onChange: container.inputHandeler,
-                        value: container.data.poBox,
-                        error: container.errors?.poBox,
-                    },
-                    {
-                        lableText: "Email",
-                        name: myTools.propToString<typeof container.data>(container.data).email,
-                        onChange: container.inputHandeler,
-                        value: container.data.email,
-                        error: container.errors?.email,
-                    },
-                    {
-                        lableText: "Address",
-                        name: myTools.propToString<typeof container.data>(container.data).address,
-                        onChange: container.inputHandeler,
-                        value: container.data.address,
-                        error: container.errors?.address,
-                    },
-                    {
-                        lableText: "Trn",
-                        name: myTools.propToString<typeof container.data>(container.data).trn,
-                        onChange: container.inputHandeler,
-                        value: container.data.trn,
-                        error: container.errors?.trn,
-                    }
-                ]} />
+        <Applayout>
+            <div className="flex flex-col gap-5 ">
+                <Header onClickSave={() => container.submitHandler()} />
+                <div className="flex gap-3">
+                    <TableThree inputsProps={[
+                        {
+                            lableText: "Name",
+                            name: myTools.propToString<typeof container.data>(container.data).name,
+                            onChange: container.inputHandeler,
+                            value: container.data.name,
+                            error: container.errors?.name,
+                        },
+                        {
+                            lableText: "Tel",
+                            name: myTools.propToString<typeof container.data>(container.data).tel,
+                            onChange: container.inputHandeler,
+                            value: container.data.tel,
+                            error: container.errors?.tel,
+                        },
+                        {
+                            lableText: "poBox",
+                            name: myTools.propToString<typeof container.data>(container.data).poBox,
+                            onChange: container.inputHandeler,
+                            value: container.data.poBox,
+                            error: container.errors?.poBox,
+                        },
+                        {
+                            lableText: "Email",
+                            name: myTools.propToString<typeof container.data>(container.data).email,
+                            onChange: container.inputHandeler,
+                            value: container.data.email,
+                            error: container.errors?.email,
+                        },
+                        {
+                            lableText: "Address",
+                            name: myTools.propToString<typeof container.data>(container.data).address,
+                            onChange: container.inputHandeler,
+                            value: container.data.address,
+                            error: container.errors?.address,
+                        },
+                        {
+                            lableText: "Trn",
+                            name: myTools.propToString<typeof container.data>(container.data).trn,
+                            onChange: container.inputHandeler,
+                            value: container.data.trn,
+                            error: container.errors?.trn,
+                        }
+                    ]} />
 
+                </div>
             </div>
-        </div>
+        </Applayout>
     </>)
 }
 
@@ -100,20 +104,26 @@ const GridItem = (props: { error?: string, name: string, children: React.ReactNo
     return (
         <>
             <div className="flex flex-row items-center justify-start">
-                <div className="w-5 h-5 text-danger" title={props.error}>
-                    {
-                        props.error && <AiOutlineInfoCircle />
-                    }
-                </div>
+                {
+                    props.error &&
+                    <ToolTip tooltip={props.error}>
+                        <div className="w-5 h-5 text-danger">
+                            {
+                                props.error && <AiOutlineInfoCircle />
+                            }
+                        </div>
+                    </ToolTip>
+                }
                 <div className="flex flex-row items-center justify-between flex-1">
                     <label htmlFor="">{props.name}</label>
                     {props.children}
                 </div>
             </div>
-
         </>
     );
 };
+
+
 
 
 const Header = (props: { onClickSave: () => void }) => {

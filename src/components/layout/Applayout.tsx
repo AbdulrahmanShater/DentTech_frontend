@@ -30,7 +30,7 @@ export default function Applayout({ children }: { children: React.ReactNode }) {
           {/* <!-- ===== Header End ===== --> */}
 
           {/* <!-- ===== Main Content Start ===== --> */}
-          <main className='md:p-6 2xl:p-10'>
+          <main className='md:p-6 2xl:p-10 h-full min-h-fit'>
             {/* <div className="mx-auto max-w-screen-2xl p-3 md:p-6 2xl:p-10 bg-meta-7"> */}
             {children}
             {/* </div> */}

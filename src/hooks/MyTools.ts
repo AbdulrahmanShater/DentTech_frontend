@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 export default function MyTools() {
 
+
     const propToString = <T>(obj?: T): T => {
         return new Proxy({}, {
             get({ }, prop) {
@@ -78,6 +79,22 @@ export default function MyTools() {
         return str.substring(0, index) + chr + str.substring(index + 1);
     }
 
+    const isValidEmailRGX = (email: string) => {
+        // var Regex = require("regex");
+        // const emailRegex = new Regex(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
+        // return emailRegex.test(email);
+        return true;
+    }
+    const objectIsUndefined = <T>(object: T):boolean => {
+        for (const key in object) {
+            if (Object.prototype.hasOwnProperty.call(object, key)) {
+                const element = object[key];
+                if (element !== undefined) return false;
+            }
+        }
+        return true;
+    }
+
 
     /**
      * 
@@ -123,5 +140,7 @@ export default function MyTools() {
         getObjectValueByKey,
         encryptEmail,
         CountDownTimer,
+        isValidEmailRGX,
+        objectIsUndefined,
     }
 }

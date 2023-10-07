@@ -1,5 +1,6 @@
 import { CreateCompanyER, CreateCompanyInterface, CreateJsonR } from "@/api/interface/company/create"
 import CompanyService from "@/api/services/CompanyService";
+import { CreateValidation } from "@/api/validation/company";
 import { httpErrorHandler } from "@/hooks/httpErrorHandler";
 import MyToast from "@/hooks/toast";
 import { Company } from "@/models/company";
@@ -27,6 +28,12 @@ export default function CreateCompanyContainer() {
 
 
     const submitHandler = () => {
+
+        const validate = CreateValidation(data);
+        if (validate !== undefined) {
+            setErrors(validate)
+            return;
+        }
         CompanyService.create(data)
             .then(response => {
                 const res: CreateJsonR = response.data;
@@ -34,7 +41,7 @@ export default function CreateCompanyContainer() {
                 new MyToast(res.message).success();
             })
             .catch((error) => {
-                
+
                 httpErrorHandler(error, {
                     onStatusCode: function (status: number): void {
                         const res: CreateJsonR = error.response.data;

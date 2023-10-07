@@ -18,9 +18,9 @@ const CreateCompany = () => {
 
     return (<>
         <Applayout>
-            <div className="flex flex-col gap-5 ">
+            <div className="flex flex-col gap-5 h-full ">
                 <Header onClickSave={() => container.submitHandler()} />
-                <div className="flex gap-3">
+                <div className="flex gap-3 h-full">
                     <TableThree inputsProps={[
                         {
                             lableText: "Name",
@@ -84,8 +84,8 @@ const TableThree = (props: { inputsProps: MyInputsInterface[] }) => {
         //     <div className="max-w-full overflow-x-auto flex flex-row flex-wrap items-center gap-7 gap-x-14"
         //     // className="max-w-full overflow-x-auto grid grid-cols-[max-content,1fr,max-content,1fr] items-center gap-7 gap-x-14"
         //     >
-        <div className={`flex-1 rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1`}>
-            <div className="max-w-full overflow-x-auto grid xs:grid-cols-input_grid-xs md:grid-cols-input_grid-md   items-center gap-7 gap-x-14">
+        <div className={`h-full flex-1 rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1`}>
+            <div className="h-full  max-w-full overflow-x-auto grid xs:grid-cols-input_grid-xs md:grid-cols-input_grid-md   items-center gap-7 gap-x-14">
                 {
                     props.inputsProps.map((inp) => {
                         return (<>

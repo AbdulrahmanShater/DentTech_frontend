@@ -2,22 +2,36 @@ import { UpdateJsonR, EditCompanyInterface, EditCompanyInterfaceER } from "@/api
 import { GetOneJsonR } from "@/api/interface/company/get";
 import CompanyService from "@/api/services/CompanyService";
 import { EditValidation } from "@/api/validation/company";
+import { ConfirmDialog } from "@/components/MyDialog/Confirm";
+import MyTools from "@/hooks/MyTools";
 import { httpErrorHandler } from "@/hooks/httpErrorHandler";
 import MyToast from "@/hooks/toast";
 import { Company } from "@/models/company";
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
+import { AiFillSave } from "react-icons/ai";
 
 export default function EditCompanyContainer(props: { comapny_id: number }) {
 
+    const myTools = MyTools()
 
     const [loading, setLoading] = useState<boolean>(false);
-
 
     const [data, setData] = useState<EditCompanyInterface>({});
 
     const [errors, setErrors] = useState<EditCompanyInterfaceER | undefined>();
 
     const [company, setCompany] = useState<Company | null>(null);
+
+    const canSaveEditData = useMemo(() => {
+        if (data !== undefined) {
+            if (!myTools.areAllValuesUndefined<EditCompanyInterface>(data)) {
+                if (Object(data) != Object({ vendor: false, price_stage: 1 })) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }, [data])
 
     useEffect(() => {
         if (props.comapny_id) {
@@ -112,6 +126,26 @@ export default function EditCompanyContainer(props: { comapny_id: number }) {
             });
     }
 
+
+    const backHandlerHandler = () => {
+        if (!canSaveEditData) {
+            document.location.replace("/company")
+            return;
+        }
+        ConfirmDialog({
+            type: "warning",
+            icon: <AiFillSave />,
+            title: 'Do you want to ignore the changes?',
+            message: 'The data will not be saved',
+            default: "no",
+            onCallback(value) {
+                if (value) {
+                    document.location.replace("/company")
+                }
+            },
+        })
+    }
+
     return {
         inputHandeler,
         submitHandler,
@@ -119,6 +153,8 @@ export default function EditCompanyContainer(props: { comapny_id: number }) {
         errors,
         loading,
         company,
+        canSaveEditData,
+        backHandlerHandler,
 
     }
 }

@@ -1,39 +1,39 @@
 "use client";
 import Link from "next/link";
-import { Company } from "../../models/company";
+import { Customer } from "../../models/customer";
 import DropdownFilter from "./DropdownFilter";
 import { AiOutlineDelete, AiOutlineEdit, AiOutlineInfoCircle, AiOutlinePlus } from "react-icons/ai";
 import { useState } from "react";
-import CompanyContainer from "@/container/company/CompanyContainer";
 import { confirmAlert } from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css'
 import Applayout from "@/components/layout/Applayout";
-export default function CompanyPage() {
+import CustomersContainer from "@/container/customer/CustomersContainer";
+export default function CustomerPage() {
 
-    const [selectedCompany, setSelectedCompany] = useState<Company | undefined>(undefined);
+    const [selectedCustomer, setSelectedCustomer] = useState<Customer | undefined>(undefined);
 
-    const container = CompanyContainer();
+    const container = CustomersContainer();
 
     const TableThree = () => {
         return (
-            <div id="companyPage" className={`flex-1 rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 relative  `}>
+            <div id="customerPage" className={`flex-1 rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 relative  `}>
                 <div className="max-w-full overflow-x-auto">
                     <table className="w-full table-auto">
                         <thead>
                             <tr className="bg-gray-2 text-left dark:bg-meta-4">
                                 <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
-                                    {"Company Name"}
+                                    {"Customer Name"}
                                 </th>
-                                <th className={`${selectedCompany != undefined ? 'hidden' : 'table-cell'} min-w-[150px] py-4 px-4 font-medium text-black dark:text-white`}>
+                                <th className={`${selectedCustomer != undefined ? 'hidden' : 'table-cell'} min-w-[150px] py-4 px-4 font-medium text-black dark:text-white`}>
                                     {"Debit"}
                                 </th>
-                                <th className={`${selectedCompany != undefined ? 'hidden' : 'table-cell'} min-w-[120px] py-4 px-4 font-medium text-black dark:text-white`}>
+                                <th className={`${selectedCustomer != undefined ? 'hidden' : 'table-cell'} min-w-[120px] py-4 px-4 font-medium text-black dark:text-white`}>
                                     {"Credit"}
                                 </th>
-                                <th className={`${selectedCompany != undefined ? 'hidden' : 'table-cell'} py-4 px-4 font-medium text-black dark:text-white`}>
+                                <th className={`${selectedCustomer != undefined ? 'hidden' : 'table-cell'} py-4 px-4 font-medium text-black dark:text-white`}>
                                     {"Balance"}
                                 </th>
-                                <th className={`${selectedCompany != undefined ? 'hidden' : 'table-cell'} py-4 px-4 font-medium text-black dark:text-white`}>
+                                <th className={`${selectedCustomer != undefined ? 'hidden' : 'table-cell'} py-4 px-4 font-medium text-black dark:text-white`}>
                                     {"Status"}
                                 </th>
                                 <th className={`py-4 px-4 font-medium text-black dark:text-white`}>
@@ -42,51 +42,51 @@ export default function CompanyPage() {
                             </tr>
                         </thead>
                         <tbody>
-                            {container.data.map((company, key) => (
+                            {container.data.map((customer, key) => (
                                 <tr key={key}>
                                     {/* Name */}
                                     <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                                         <p className="text-black dark:text-white">
-                                            {company.name}
+                                            {customer.name}
                                         </p>
                                     </td>
                                     {/* Name */}
 
                                     {/* Debit */}
-                                    <td className={`${selectedCompany != undefined ? 'hidden' : 'table-cell'}  border-b border-[#eee] py-5 px-4 dark:border-strokedark`}>
+                                    <td className={`${selectedCustomer != undefined ? 'hidden' : 'table-cell'}  border-b border-[#eee] py-5 px-4 dark:border-strokedark`}>
                                         <p className="text-black dark:text-white">
-                                            {company.debit}
+                                            {customer.debit}
                                         </p>
                                     </td>
                                     {/* Debit */}
 
                                     {/* Credit */}
-                                    <td className={`${selectedCompany != undefined ? 'hidden' : 'table-cell'}  border-b border-[#eee] py-5 px-4 dark:border-strokedark`}>
+                                    <td className={`${selectedCustomer != undefined ? 'hidden' : 'table-cell'}  border-b border-[#eee] py-5 px-4 dark:border-strokedark`}>
                                         <p className="text-black dark:text-white">
-                                            {company.credit}
+                                            {customer.credit}
                                         </p>
                                     </td>
                                     {/* Credit */}
 
                                     {/* Balance */}
-                                    <td className={`${selectedCompany != undefined ? 'hidden' : 'table-cell'}  border-b border-[#eee] py-5 px-4 dark:border-strokedark`}>
+                                    <td className={`${selectedCustomer != undefined ? 'hidden' : 'table-cell'}  border-b border-[#eee] py-5 px-4 dark:border-strokedark`}>
                                         <p className="text-black dark:text-white">
-                                            {company.balance}
+                                            {customer.balance}
                                         </p>
                                     </td>
                                     {/* Balance */}
 
                                     {/* Status */}
-                                    <td className={`${selectedCompany != undefined ? 'hidden' : 'table-cell'}  border-b border-[#eee] py-5 px-4 dark:border-strokedark`}>
+                                    <td className={`${selectedCustomer != undefined ? 'hidden' : 'table-cell'}  border-b border-[#eee] py-5 px-4 dark:border-strokedark`}>
                                         <p
-                                            className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${company.status === "Paid"
+                                            className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${customer.status === "Paid"
                                                 ? "text-success bg-success"
-                                                : company.status === "Unpaid"
+                                                : customer.status === "Unpaid"
                                                     ? "text-danger bg-danger"
                                                     : "text-warning bg-warning"
                                                 }`}
                                         >
-                                            {company.status}
+                                            {customer.status}
                                         </p>
                                     </td>
                                     {/* Status */}
@@ -94,18 +94,18 @@ export default function CompanyPage() {
                                     {/* Actions */}
                                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                                         <div className="flex items-center felx-row space-x-3.5">
-                                            <Link href={`/company/edit/${selectedCompany?.id}`} >
+                                            <Link href={`/customer/edit/${selectedCustomer?.id}`} >
                                                 <button className="hover:text-primary" >
                                                     <AiOutlineEdit />
                                                 </button>
                                             </Link>
-                                            <button className="hover:text-primary" onClick={() => { setSelectedCompany(company) }}>
+                                            <button className="hover:text-primary" onClick={() => { setSelectedCustomer(customer) }}>
                                                 <AiOutlineInfoCircle />
                                             </button>
                                             <button className="hover:text-primary" onClick={() => {
                                                 confirmAlert({
                                                     title: 'Are you sure?',
-                                                    message: 'want to delete this Company!?',
+                                                    message: 'want to delete this Customer!?',
                                                     buttons: [
                                                         {
                                                             label: 'Yes',
@@ -134,7 +134,7 @@ export default function CompanyPage() {
                                                                         className="border rounded-lg cursor-pointer border-danger text-danger bg-white px-4 py-2"
                                                                         onClick={() => {
                                                                             customUiOptions.onClose()
-                                                                            container.submitDeleteHandler({ id: company.id })
+                                                                            container.submitDeleteHandler({ id: customer.id })
                                                                         }}
                                                                     >
                                                                         Yes, Delete it!
@@ -170,7 +170,7 @@ export default function CompanyPage() {
                 {/* buttons */}
                 <div className="flex">
                     <Link
-                        href="/company/create"
+                        href="/customer/create"
                         className="inline-flex items-center justify-center gap-2.5 rounded-md bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-4 xl:px-5"
                     >
                         <AiOutlinePlus />
@@ -189,15 +189,15 @@ export default function CompanyPage() {
                 <Header />
                 <div className="flex gap-3">
                     <TableThree />
-                    {/* company details */}
-                    <div className={`${selectedCompany == undefined ? 'hidden' : 'block'} flex-2 flex flex-col bg-white dark:bg-boxdark border-stroke dark:border-strokedark rounded-sm border gap-5 px-5 pt-6 pb-2.5 sm:px-7.5 xl:pb-1 `}>
+                    {/* customer details */}
+                    <div className={`${selectedCustomer == undefined ? 'hidden' : 'block'} flex-2 flex flex-col bg-white dark:bg-boxdark border-stroke dark:border-strokedark rounded-sm border gap-5 px-5 pt-6 pb-2.5 sm:px-7.5 xl:pb-1 `}>
                         {/* header */}
                         <div className="flex flex-row justify-between items-center w-full">
-                            <h1 className="text-3xl font-bold">{selectedCompany?.name}</h1>
+                            <h1 className="text-3xl font-bold">{selectedCustomer?.name}</h1>
                             <div className="flex flex-row justify-center items-center">
                                 <div
                                     className="cursor-pointer"
-                                    onClick={() => { setSelectedCompany(undefined) }}>
+                                    onClick={() => { setSelectedCustomer(undefined) }}>
                                     <AiOutlinePlus />
                                 </div>
                             </div>
@@ -231,12 +231,12 @@ export default function CompanyPage() {
                                         className="w-25 h-25 bg-body rounded-lg"
                                     />
                                     <div className="flex flex-col">
-                                        <h3 className="font-bold">{selectedCompany?.name}</h3>
-                                        <h3>{selectedCompany?.email}</h3>
+                                        <h3 className="font-bold">{selectedCustomer?.name}</h3>
+                                        <h3>{selectedCustomer?.email}</h3>
                                         <ul className="flex flex-col gap-2">
                                             <li className="flex flex-row items-center justify-start ">
                                                 <AiOutlinePlus />
-                                                {selectedCompany?.tel}
+                                                {selectedCustomer?.tel}
                                             </li>
                                         </ul>
                                     </div>
@@ -252,7 +252,7 @@ export default function CompanyPage() {
                         {/* content */}
 
                     </div>
-                    {/* company details */}
+                    {/* customer details */}
                 </div>
             </div>
         </Applayout>

@@ -1,12 +1,17 @@
 import { CreateCompanyER, CreateCompanyInterface, CreateJsonR } from "@/api/interface/company/create"
 import CompanyService from "@/api/services/CompanyService";
 import { CreateValidation } from "@/api/validation/company";
+import { ConfirmDialog } from "@/components/MyDialog/Confirm";
+import MyTools from "@/hooks/MyTools";
 import { httpErrorHandler } from "@/hooks/httpErrorHandler";
 import MyToast from "@/hooks/toast";
 import { Company } from "@/models/company";
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
+import { AiFillSave } from "react-icons/ai";
 
 export default function CreateCompanyContainer() {
+
+    const myTools = MyTools()
 
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -14,6 +19,18 @@ export default function CreateCompanyContainer() {
     const [data, setData] = useState<CreateCompanyInterface>({ vendor: false, price_stage: 1 });
 
     const [errors, setErrors] = useState<CreateCompanyER | undefined>();
+
+    const canSaveEditData = useMemo(() => {
+        if (data !== undefined) {
+            if (!myTools.areAllValuesUndefined<CreateCompanyInterface>(data)) {
+                if (Object(data) != Object({ vendor: false, price_stage: 1 })) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }, [data])
+
 
 
     const inputHandeler = (event: any) => {
@@ -26,8 +43,28 @@ export default function CreateCompanyContainer() {
         setData((prev) => ({ ...prev, [name]: value }));
     }
 
+    const submitHandler = (props: { reInter: boolean }) => {
 
-    const submitHandler = () => {
+        if (props.reInter) {
+
+            ConfirmDialog({
+                type: "success",
+                icon: <AiFillSave />,
+                title: 'Do you want to keep the data?',
+                message: `For new entry`,
+                default: "yes",
+                onCallback(value) {
+                    saveHandler({ ...props, clearData: value })
+                },
+            })
+
+        } else {
+            saveHandler({ ...props, clearData: true })
+        }
+
+    }
+
+    const saveHandler = (props: { reInter: boolean, clearData: boolean }) => {
 
         const validate = CreateValidation(data);
         if (validate !== undefined) {
@@ -37,8 +74,13 @@ export default function CreateCompanyContainer() {
         CompanyService.create(data)
             .then(response => {
                 const res: CreateJsonR = response.data;
-                setData({ vendor: false, price_stage: 1 })
                 new MyToast(res.message).success();
+                if (!props.reInter) {
+                    document.location.replace("/")
+                }
+                if (props.clearData) {
+                    setData({ vendor: false, price_stage: 1 })
+                }
             })
             .catch((error) => {
 
@@ -67,11 +109,32 @@ export default function CreateCompanyContainer() {
             });
     }
 
+    const backHandlerHandler = () => {
+        if (!canSaveEditData) {
+            document.location.replace("/company")
+            return;
+        }
+        ConfirmDialog({
+            type: "warning",
+            icon: <AiFillSave />,
+            title: 'Do you want to ignore the changes?',
+            message: 'The data will not be saved',
+            default: "no",
+            onCallback(value) {
+                if (value) {
+                    document.location.replace("/company")
+                }
+            },
+        })
+    }
+
     return {
         inputHandeler,
         submitHandler,
+        backHandlerHandler,
         data,
         errors,
         loading,
+        canSaveEditData,
     }
 }

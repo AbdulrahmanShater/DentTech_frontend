@@ -5,30 +5,29 @@ import { InputHTMLAttributes, useEffect, useState } from 'react';
 
 
 import Link from "next/link";
-import { Company } from "../../../../models/company";
+import { Customer } from "../../../../models/customer";
 import DropdownFilter from "../../DropdownFilter";
 import { AiOutlineArrowLeft, AiOutlineEdit, AiOutlineInfoCircle, AiOutlinePlus, AiOutlineSave } from "react-icons/ai";
 import { MyItemInput } from '@/components/Input';
 import MyTools from '@/hooks/MyTools';
-import EditCompanyContainer from '@/container/company/EditCompanyContainer';
-import ToolTip from '@/components/ToolTip';
 import Applayout from '@/components/layout/Applayout';
 import IconButton from '@/components/Button/IconButton';
-import { EditCompanyInterface } from '@/api/interface/company';
+import { EditCustomerInterface } from '@/api/interface/customer';
 import GridItem from '@/components/GridItem';
+import EditContainer from '@/container/customer/EditContainer';
 
-export default function EditCompany() {
+export default function EditCustomer() {
 
     const router = useRouter();
     // const { id } = router.query; // get id value from URL
 
     const { id } = useParams();
-    const container = EditCompanyContainer({ comapny_id: Number(id) });
+    const container = EditContainer({ comapny_id: Number(id) });
 
     const myTools = MyTools();
 
 
-    if (container.company == null) {
+    if (container.customer == null) {
         return (
             <>
                 <div className="">{"loading.."}</div>
@@ -47,7 +46,7 @@ export default function EditCompany() {
                             error: container.errors?.name,
                             input: <MyItemInput
                                 className="w-72"
-                                name={myTools.propToString<EditCompanyInterface>().name + ""}
+                                name={myTools.propToString<EditCustomerInterface>().name + ""}
                                 onChange={container.inputHandeler}
                                 value={container.data == undefined ? "" : container.data.name!}
                             />
@@ -57,7 +56,7 @@ export default function EditCompany() {
                             error: container.errors?.tel,
                             input: <MyItemInput
                                 className="w-72"
-                                name={myTools.propToString<EditCompanyInterface>().tel + ""}
+                                name={myTools.propToString<EditCustomerInterface>().tel + ""}
                                 onChange={container.inputHandeler}
                                 value={container.data == undefined ? "" : container.data.tel!}
                             />
@@ -67,7 +66,7 @@ export default function EditCompany() {
                             error: container.errors?.poBox,
                             input: <MyItemInput
                                 className="w-72"
-                                name={myTools.propToString<EditCompanyInterface>().poBox + ""}
+                                name={myTools.propToString<EditCustomerInterface>().poBox + ""}
                                 onChange={container.inputHandeler}
                                 value={container.data == undefined ? "" : container.data.poBox!}
                             />
@@ -77,7 +76,7 @@ export default function EditCompany() {
                             error: container.errors?.email,
                             input: <MyItemInput
                                 className="w-72"
-                                name={myTools.propToString<EditCompanyInterface>().email + ""}
+                                name={myTools.propToString<EditCustomerInterface>().email + ""}
                                 onChange={container.inputHandeler}
                                 value={container.data == undefined ? "" : container.data.email!}
                             />
@@ -87,7 +86,7 @@ export default function EditCompany() {
                             error: container.errors?.address,
                             input: <MyItemInput
                                 className="w-72"
-                                name={myTools.propToString<EditCompanyInterface>().address + ""}
+                                name={myTools.propToString<EditCustomerInterface>().address + ""}
                                 onChange={container.inputHandeler}
                                 value={container.data == undefined ? "" : container.data.address!}
                             />
@@ -97,7 +96,7 @@ export default function EditCompany() {
                             error: container.errors?.trn,
                             input: <MyItemInput
                                 className="w-72"
-                                name={myTools.propToString<EditCompanyInterface>().trn + ""}
+                                name={myTools.propToString<EditCustomerInterface>().trn + ""}
                                 onChange={container.inputHandeler}
                                 value={container.data == undefined ? "" : container.data.trn!}
                             />

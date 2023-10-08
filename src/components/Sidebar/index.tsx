@@ -162,7 +162,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               },
               {
                 title: "Customers",
-                href: "/customers",
+                href: "/customer",
                 icon: <HiOutlineUserGroup />,
                 items: [],
               },

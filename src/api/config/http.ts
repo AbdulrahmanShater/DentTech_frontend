@@ -6,13 +6,13 @@ import Cookies from "js-cookie";
 
 export default async function http(multipart?: boolean): Promise<AxiosInstance> {
 
-    const response = await fetch(`/env.json?${Date.now()}`);
-    const responseData = await response.json()
+    // const response = await fetch(`/env.json?${Date.now()}`);
+    // const responseData = await response.json()
     // const BASE_URL: string = responseData.BASE_URL + '';
 
 
     const BASE_URL: string = process.env.NEXT_PUBLIC_BASE_URL + "";
-    alert(BASE_URL);
+    // alert(BASE_URL);
     // const token: string = "";
 
 

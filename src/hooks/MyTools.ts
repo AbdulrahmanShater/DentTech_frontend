@@ -14,7 +14,17 @@ export default function MyTools() {
     const getObjectValueByKey = <T>(obj: T, key: keyof T) => {
         return obj[key];
     };
-
+    const areAllValuesUndefined = <T>(object: T): boolean => {
+        for (const key in object) {
+            if (Object.prototype.hasOwnProperty.call(object, key)) {
+                const element = object[key];
+                if (element != undefined) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
     const encryptEmail = (email: string) => {
 
         const atIndex = email.indexOf('@');
@@ -85,7 +95,7 @@ export default function MyTools() {
         // return emailRegex.test(email);
         return true;
     }
-    const objectIsUndefined = <T>(object: T):boolean => {
+    const objectIsUndefined = <T>(object: T): boolean => {
         for (const key in object) {
             if (Object.prototype.hasOwnProperty.call(object, key)) {
                 const element = object[key];
@@ -142,5 +152,6 @@ export default function MyTools() {
         CountDownTimer,
         isValidEmailRGX,
         objectIsUndefined,
+        areAllValuesUndefined,
     }
 }

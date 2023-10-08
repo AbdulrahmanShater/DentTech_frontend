@@ -8,7 +8,11 @@ export default async function http(multipart?: boolean): Promise<AxiosInstance> 
 
     const response = await fetch(`/env.json?${Date.now()}`);
     const responseData = await response.json()
-    const BASE_URL: string = responseData.BASE_URL + '';
+    // const BASE_URL: string = responseData.BASE_URL + '';
+
+
+    const BASE_URL: string = process.env.NEXT_PUBLIC_BASE_URL + "";
+    alert(BASE_URL);
     // const token: string = "";
 
 
@@ -23,7 +27,7 @@ export default async function http(multipart?: boolean): Promise<AxiosInstance> 
             "Accept": "application/json",
             "Authorization": "Bearer " + Cookies.get("token"),
             'Access-Control-Allow-Credentials': true,
-            'Access-Control-Allow-Origin':"*"
+            'Access-Control-Allow-Origin': "*"
         };
 
     return axios.create({

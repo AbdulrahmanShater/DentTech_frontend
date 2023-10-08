@@ -1,10 +1,5 @@
 const URL = async () => {
 
-    // const response = await fetch(`/env.json?${Date.now()}`);
-    // const responseData = await response.json()
-    // const BASE_URL: string = responseData.BASE_URL + '';
-
-
     const COMPANY_URL_PREFIX = "" + "/company"
 
     const AUTH_URL_PREFIX = "" + "/auth"

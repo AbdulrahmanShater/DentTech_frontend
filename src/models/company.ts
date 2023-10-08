@@ -2,7 +2,7 @@ export type Company = {
   id: number;
   name: string;
   tel: string;
-  poBox: number,
+  poBox: string,
   email: string;
   address: string;
   credit: string;

@@ -1,6 +1,7 @@
 import { UpdateJsonR, EditCompanyInterface, EditCompanyInterfaceER } from "@/api/interface/company/edit"
 import { GetOneJsonR } from "@/api/interface/company/get";
 import CompanyService from "@/api/services/CompanyService";
+import { EditValidation } from "@/api/validation/company";
 import { httpErrorHandler } from "@/hooks/httpErrorHandler";
 import MyToast from "@/hooks/toast";
 import { Company } from "@/models/company";
@@ -72,6 +73,13 @@ export default function EditCompanyContainer(props: { comapny_id: number }) {
 
 
     const submitHandler = () => {
+
+        const validate = EditValidation(data);
+        if (validate !== undefined) {
+            setErrors(validate)
+            return;
+        }
+
         CompanyService.update(data)
             .then(response => {
                 const res: UpdateJsonR = response.data;

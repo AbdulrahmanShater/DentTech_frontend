@@ -1,5 +1,5 @@
 import MyTools from "@/hooks/MyTools";
-import { CreateCompanyInterface, CreateCompanyER } from "../interface/company";
+import { CreateCompanyInterface, CreateCompanyER, EditCompanyInterfaceER, EditCompanyInterface } from "../interface/company";
 
 export function CreateValidation(company: CreateCompanyInterface): CreateCompanyER | undefined {
 
@@ -58,4 +58,7 @@ export function CreateValidation(company: CreateCompanyInterface): CreateCompany
     }
 
     return myTools.objectIsUndefined<CreateCompanyER>(validate) ? undefined : validate;
+}   
+export function EditValidation(company: EditCompanyInterface): EditCompanyInterfaceER | undefined {
+    return CreateValidation(company);
 }   

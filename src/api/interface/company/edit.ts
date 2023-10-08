@@ -13,8 +13,16 @@ export interface EditCompanyInterface {
     price_stage?: number,
 
 }
-export interface EditCompanyInterfaceER extends EditCompanyInterface {
-
+export interface EditCompanyInterfaceER  {
+    id?: string,
+    name?: string,
+    tel?: string,
+    poBox?: string,
+    email?: string,
+    address?: string,
+    trn?: string,
+    vendor?: string,
+    price_stage?: string,
 }
 
 

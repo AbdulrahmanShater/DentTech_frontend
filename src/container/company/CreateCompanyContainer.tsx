@@ -54,7 +54,7 @@ export default function CreateCompanyContainer() {
                 message: `For new entry`,
                 default: "yes",
                 onCallback(value) {
-                    saveHandler({ ...props, clearData: value })
+                    saveHandler({ ...props, clearData: !value })
                 },
             })
 

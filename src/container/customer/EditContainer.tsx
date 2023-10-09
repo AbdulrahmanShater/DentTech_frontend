@@ -7,10 +7,10 @@ import MyTools from "@/hooks/MyTools";
 import { httpErrorHandler } from "@/hooks/httpErrorHandler";
 import MyToast from "@/hooks/toast";
 import { Customer } from "@/models/customer";
-import { useEffect, useState, useMemo } from "react"
+import { useEffect, useState, useMemo, useCallback } from "react"
 import { AiFillSave } from "react-icons/ai";
 
-export default function EditContainer(props: { comapny_id: number }) {
+export default function EditContainer(props: { customer_id: number }) {
 
     const myTools = MyTools()
 
@@ -33,19 +33,29 @@ export default function EditContainer(props: { comapny_id: number }) {
         return false;
     }, [data])
 
-    useEffect(() => {
-        if (props.comapny_id) {
+
+    let mounted = false;
+
+    const onload = useCallback(() => {
+        if (!mounted) {
             getCustomerHandler()
+            mounted = true;
         }
-    }, [props.comapny_id])
+    }, []);
+
+    useEffect(() => {
+        if (props.customer_id) {
+            onload()
+        }
+    }, [props.customer_id])
 
 
     const getCustomerHandler = () => {
-        CustomerService.getById({ id: props.comapny_id })
+        CustomerService.getById({ id: props.customer_id })
             .then(response => {
                 const res: GetOneJsonR = response.data;
                 setCustomer(res.data)
-                setData((prev) => ({ ...res.data }));
+                setData((prev) => ({ ...res.data, company: res.data.company?.id }));
                 new MyToast(res.message).success();
             })
             .catch((error) => {
@@ -87,6 +97,11 @@ export default function EditContainer(props: { comapny_id: number }) {
 
 
     const submitHandler = () => {
+
+        if (data == undefined) {
+            new MyToast("No Data To Save!").warning()
+            return;
+        };
 
         const validate = EditValidation(data);
         if (validate !== undefined) {

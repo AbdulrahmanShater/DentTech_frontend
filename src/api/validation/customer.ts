@@ -5,56 +5,40 @@ export function CreateValidation(customer: CreateCustomerInterface): CreateCusto
 
     const myTools = MyTools();
 
-    var name: string | undefined = undefined;
+    var firstName: string | undefined = undefined;
+    var lastName: string | undefined = undefined;
     var tel: string | undefined = undefined;
-    var poBox: string | undefined = undefined;
     var email: string | undefined = undefined;
-    var trn: string | undefined = undefined;
-    var address: string | undefined = undefined;
-    var vendor: string | undefined = undefined;
-    var price_stage: string | undefined = undefined;
+    var password: string | undefined = undefined;
+    var company: string | undefined = undefined;
 
-    // name
-    if (customer.name == undefined) name = "name is required"
-    else if (customer.name.length < 3 || customer.name.length > 60) name = "name max length 60 and min is 3";
+
+    if (customer.firstName == undefined) firstName = "name is required";
+
+    if (customer.lastName == undefined) lastName = "name is required";
 
     // tel
-    if (customer.tel == undefined) tel = "phoneNumber is required"
+    if (customer.tel == undefined) tel = "PhoneNumber is required"
     else if (!customer.tel.startsWith("+")) tel = "phoneNumber must starts with +";
-    else if (customer.tel.length < 5) tel = "phoneNumber min length is 5";
-
-    // poBox
-    if (customer.poBox == undefined) name = "poBox is required"
-    else if (customer.poBox.length < 3 || customer.poBox.length > 60) poBox = "poBox max length 60 and min is 3";
+    else if (customer.tel.length < 5) tel = "PhoneNumber min length is 5";
 
     // email
-    if (customer.email == undefined) email = "email is required"
-    else if (!myTools.isValidEmailRGX(customer.email)) email = "email is invalid";
+    if (customer.email == undefined) email = "Email is required"
+    else if (!myTools.isValidEmailRGX(customer.email)) email = "Email is invalid";
 
-    // trn
-    if (customer.trn == undefined) trn = "trn is required"
-    else if (customer.trn.length != 15) trn = "TRN number must be 15 digits";
+    if (customer.password == undefined) password = "Password is required";
 
-    // address
-    if (customer.address == undefined) address = "address is required";
+    if (customer.company == undefined) company = "Company is required";
 
-    // vendor
-    if (customer.vendor == undefined) vendor = "vendor is required";
-
-    // price stage
-    if (customer.price_stage == undefined) price_stage = "vendor is required"
-    else if (customer.price_stage < 0 || customer.price_stage > 3) price_stage = "price stage must be between 0 and 3";
 
 
     const validate: CreateCustomerER = {
-        name: name,
+        firstName: firstName,
+        lastName: lastName,
         tel: tel,
-        address: address,
         email: email,
-        poBox: poBox,
-        price_stage: price_stage,
-        trn: trn,
-        vendor: vendor
+        password: password,
+        company: company,
     }
 
     return myTools.objectIsUndefined<CreateCustomerER>(validate) ? undefined : validate;

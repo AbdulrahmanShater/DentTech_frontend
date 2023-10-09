@@ -22,7 +22,7 @@ export default function EditCustomer() {
     // const { id } = router.query; // get id value from URL
 
     const { id } = useParams();
-    const container = EditContainer({ comapny_id: Number(id) });
+    const container = EditContainer({ customer_id: Number(id) });
 
     const myTools = MyTools();
 
@@ -42,13 +42,33 @@ export default function EditCustomer() {
                 <div className="flex gap-3">
                     <TableThree inputs={[
                         {
-                            lableText: "Name",
-                            error: container.errors?.name,
+                            lableText: "First Name",
+                            error: container.errors?.firstName,
                             input: <MyItemInput
                                 className="w-72"
-                                name={myTools.propToString<EditCustomerInterface>().name + ""}
+                                name={myTools.propToString<EditCustomerInterface>().firstName + ""}
                                 onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.name!}
+                                value={container.data == undefined ? "" : container.data.firstName!}
+                            />
+                        },
+                        {
+                            lableText: "Last Name",
+                            error: container.errors?.lastName,
+                            input: <MyItemInput
+                                className="w-72"
+                                name={myTools.propToString<EditCustomerInterface>().lastName + ""}
+                                onChange={container.inputHandeler}
+                                value={container.data == undefined ? "" : container.data.lastName!}
+                            />
+                        },
+                        {
+                            lableText: "Company",
+                            error: container.errors?.company,
+                            input: <MyItemInput
+                                className="w-72"
+                                name={myTools.propToString<EditCustomerInterface>().company + ""}
+                                onChange={container.inputHandeler}
+                                value={container.data == undefined ? "" : container.data.company!}
                             />
                         },
                         {
@@ -62,16 +82,6 @@ export default function EditCustomer() {
                             />
                         },
                         {
-                            lableText: "poBox",
-                            error: container.errors?.poBox,
-                            input: <MyItemInput
-                                className="w-72"
-                                name={myTools.propToString<EditCustomerInterface>().poBox + ""}
-                                onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.poBox!}
-                            />
-                        },
-                        {
                             lableText: "Email",
                             error: container.errors?.email,
                             input: <MyItemInput
@@ -82,23 +92,13 @@ export default function EditCustomer() {
                             />
                         },
                         {
-                            lableText: "Address",
-                            error: container.errors?.address,
+                            lableText: "Password",
+                            error: container.errors?.password,
                             input: <MyItemInput
                                 className="w-72"
-                                name={myTools.propToString<EditCustomerInterface>().address + ""}
+                                name={myTools.propToString<EditCustomerInterface>().password + ""}
                                 onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.address!}
-                            />
-                        },
-                        {
-                            lableText: "Trn",
-                            error: container.errors?.trn,
-                            input: <MyItemInput
-                                className="w-72"
-                                name={myTools.propToString<EditCustomerInterface>().trn + ""}
-                                onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.trn!}
+                                value={container.data == undefined ? "" : container.data.password!}
                             />
                         },
                     ]} />

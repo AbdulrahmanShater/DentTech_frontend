@@ -16,7 +16,7 @@ export default function CreateContainer() {
     const [loading, setLoading] = useState<boolean>(false);
 
 
-    const [data, setData] = useState<CreateCustomerInterface>({ vendor: false, price_stage: 1 });
+    const [data, setData] = useState<CreateCustomerInterface | undefined>(undefined);
 
     const [errors, setErrors] = useState<CreateCustomerER | undefined>();
 
@@ -54,7 +54,7 @@ export default function CreateContainer() {
                 message: `For new entry`,
                 default: "yes",
                 onCallback(value) {
-                    saveHandler({ ...props, clearData: value })
+                    saveHandler({ ...props, clearData: !value })
                 },
             })
 
@@ -66,6 +66,10 @@ export default function CreateContainer() {
 
     const saveHandler = (props: { reInter: boolean, clearData: boolean }) => {
 
+        if (data == undefined) {
+            new MyToast("No Data To Save!").warning()
+            return;
+        };
         const validate = CreateValidation(data);
         if (validate !== undefined) {
             setErrors(validate)
@@ -79,7 +83,7 @@ export default function CreateContainer() {
                     document.location.replace("/")
                 }
                 if (props.clearData) {
-                    setData({ vendor: false, price_stage: 1 })
+                    setData(undefined)
                 }
             })
             .catch((error) => {

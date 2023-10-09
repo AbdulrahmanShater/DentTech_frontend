@@ -7,7 +7,7 @@ import MyTools from "@/hooks/MyTools";
 import { httpErrorHandler } from "@/hooks/httpErrorHandler";
 import MyToast from "@/hooks/toast";
 import { Company } from "@/models/company";
-import { useEffect, useState, useMemo } from "react"
+import { useEffect, useState, useMemo, useCallback } from "react"
 import { AiFillSave } from "react-icons/ai";
 
 export default function EditCompanyContainer(props: { comapny_id: number }) {
@@ -33,11 +33,23 @@ export default function EditCompanyContainer(props: { comapny_id: number }) {
         return false;
     }, [data])
 
+
+
+    let mounted = false;
+
+    const onload = useCallback(() => {
+        if (!mounted) {
+            getCompanyHandler()
+            mounted = true;
+        }
+    }, []);
+
     useEffect(() => {
         if (props.comapny_id) {
-            getCompanyHandler()
+            onload()
         }
     }, [props.comapny_id])
+
 
 
     const getCompanyHandler = () => {

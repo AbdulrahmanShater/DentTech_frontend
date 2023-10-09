@@ -94,7 +94,7 @@ export default function CompanyPage() {
                                     {/* Actions */}
                                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                                         <div className="flex items-center felx-row space-x-3.5">
-                                            <Link href={`/company/edit/${selectedCompany?.id}`} >
+                                            <Link href={`/company/edit/${company?.id}`} >
                                                 <button className="hover:text-primary" >
                                                     <AiOutlineEdit />
                                                 </button>

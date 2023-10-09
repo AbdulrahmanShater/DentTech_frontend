@@ -1,7 +1,6 @@
 "use client";
-import Link from "next/link";
-import { AiFillSave, AiOutlineArrowLeft, AiOutlineInfoCircle, AiOutlinePlus, AiOutlineSave, AiOutlineArrowRight } from "react-icons/ai";
-import React, { InputHTMLAttributes, useRef } from "react";
+import { AiOutlineArrowLeft, AiOutlineSave } from "react-icons/ai";
+import React, { } from "react";
 import { MyItemInput } from "@/components/Input/Input";
 import MyTools from "@/hooks/MyTools";
 import Applayout from "@/components/layout/Applayout";
@@ -25,13 +24,33 @@ const CreateCustomer = () => {
                 <div className="flex gap-3 h-full">
                     <TableThree inputs={[
                         {
-                            lableText: "Name",
-                            error: container.errors?.name,
+                            lableText: "First Name",
+                            error: container.errors?.firstName,
                             input: <MyItemInput
                                 className="w-72"
-                                name={myTools.propToString<CreateCustomerInterface>().name + ""}
+                                name={myTools.propToString<CreateCustomerInterface>().firstName + ""}
                                 onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.name!}
+                                value={container.data == undefined ? "" : container.data.firstName!}
+                            />
+                        },
+                        {
+                            lableText: "Last Name",
+                            error: container.errors?.lastName,
+                            input: <MyItemInput
+                                className="w-72"
+                                name={myTools.propToString<CreateCustomerInterface>().lastName + ""}
+                                onChange={container.inputHandeler}
+                                value={container.data == undefined ? "" : container.data.lastName!}
+                            />
+                        },
+                        {
+                            lableText: "Company",
+                            error: container.errors?.company,
+                            input: <MyItemInput
+                                className="w-72"
+                                name={myTools.propToString<CreateCustomerInterface>().company + ""}
+                                onChange={container.inputHandeler}
+                                value={container.data == undefined ? "" : container.data.company!}
                             />
                         },
                         {
@@ -45,18 +64,8 @@ const CreateCustomer = () => {
                             />
                         },
                         {
-                            lableText: "poBox",
-                            error: container.errors?.tel,
-                            input: <MyItemInput
-                                className="w-72"
-                                name={myTools.propToString<CreateCustomerInterface>().poBox + ""}
-                                onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.poBox!}
-                            />
-                        },
-                        {
                             lableText: "Email",
-                            error: container.errors?.tel,
+                            error: container.errors?.email,
                             input: <MyItemInput
                                 className="w-72"
                                 name={myTools.propToString<CreateCustomerInterface>().email + ""}
@@ -65,23 +74,13 @@ const CreateCustomer = () => {
                             />
                         },
                         {
-                            lableText: "Address",
-                            error: container.errors?.tel,
+                            lableText: "Password",
+                            error: container.errors?.password,
                             input: <MyItemInput
                                 className="w-72"
-                                name={myTools.propToString<CreateCustomerInterface>().address + ""}
+                                name={myTools.propToString<CreateCustomerInterface>().password + ""}
                                 onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.address!}
-                            />
-                        },
-                        {
-                            lableText: "Trn",
-                            error: container.errors?.tel,
-                            input: <MyItemInput
-                                className="w-72"
-                                name={myTools.propToString<CreateCustomerInterface>().trn + ""}
-                                onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.trn!}
+                                value={container.data == undefined ? "" : container.data.password!}
                             />
                         },
                     ]} />

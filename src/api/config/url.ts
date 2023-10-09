@@ -2,7 +2,7 @@ const URL = async () => {
 
     const COMPANY_URL_PREFIX = "" + "/company"
 
-    const CUSTOMER_URL_PREFIX = "" + "/customer"
+    const CUSTOMER_URL_PREFIX = "" + "/user"
 
     const AUTH_URL_PREFIX = "" + "/auth"
 

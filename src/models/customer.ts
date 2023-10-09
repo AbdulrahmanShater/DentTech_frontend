@@ -1,4 +1,5 @@
-export type Customer = {
+
+export type CustomerCompany = {
   id: number;
   name: string;
   tel: string;
@@ -11,7 +12,17 @@ export type Customer = {
   status: string;
   vendor: boolean,
   price_stage: number,
-  users: [],
   payments: string,
   trn: string;
+};
+
+export type Customer = {
+  id: number;
+  firstName?: string,
+  lastName?: string,
+  email?: string,
+  tel?: string,
+  password?: string,
+  company?: CustomerCompany,
+  invoice: []
 };

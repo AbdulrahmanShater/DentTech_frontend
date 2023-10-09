@@ -22,22 +22,18 @@ export default function CustomerPage() {
                         <thead>
                             <tr className="bg-gray-2 text-left dark:bg-meta-4">
                                 <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
-                                    {"Customer Name"}
+                                    {"First Name"}
                                 </th>
                                 <th className={`${selectedCustomer != undefined ? 'hidden' : 'table-cell'} min-w-[150px] py-4 px-4 font-medium text-black dark:text-white`}>
-                                    {"Debit"}
+                                    {"Last Name"}
                                 </th>
                                 <th className={`${selectedCustomer != undefined ? 'hidden' : 'table-cell'} min-w-[120px] py-4 px-4 font-medium text-black dark:text-white`}>
-                                    {"Credit"}
+                                    {"Email"}
                                 </th>
                                 <th className={`${selectedCustomer != undefined ? 'hidden' : 'table-cell'} py-4 px-4 font-medium text-black dark:text-white`}>
-                                    {"Balance"}
+                                    {"Tel"}
                                 </th>
                                 <th className={`${selectedCustomer != undefined ? 'hidden' : 'table-cell'} py-4 px-4 font-medium text-black dark:text-white`}>
-                                    {"Status"}
-                                </th>
-                                <th className={`py-4 px-4 font-medium text-black dark:text-white`}>
-                                    {"Actions"}
                                 </th>
                             </tr>
                         </thead>
@@ -47,7 +43,7 @@ export default function CustomerPage() {
                                     {/* Name */}
                                     <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                                         <p className="text-black dark:text-white">
-                                            {customer.name}
+                                            {customer.firstName}
                                         </p>
                                     </td>
                                     {/* Name */}
@@ -55,7 +51,7 @@ export default function CustomerPage() {
                                     {/* Debit */}
                                     <td className={`${selectedCustomer != undefined ? 'hidden' : 'table-cell'}  border-b border-[#eee] py-5 px-4 dark:border-strokedark`}>
                                         <p className="text-black dark:text-white">
-                                            {customer.debit}
+                                            {customer.lastName}
                                         </p>
                                     </td>
                                     {/* Debit */}
@@ -63,7 +59,7 @@ export default function CustomerPage() {
                                     {/* Credit */}
                                     <td className={`${selectedCustomer != undefined ? 'hidden' : 'table-cell'}  border-b border-[#eee] py-5 px-4 dark:border-strokedark`}>
                                         <p className="text-black dark:text-white">
-                                            {customer.credit}
+                                            {customer.email}
                                         </p>
                                     </td>
                                     {/* Credit */}
@@ -71,30 +67,16 @@ export default function CustomerPage() {
                                     {/* Balance */}
                                     <td className={`${selectedCustomer != undefined ? 'hidden' : 'table-cell'}  border-b border-[#eee] py-5 px-4 dark:border-strokedark`}>
                                         <p className="text-black dark:text-white">
-                                            {customer.balance}
+                                            {customer.tel}
                                         </p>
                                     </td>
                                     {/* Balance */}
 
-                                    {/* Status */}
-                                    <td className={`${selectedCustomer != undefined ? 'hidden' : 'table-cell'}  border-b border-[#eee] py-5 px-4 dark:border-strokedark`}>
-                                        <p
-                                            className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${customer.status === "Paid"
-                                                ? "text-success bg-success"
-                                                : customer.status === "Unpaid"
-                                                    ? "text-danger bg-danger"
-                                                    : "text-warning bg-warning"
-                                                }`}
-                                        >
-                                            {customer.status}
-                                        </p>
-                                    </td>
-                                    {/* Status */}
 
                                     {/* Actions */}
                                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                                         <div className="flex items-center felx-row space-x-3.5">
-                                            <Link href={`/customer/edit/${selectedCustomer?.id}`} >
+                                            <Link href={`/customer/edit/${customer?.id}`} >
                                                 <button className="hover:text-primary" >
                                                     <AiOutlineEdit />
                                                 </button>
@@ -193,7 +175,7 @@ export default function CustomerPage() {
                     <div className={`${selectedCustomer == undefined ? 'hidden' : 'block'} flex-2 flex flex-col bg-white dark:bg-boxdark border-stroke dark:border-strokedark rounded-sm border gap-5 px-5 pt-6 pb-2.5 sm:px-7.5 xl:pb-1 `}>
                         {/* header */}
                         <div className="flex flex-row justify-between items-center w-full">
-                            <h1 className="text-3xl font-bold">{selectedCustomer?.name}</h1>
+                            <h1 className="text-3xl font-bold">{selectedCustomer?.firstName}</h1>
                             <div className="flex flex-row justify-center items-center">
                                 <div
                                     className="cursor-pointer"
@@ -231,7 +213,7 @@ export default function CustomerPage() {
                                         className="w-25 h-25 bg-body rounded-lg"
                                     />
                                     <div className="flex flex-col">
-                                        <h3 className="font-bold">{selectedCustomer?.name}</h3>
+                                        <h3 className="font-bold">{selectedCustomer?.firstName}</h3>
                                         <h3>{selectedCustomer?.email}</h3>
                                         <ul className="flex flex-col gap-2">
                                             <li className="flex flex-row items-center justify-start ">

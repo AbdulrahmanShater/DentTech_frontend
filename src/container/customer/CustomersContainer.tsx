@@ -1,7 +1,6 @@
-import { CreateCustomerER, CreateCustomerInterface, CreateJsonR } from "@/api/interface/customer/create"
 import CustomerService from "@/api/services/CustomerService";
 import MyToast from "@/hooks/toast";
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { GetServerSideProps } from 'next';
 import { GetAllJsonR, DeleteCustomerInterface, } from "@/api/interface/customer";
 import { Customer } from "@/models/customer";
@@ -18,12 +17,20 @@ export default function CustomersContainer() {
 
     const [loading, setLoading] = useState<false>(false);
 
+    let mounted = false;
+
+    const onload = useCallback(() => {
+        if (!mounted) {
+            getCustomersHandler()
+            mounted = true;
+        }
+    }, []);
+
     useEffect(() => {
-        getCompaniesHandler()
-    }, [])
+        onload()
+    }, [onload])
 
-
-    const getCompaniesHandler = () => {
+    const getCustomersHandler = () => {
         CustomerService.getAll()
             .then(response => {
                 const res: GetAllJsonR = response.data;

@@ -3,26 +3,21 @@ import { Customer } from "@/models/customer";
 
 export interface EditCustomerInterface {
     id?: number,
-    name?: string,
+    firstName?: string,
+    lastName?: string,
     tel?: string,
-    poBox?: string,
     email?: string,
-    address?: string,
-    trn?: string,
-    vendor?: boolean,
-    price_stage?: number,
-
+    password?: string,
+    company?: number,
 }
-export interface EditCustomerInterfaceER  {
+export interface EditCustomerInterfaceER {
     id?: string,
-    name?: string,
+    firstName?: string,
+    lastName?: string,
     tel?: string,
-    poBox?: string,
     email?: string,
-    address?: string,
-    trn?: string,
-    vendor?: string,
-    price_stage?: string,
+    password?: string,
+    company?: string,
 }
 
 

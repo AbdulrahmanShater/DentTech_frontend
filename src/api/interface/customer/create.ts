@@ -2,24 +2,20 @@ import { BaseJsonResponse } from "@/api/config/BaseJson";
 import { Customer } from "@/models/customer";
 
 export interface CreateCustomerInterface {
-    name?: string,
+    firstName?: string,
+    lastName?: string,
     tel?: string,
-    poBox?: string,
     email?: string,
-    address?: string,
-    trn?: string,
-    vendor?: boolean,
-    price_stage?: number,
+    password?: string,
+    company?: number,
 }
 export interface CreateCustomerER {
-    name?: string,
+    firstName?: string,
+    lastName?: string,
     tel?: string,
-    poBox?: string,
     email?: string,
-    address?: string,
-    trn?: string,
-    vendor?: string,
-    price_stage?: string,
+    password?: string,
+    company?: string,
 }
 
 export interface CreateJsonR extends BaseJsonResponse<Customer[], CreateCustomerER> { }

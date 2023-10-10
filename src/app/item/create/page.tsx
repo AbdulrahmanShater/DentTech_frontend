@@ -1,107 +1,89 @@
 "use client";
+import { AiOutlineArrowLeft, AiOutlineSave } from "react-icons/ai";
+import React, { } from "react";
+import { MyItemInput } from "@/components/Input/Input";
+import MyTools from "@/hooks/MyTools";
+import Applayout from "@/components/layout/Applayout";
+import IconButton from "@/components/Button/IconButton";
+import GridItem from "@/components/GridItem";
+import { CreateItemInterface } from "@/api/interface/item";
+import CreateContainer from "@/container/item/CreateContainer";
 
-import { useParams, useRouter } from 'next/navigation'
-import { InputHTMLAttributes, useEffect, useState } from 'react';
+const CreateItem = () => {
 
-
-import Link from "next/link";
-import { Company } from "../../../../models/company";
-import DropdownFilter from "../../DropdownFilter";
-import { AiOutlineArrowLeft, AiOutlineEdit, AiOutlineInfoCircle, AiOutlinePlus, AiOutlineSave } from "react-icons/ai";
-import { MyItemInput } from '@/components/Input';
-import MyTools from '@/hooks/MyTools';
-import EditCompanyContainer from '@/container/company/EditCompanyContainer';
-import ToolTip from '@/components/ToolTip';
-import Applayout from '@/components/layout/Applayout';
-import IconButton from '@/components/Button/IconButton';
-import { EditCompanyInterface } from '@/api/interface/company';
-import GridItem from '@/components/GridItem';
-
-export default function EditCompany() {
-
-    const router = useRouter();
-    // const { id } = router.query; // get id value from URL
-
-    const { id } = useParams();
-    const container = EditCompanyContainer({ comapny_id: Number(id) });
+    const container = CreateContainer();
 
     const myTools = MyTools();
 
-
-    if (container.company == null) {
-        return (
-            <>
-                <div className="">{"loading.."}</div>
-            </>
-        )
-
-    }
     return (<>
         <Applayout>
-            <div className="flex flex-col gap-5">
-                <Header onClickSave={container.canSaveEditData ? container.submitHandler : undefined} backHanlder={container.backHandlerHandler} />
-                <div className="flex gap-3">
+            <div className="flex flex-col gap-5 h-full ">
+                <Header
+                    onClickSave={container.canSaveEditData ? container.submitHandler : undefined}
+                    backHanlder={container.backHandlerHandler} />
+                <div className="flex gap-3 h-full">
                     <TableThree inputs={[
                         {
                             lableText: "Name",
                             error: container.errors?.name,
                             input: <MyItemInput
                                 className="w-72"
-                                name={myTools.propToString<EditCompanyInterface>().name + ""}
+                                name={myTools.propToString<CreateItemInterface>().name + ""}
                                 onChange={container.inputHandeler}
                                 value={container.data == undefined ? "" : container.data.name!}
                             />
                         },
                         {
-                            lableText: "Tel",
-                            error: container.errors?.tel,
+                            lableText: "Description",
+                            error: container.errors?.description,
                             input: <MyItemInput
                                 className="w-72"
-                                name={myTools.propToString<EditCompanyInterface>().tel + ""}
+                                name={myTools.propToString<CreateItemInterface>().description + ""}
                                 onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.tel!}
+                                value={container.data == undefined ? "" : container.data.description!}
                             />
                         },
                         {
-                            lableText: "poBox",
-                            error: container.errors?.poBox,
+                            lableText: "Price1",
+                            error: container.errors?.price1,
                             input: <MyItemInput
                                 className="w-72"
-                                name={myTools.propToString<EditCompanyInterface>().poBox + ""}
+                                name={myTools.propToString<CreateItemInterface>().price1 + ""}
                                 onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.poBox!}
+                                value={container.data == undefined ? "" : container.data.price1!}
                             />
                         },
                         {
-                            lableText: "Email",
-                            error: container.errors?.email,
+                            lableText: "Price2",
+                            error: container.errors?.price1,
                             input: <MyItemInput
                                 className="w-72"
-                                name={myTools.propToString<EditCompanyInterface>().email + ""}
+                                name={myTools.propToString<CreateItemInterface>().price2 + ""}
                                 onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.email!}
+                                value={container.data == undefined ? "" : container.data.price2!}
                             />
                         },
                         {
-                            lableText: "Address",
-                            error: container.errors?.address,
+                            lableText: "Price3",
+                            error: container.errors?.price1,
                             input: <MyItemInput
                                 className="w-72"
-                                name={myTools.propToString<EditCompanyInterface>().address + ""}
+                                name={myTools.propToString<CreateItemInterface>().price3 + ""}
                                 onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.address!}
+                                value={container.data == undefined ? "" : container.data.price3!}
                             />
                         },
                         {
-                            lableText: "Trn",
-                            error: container.errors?.trn,
+                            lableText: "Price4",
+                            error: container.errors?.price1,
                             input: <MyItemInput
                                 className="w-72"
-                                name={myTools.propToString<EditCompanyInterface>().trn + ""}
+                                name={myTools.propToString<CreateItemInterface>().price4 + ""}
                                 onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.trn!}
+                                value={container.data == undefined ? "" : container.data.price4!}
                             />
                         },
+                      
                     ]} />
 
                 </div>
@@ -109,6 +91,7 @@ export default function EditCompany() {
         </Applayout>
     </>)
 }
+
 
 
 interface MyInputsInterface {
@@ -136,9 +119,7 @@ const TableThree = (props: { inputs: MyInputsInterface[], title?: string }) => {
     );
 };
 
-
-
-const Header = (props: { onClickSave?: () => void, backHanlder?: () => void }) => {
+const Header = (props: { onClickSave?: (props: { reInter: boolean }) => void, backHanlder?: () => void }) => {
     return (<>
         <div className="flex flex-row justify-between">
 
@@ -146,22 +127,24 @@ const Header = (props: { onClickSave?: () => void, backHanlder?: () => void }) =
                 <div className="cursor-pointer" onClick={props.backHanlder}>
                     <AiOutlineArrowLeft />
                 </div>
-                <h1 className="font-extrabold text-2xl">{"Edit Customer"}</h1>
+                <h1 className="font-extrabold text-2xl">{"New Item"}</h1>
             </div>
-
-            {/* buttons */}
             {
                 props.onClickSave !== undefined ?
                     <div className="flex">
-                        <IconButton className="bg-warning animate-pulse" text="Save Changing" icon={<AiOutlineSave />}
+                        <IconButton className="bg-success animate-pulse" text="save" icon={<AiOutlineSave />}
                             onClick={() => {
-                                props.onClickSave!()
+                                props.onClickSave!({ reInter: true })
                             }} />
+                        <IconButton className="bg-success" text="save and close" icon={<AiOutlineSave />}
+                            onClick={() => {
+                                props.onClickSave!({ reInter: false })
+                            }} />
+
                     </div> : <></>
             }
-            {/* buttons */}
 
         </div>
     </>)
 }
-
+export default CreateItem;

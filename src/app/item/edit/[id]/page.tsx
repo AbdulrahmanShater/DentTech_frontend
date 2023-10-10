@@ -1,34 +1,27 @@
 "use client";
 
 import { useParams, useRouter } from 'next/navigation'
-import { InputHTMLAttributes, useEffect, useState } from 'react';
-
-
-import Link from "next/link";
-import { Company } from "../../../../models/company";
-import DropdownFilter from "../../DropdownFilter";
-import { AiOutlineArrowLeft, AiOutlineEdit, AiOutlineInfoCircle, AiOutlinePlus, AiOutlineSave } from "react-icons/ai";
+import { AiOutlineArrowLeft, AiOutlineSave } from "react-icons/ai";
 import { MyItemInput } from '@/components/Input';
 import MyTools from '@/hooks/MyTools';
-import EditCompanyContainer from '@/container/company/EditCompanyContainer';
-import ToolTip from '@/components/ToolTip';
 import Applayout from '@/components/layout/Applayout';
 import IconButton from '@/components/Button/IconButton';
-import { EditCompanyInterface } from '@/api/interface/company';
+import { EditItemInterface } from '@/api/interface/item';
 import GridItem from '@/components/GridItem';
+import EditContainer from '@/container/item/EditContainer';
 
-export default function EditCompany() {
+export default function EditItem() {
 
     const router = useRouter();
     // const { id } = router.query; // get id value from URL
 
     const { id } = useParams();
-    const container = EditCompanyContainer({ comapny_id: Number(id) });
+    const container = EditContainer({ item_id: Number(id) });
 
     const myTools = MyTools();
 
 
-    if (container.company == null) {
+    if (container.item == null) {
         return (
             <>
                 <div className="">{"loading.."}</div>
@@ -47,59 +40,59 @@ export default function EditCompany() {
                             error: container.errors?.name,
                             input: <MyItemInput
                                 className="w-72"
-                                name={myTools.propToString<EditCompanyInterface>().name + ""}
+                                name={myTools.propToString<EditItemInterface>().name + ""}
                                 onChange={container.inputHandeler}
                                 value={container.data == undefined ? "" : container.data.name!}
                             />
                         },
                         {
-                            lableText: "Tel",
-                            error: container.errors?.tel,
+                            lableText: "Description",
+                            error: container.errors?.description,
                             input: <MyItemInput
                                 className="w-72"
-                                name={myTools.propToString<EditCompanyInterface>().tel + ""}
+                                name={myTools.propToString<EditItemInterface>().description + ""}
                                 onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.tel!}
+                                value={container.data == undefined ? "" : container.data.description!}
                             />
                         },
                         {
-                            lableText: "poBox",
-                            error: container.errors?.poBox,
+                            lableText: "Price1",
+                            error: container.errors?.price1,
                             input: <MyItemInput
                                 className="w-72"
-                                name={myTools.propToString<EditCompanyInterface>().poBox + ""}
+                                name={myTools.propToString<EditItemInterface>().price1 + ""}
                                 onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.poBox!}
+                                value={container.data == undefined ? "" : container.data.price1!}
                             />
                         },
                         {
-                            lableText: "Email",
-                            error: container.errors?.email,
+                            lableText: "Price2",
+                            error: container.errors?.price2,
                             input: <MyItemInput
                                 className="w-72"
-                                name={myTools.propToString<EditCompanyInterface>().email + ""}
+                                name={myTools.propToString<EditItemInterface>().price2 + ""}
                                 onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.email!}
+                                value={container.data == undefined ? "" : container.data.price2!}
                             />
                         },
                         {
-                            lableText: "Address",
-                            error: container.errors?.address,
+                            lableText: "Price3",
+                            error: container.errors?.price3,
                             input: <MyItemInput
                                 className="w-72"
-                                name={myTools.propToString<EditCompanyInterface>().address + ""}
+                                name={myTools.propToString<EditItemInterface>().price3 + ""}
                                 onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.address!}
+                                value={container.data == undefined ? "" : container.data.price3!}
                             />
                         },
                         {
-                            lableText: "Trn",
-                            error: container.errors?.trn,
+                            lableText: "Price4",
+                            error: container.errors?.price4,
                             input: <MyItemInput
                                 className="w-72"
-                                name={myTools.propToString<EditCompanyInterface>().trn + ""}
+                                name={myTools.propToString<EditItemInterface>().price4 + ""}
                                 onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.trn!}
+                                value={container.data == undefined ? "" : container.data.price4!}
                             />
                         },
                     ]} />
@@ -146,7 +139,7 @@ const Header = (props: { onClickSave?: () => void, backHanlder?: () => void }) =
                 <div className="cursor-pointer" onClick={props.backHanlder}>
                     <AiOutlineArrowLeft />
                 </div>
-                <h1 className="font-extrabold text-2xl">{"Edit Customer"}</h1>
+                <h1 className="font-extrabold text-2xl">{"Edit Item"}</h1>
             </div>
 
             {/* buttons */}

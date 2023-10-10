@@ -12,7 +12,7 @@ import { MdOutlinePayments } from "react-icons/md";
 import { RiBuilding2Line } from "react-icons/ri";
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { SlChemistry } from "react-icons/sl";
-import { AiOutlinePlus } from "react-icons/ai";
+import { AiOutlineInbox, AiOutlinePlus } from "react-icons/ai";
 
 import { SideBarGroupProps } from "./ListItem";
 
@@ -164,6 +164,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 title: "Customers",
                 href: "/customer",
                 icon: <HiOutlineUserGroup />,
+                items: [],
+              },
+              {
+                title: "Items",
+                href: "/item",
+                icon: <AiOutlineInbox />,
                 items: [],
               },
             ]}

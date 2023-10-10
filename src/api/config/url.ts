@@ -6,6 +6,17 @@ const URL = async () => {
 
     const AUTH_URL_PREFIX = "" + "/auth"
 
+    const ITEM_URL_PREFIX = "" + "/item"
+
+
+    const ITEM_URL = {
+        GET_ALL: ITEM_URL_PREFIX,
+        GET_BY_ID: ITEM_URL_PREFIX,
+        CREATE: ITEM_URL_PREFIX,
+        UPDATE: ITEM_URL_PREFIX,
+        DELETE: ITEM_URL_PREFIX,
+    };
+
 
     const COMPANY_URL = {
         GET_ALL: COMPANY_URL_PREFIX,
@@ -30,6 +41,7 @@ const URL = async () => {
         COMPANY_URL,
         CUSTOMER_URL,
         AUTH_URL,
+        ITEM_URL,
     }
 }
 

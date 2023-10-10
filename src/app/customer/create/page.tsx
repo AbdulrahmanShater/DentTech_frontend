@@ -103,7 +103,7 @@ const TableThree = (props: { inputs: MyInputsInterface[], title?: string }) => {
 
         <div className={`min-h-fit h-full flex-1 flex flex-col gap-4 rounded-xl border border-stroke bg-[var(--color3)] text-[var(--color2)] px-5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5`}>
             {props.title && <h1 className="text-title-md font-bold"> {props.title}</h1>}
-            <div className="max-w-full overflow-x-auto grid grid-cols-1 items-center gap-7 gap-x-14">
+            <div className="max-w-full overflow-x-auto grid xs:grid-cols-1 md:grid-cols-2 items-center gap-7 gap-x-14">
                 {
                     props.inputs.map((inp) => {
                         return (<>

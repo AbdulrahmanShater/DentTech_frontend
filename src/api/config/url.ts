@@ -8,6 +8,16 @@ const URL = async () => {
 
     const ITEM_URL_PREFIX = "" + "/item"
 
+    const BUY_INVOICE_URL_PREFIX = "" + "/buy-invoice"
+
+
+    const BUY_INVOICE_URL = {
+        GET_ALL: BUY_INVOICE_URL_PREFIX,
+        GET_BY_ID: BUY_INVOICE_URL_PREFIX,
+        CREATE: BUY_INVOICE_URL_PREFIX,
+        UPDATE: BUY_INVOICE_URL_PREFIX,
+        DELETE: BUY_INVOICE_URL_PREFIX,
+    };
 
     const ITEM_URL = {
         GET_ALL: ITEM_URL_PREFIX,
@@ -42,6 +52,7 @@ const URL = async () => {
         CUSTOMER_URL,
         AUTH_URL,
         ITEM_URL,
+        BUY_INVOICE_URL
     }
 }
 

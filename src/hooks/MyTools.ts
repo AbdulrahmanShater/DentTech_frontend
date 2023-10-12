@@ -11,6 +11,10 @@ export default function MyTools() {
         }) as T;
     }
 
+    const isValidDate = (date: string): boolean => {
+        const moment = require('moment');
+        return moment(date).isValid();
+    }
     const getObjectValueByKey = <T>(obj: T, key: keyof T) => {
         return obj[key];
     };
@@ -146,6 +150,7 @@ export default function MyTools() {
     }
 
     return {
+        isValidDate,
         propToString,
         getObjectValueByKey,
         encryptEmail,

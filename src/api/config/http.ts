@@ -15,7 +15,6 @@ export default async function http(multipart?: boolean): Promise<AxiosInstance> 
     // alert(BASE_URL);
     // const token: string = "";
 
-
     var HEADER = multipart == true ?
         {
             "Content-Type": "multipart/form-data",

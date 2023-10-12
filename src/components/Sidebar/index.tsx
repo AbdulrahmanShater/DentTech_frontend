@@ -184,8 +184,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             sidebarExpanded={sidebarExpanded}
             items={[
               {
-                title: "Invoice",
-                href: "/invoice",
+                title: "Buy Invoice",
+                href: "/invoice/buy",
                 icon: <LiaFileInvoiceSolid />,
                 items: [],
 

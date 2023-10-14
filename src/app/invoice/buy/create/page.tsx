@@ -1,6 +1,6 @@
 "use client";
-import { AiOutlineArrowLeft, AiOutlineSave } from "react-icons/ai";
-import React, { } from "react";
+import { AiOutlineArrowLeft, AiOutlineDelete, AiOutlineEdit, AiOutlineInfoCircle, AiOutlineSave } from "react-icons/ai";
+import React, { useState } from "react";
 import { MyItemInput } from "@/components/Input/Input";
 import MyTools from "@/hooks/MyTools";
 import Applayout from "@/components/layout/Applayout";
@@ -8,6 +8,8 @@ import IconButton from "@/components/Button/IconButton";
 import GridItem from "@/components/GridItem";
 import CreateContainer from "@/container/invoice/buy/CreateContainer";
 import { CreateInterface } from "@/api/interface/invoice/buy";
+import { BsArrowReturnRight } from "react-icons/bs";
+import { IoMdAddCircleOutline } from "react-icons/io";
 
 const CreateCustomer = () => {
 
@@ -76,9 +78,217 @@ const CreateCustomer = () => {
                     ]} />
 
                 </div>
+                <InvoiceItemTable />
             </div>
         </Applayout>
     </>)
+
+
+    function InvoiceItemTable() {
+
+        const myTools = MyTools()
+        interface InvoiceItemModel {
+            item_id?: number,
+            quantity?: number,
+            unite_price?: number
+        }
+        const [data, setData] = useState<InvoiceItemModel[]>([
+            {
+                item_id: 1,
+                quantity: 2,
+                unite_price: 252
+            },
+            {
+                item_id: 2,
+                quantity: 4,
+                unite_price: 300
+            },
+            {
+                item_id: 5,
+                quantity: 2,
+                unite_price: 150
+            }
+        ])
+
+        const [newRowData, setNewRowData] = useState<InvoiceItemModel>({});
+
+        const [newRow, setNewRow] = useState<boolean>(false)
+
+        const saveNewRowDate = () => {
+            setData((prev) => [...prev, newRowData]);
+            setNewRow(false)
+            setNewRowData({})
+        }
+
+        const copyLineHandler = (lineIndex: number) => {
+            const index = 2;
+            const rowdata = data[lineIndex]
+            const newData = [
+                ...data.slice(0, index),
+                rowdata,
+                ...data.slice(index)
+            ];
+            setData(newData)
+        }
+
+        const inputNewRowData = (event: any) => {
+            var value = event.target.value;
+            const name = event.target.name;
+            if (value == "" || value == null) {
+                value = undefined;
+            }
+            setNewRowData((prev) => ({ ...prev, [name]: value }));
+        }
+
+        const inputEditRowData = (event: any, rowIndex: number) => {
+            var value = event.target.value;
+            const name = event.target.name;
+            if (value == "" || value == null) {
+                value = undefined;
+            }
+            setData((prev) => (
+                prev.map((row, index) => {
+                    return index == rowIndex ? { ...row, [name]: value }
+                        : row
+                })
+            ))
+            setNewRowData((prev) => ({ ...prev, [name]: value }));
+        }
+
+        const deleteRowHandler = (rowData: InvoiceItemModel) => {
+            setData((prev) => prev.filter((f) => f != rowData))
+        }
+
+
+        return (<>
+            <div id="customerPage" className={`flex-1 rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 relative  `}>
+                <div className="max-w-full overflow-x-auto">
+                    <table className="w-full table-auto">
+                        <thead>
+                            <tr className="bg-gray-2 text-left dark:bg-meta-4">
+                                {
+                                    ["Item", "Quantity", "Unite Price", ""].map((col) => {
+                                        return (
+                                            <>
+                                                <th className="min-w-[220px] py-4 px-4 font-medium text-black text-center dark:text-white xl:pl-11">
+                                                    {col}
+                                                </th>
+                                            </>
+                                        )
+                                    })
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data.map((invoice, key) => (
+                                <tr key={key}>
+                                    <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11 text-center">
+                                        <select id="" className="text-black dark:text-white bg-white dark:bg-boxdark border outline-none p-2 rounded-lg w-full "
+                                            onChange={(event) => inputEditRowData(event, key)}
+                                            value={invoice.item_id}>
+                                            <option value={invoice.item_id}>{invoice.item_id}</option>
+                                            <option value={1}>{"1"}</option>
+                                            <option value={2}>{"2"}</option>
+                                            <option value={3}>{"3"}</option>
+                                            <option value={4}>{"4"}</option>
+                                        </select>
+                                    </td>
+
+                                    <td className={`  border-b border-[#eee] py-5 px-4 dark:border-strokedark text-center`}>
+                                        <input type="text" className="text-black dark:text-white bg-transparent border outline-none p-2 rounded-lg"
+                                            onChange={(event) => inputEditRowData(event, key)}
+                                            value={invoice.quantity} />
+                                        {/* <p className="text-black dark:text-white">
+                                            {invoice}
+                                        </p> */}
+                                    </td>
+
+                                    <td className={`  border-b border-[#eee] py-5 px-4 dark:border-strokedark text-center`}>
+                                        <input type="text" className="text-black dark:text-white bg-transparent border outline-none p-2 rounded-lg"
+                                            onChange={(event) => inputEditRowData(event, key)}
+                                            value={invoice.unite_price} />
+                                    </td>
+
+                                    {/* Actions */}
+                                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark text-end">
+                                        <div className="flex items-center justify-end felx-row space-x-3.5 gap-4 ">
+                                            <button className="hover:text-primary" onClick={() => {
+                                                copyLineHandler(key)
+                                            }}>
+                                                <BsArrowReturnRight />
+                                            </button>
+                                            <button className="hover:text-primary" onClick={() => {
+                                                deleteRowHandler(invoice)
+                                            }}>
+                                                <AiOutlineDelete />
+                                            </button>
+
+                                        </div>
+                                    </td>
+                                    {/* Actions */}
+                                </tr>
+                            ))}
+                            {
+                                newRow &&
+                                <tr key={-1}>
+                                    <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11 text-center">
+                                        <select
+                                            name={myTools.propToString<InvoiceItemModel>().item_id + ""}
+                                            id=""
+                                            onChange={inputNewRowData}
+                                            value={newRowData.item_id}
+                                            className="text-black dark:text-white bg-white dark:bg-boxdark border outline-none p-2 rounded-lg w-full " >
+                                            <option value={1}>{"1"}</option>
+                                            <option value={2}>{"2"}</option>
+                                            <option value={3}>{"3"}</option>
+                                            <option value={4}>{"4"}</option>
+                                        </select>
+                                    </td>
+
+                                    <td className={`  border-b border-[#eee] py-5 px-4 dark:border-strokedark text-center`}>
+                                        <input type="text" name={myTools.propToString<InvoiceItemModel>().quantity + ""} value={newRowData.quantity} onChange={inputNewRowData} className="text-black dark:text-white bg-transparent border outline-none p-2 rounded-lg" />
+                                        {/* <p className="text-black dark:text-white">
+                                    {invoice}
+                                </p> */}
+                                    </td>
+
+                                    <td className={`  border-b border-[#eee] py-5 px-4 dark:border-strokedark text-center`}>
+                                        <input type="text" name={myTools.propToString<InvoiceItemModel>().unite_price + ""} value={newRowData.unite_price} onChange={inputNewRowData} className="text-black dark:text-white bg-transparent border outline-none p-2 rounded-lg" />
+                                    </td>
+
+                                    {/* Actions */}
+                                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark text-end">
+                                        <div className="flex items-center justify-end felx-row space-x-3.5 gap-4 ">
+                                            <button className="hover:text-primary" onClick={() => {
+                                                saveNewRowDate()
+                                            }}>
+                                                <AiOutlineSave />
+                                            </button>
+                                            <button className="hover:text-primary" onClick={() => {
+                                                setNewRow(false)
+                                            }}>
+                                                <AiOutlineDelete />
+                                            </button>
+                                        </div>
+                                    </td>
+                                    {/* Actions */}
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    {
+
+                        !newRow && <button className="flex flex-row items-center gap-2 cursor-pointer" onClick={() => {
+                            setNewRow(true)
+                        }}>
+                            <IoMdAddCircleOutline />
+                            <h1>{"Add another line"}</h1>
+                        </button>
+                    }
+                </div>
+            </div>
+        </>)
+    }
 }
 
 

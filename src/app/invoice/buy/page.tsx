@@ -52,8 +52,8 @@ export default function InvoicePage() {
                                     </td>
 
                                     <td className={`${selectedCustomer != undefined ? 'hidden' : 'table-cell'}  border-b border-[#eee] py-5 px-4 dark:border-strokedark`}>
-                                        <p className={`text-white dark:text-white ${invoice.paid?'bg-success':'bg-danger'}  w-fit rounded-xl px-4 py-1`}>
-                                            {`${invoice.paid?'Paid':'Not Paid'}`}
+                                        <p className={`text-white dark:text-white ${invoice.paid ? 'bg-success' : 'bg-danger'}  w-fit rounded-xl px-4 py-1`}>
+                                            {`${invoice.paid ? 'Paid' : 'Not Paid'}`}
                                         </p>
                                     </td>
 

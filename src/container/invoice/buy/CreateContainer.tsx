@@ -1,4 +1,4 @@
-import { CreateER, CreateInterface, CreateJsonR } from "@/api/interface/invoice/buy";
+import { CreateER, CreateInterface, CreateJsonR, InvoiceItemInterface } from "@/api/interface/invoice/buy";
 import BuyInvoiceService from "@/api/services/invoice/BuyService";
 import { CreateValidation } from "@/api/validation/invoice/buy";
 import { ConfirmDialog } from "@/components/MyDialog/Confirm";
@@ -8,16 +8,33 @@ import MyToast from "@/hooks/toast";
 import { useEffect, useState, useMemo } from "react"
 import { AiFillSave } from "react-icons/ai";
 
+
+export interface TableItemModel extends InvoiceItemInterface {
+    rowId?: number,
+}
+
 export default function CreateContainer() {
 
     const myTools = MyTools()
 
     const [loading, setLoading] = useState<boolean>(false);
 
+    const [tableItems, setTableItems] = useState<TableItemModel[]>([])
 
     const [data, setData] = useState<CreateInterface | undefined>();
 
     const [errors, setErrors] = useState<CreateER | undefined>();
+
+    const tableItemsTotalValue: number = useMemo(() => {
+        var total = 0;
+        for (let index = 0; index < tableItems.length; index++) {
+            const element = tableItems[index];
+            total += (Number(element.quantity) * Number(element.unitPrice))
+        }
+        return total;
+    }, [tableItems])
+
+
 
     const canSaveEditData = useMemo(() => {
         if (data !== undefined) {
@@ -69,7 +86,7 @@ export default function CreateContainer() {
             new MyToast("No Data To Save!").warning()
             return;
         };
-        const validate = CreateValidation(data);
+        const validate = CreateValidation({ ...data, invoiceItems: tableItems });
         if (validate !== undefined) {
             setErrors(validate)
             return;
@@ -136,8 +153,11 @@ export default function CreateContainer() {
         submitHandler,
         backHandlerHandler,
         data,
+        tableItemsTotalValue,
         errors,
         loading,
         canSaveEditData,
+        tableItems,
+        setTableItems,
     }
 }

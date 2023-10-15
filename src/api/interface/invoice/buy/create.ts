@@ -1,8 +1,8 @@
 import { BaseJsonResponse } from "@/api/config/BaseJson";
 import { BuyInvoice } from "@/models/invoice/buyInvoice";
 
-interface InvoiceItemInterface {
-    quantity?: number;
+export interface InvoiceItemInterface {
+    quantity?: string;
     unitPrice?: string;
     item?: number;
 }

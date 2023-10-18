@@ -1,6 +1,6 @@
 "use client";
 import { AiOutlineArrowLeft, AiOutlineDelete, AiOutlineEdit, AiOutlineInfoCircle, AiOutlineSave } from "react-icons/ai";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { MyItemInput } from "@/components/Input/Input";
 import MyTools from "@/hooks/MyTools";
 import Applayout from "@/components/layout/Applayout";
@@ -10,12 +10,15 @@ import CreateContainer, { TableItemModel } from "@/container/invoice/buy/CreateC
 import { CreateInterface, InvoiceItemInterface } from "@/api/interface/invoice/buy";
 import { BsArrowReturnRight } from "react-icons/bs";
 import { IoMdAddCircleOutline } from "react-icons/io";
+import { PiArrowClockwiseLight } from "react-icons/pi";
+
 import { httpErrorHandler } from "@/hooks/httpErrorHandler";
 import MyToast from "@/hooks/toast";
 import { BuyInvoiceItem } from "@/models/invoice/buyInvoice";
 import { Item } from "@/models/item";
 import ItemService from "@/api/services/ItemService";
 import { GetAllJsonR } from "@/api/interface/item";
+import ToolTip from "@/components/ToolTip";
 
 const CreateCustomer = () => {
 
@@ -84,343 +87,228 @@ const CreateCustomer = () => {
                     ]} />
 
                 </div>
-                <ItemsTable />
+                <ItemsTable
+                    data={container.data?.invoiceItems == undefined ? [] : container.data?.invoiceItems.map((item, index) => {
+                        return { ...item, index }
+                    })}
+                    hiddenNewRow={false}
+                    hiddenSelectAll={false}
+                    saveHandler={(data, atIndex) => {
+
+                        if (container.data == undefined || container.data?.invoiceItems == undefined) {
+                            container.setData((prev) => ({ ...prev, items: [data] }))
+                        } else {
+                            container.setData((prev) => ({
+                                ...prev, items:
+                                    atIndex == undefined ?
+                                        [...prev?.invoiceItems!, data] :
+                                        [
+                                            ...prev!.invoiceItems!.slice(0, atIndex),
+                                            {
+                                                ...data,
+                                            },
+                                            ...prev!.invoiceItems!.slice(atIndex)
+                                        ]
+                            }))
+                        }
+                    }}
+                    deleteHandler={(data) => {
+                        container.setData((prev) => ({ ...prev, items: prev?.invoiceItems?.filter((f) => Number(f.rowId) != Number(data.rowId)) }))
+                    }}
+                    editHandler={(data) => {
+                        container.setData((prev) => ({
+                            ...prev, items: prev?.invoiceItems?.map((item) => {
+                                return Number(item.rowId) == Number(data.rowId) ? data : item
+                            })
+                        }))
+                    }}
+                />
+
+                {/* summary table */}
+                <div id="customerPage" className={`flex-1 rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 relative  `}>
+                    <div className="max-w-full overflow-x-auto">
+                        <table className="w-full table-auto">
+                            <thead>
+                                <tr className="bg-gray-2 text-left dark:bg-meta-4">
+                                    {
+                                        ["Total"].map((col) => {
+                                            return (
+                                                <>
+                                                    <th className="min-w-[220px] py-4 px-4 font-medium text-black text-center dark:text-white xl:pl-11">
+                                                        {col}
+                                                    </th>
+                                                </>
+                                            )
+                                        })
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr >
+                                    <td className={`  border-b border-[#eee] py-5 px-4 dark:border-strokedark text-center`}>
+                                        <ToolTip tooltip={"هذا الحق يعبر عن مجموع عناصر الجدول ولايمكن تغيره يدوياً"}>
+                                            <input
+                                                type="text"
+
+                                                className="text-center text-black dark:text-white bg-transparent border outline-none p-2 disabled:bg-gray-300 rounded-lg cursor-not-allowed"
+                                                value={container.tableItemsTotalValue}
+                                                disabled
+                                            />
+                                        </ToolTip>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </Applayout>
     </>)
+}
+interface ItemsTableProps {
+    data: TableItems[],
+    // onDataChange: (data: OfferItemModel[]) => void,
+    saveHandler: (data: TableItems, atIndex?: number) => void,
+
+    editHandler: (data: TableItems) => void,
+    deleteHandler: (data: TableItems) => void,
+    hiddenNewRow: boolean,
+    hiddenSelectAll: boolean,
+
+}
+interface TableItems extends InvoiceItemInterface {
+    rowId?: number,
+}
+
+function ItemsTable(props: ItemsTableProps) {
 
 
-    // function InvoiceItemTable() {
+    const myTools = MyTools()
 
-    //     const myTools = MyTools()
-    //     interface InvoiceItemModel {
-    //         item_id?: number,
-    //         quantity?: number,
-    //         unite_price?: number
-    //     }
-    //     const [data, setData] = useState<InvoiceItemModel[]>([
-    //         {
-    //             item_id: 1,
-    //             quantity: 2,
-    //             unite_price: 252
-    //         },
-    //         {
-    //             item_id: 2,
-    //             quantity: 4,
-    //             unite_price: 300
-    //         },
-    //         {
-    //             item_id: 5,
-    //             quantity: 2,
-    //             unite_price: 150
-    //         }
-    //     ])
+    const [loading, setLoading] = useState<boolean>(false);
 
-    //     const [newRowData, setNewRowData] = useState<InvoiceItemModel>({});
+    const [items, setItems] = useState<Item[]>([]);
 
-    //     const [newRow, setNewRow] = useState<boolean>(false)
+    // const [data, setData] = useState<TableItems[]>([])
 
-    //     const saveNewRowDate = () => {
-    //         setData((prev) => [...prev, newRowData]);
-    //         setNewRow(false)
-    //         setNewRowData({})
-    //     }
+    const [newRowData, setNewRowData] = useState<TableItems>({});
 
-    //     const copyLineHandler = (lineIndex: number) => {
-    //         const index = 2;
-    //         const rowdata = data[lineIndex]
-    //         const newData = [
-    //             ...data.slice(0, index),
-    //             rowdata,
-    //             ...data.slice(index)
-    //         ];
-    //         setData(newData)
-    //     }
-
-    //     const inputNewRowData = (event: any) => {
-    //         var value = event.target.value;
-    //         const name = event.target.name;
-    //         if (value == "" || value == null) {
-    //             value = undefined;
-    //         }
-    //         setNewRowData((prev) => ({ ...prev, [name]: value }));
-    //     }
-
-    //     const inputEditRowData = (event: any, rowIndex: number) => {
-    //         var value = event.target.value;
-    //         const name = event.target.name;
-    //         if (value == "" || value == null) {
-    //             value = undefined;
-    //         }
-    //         setData((prev) => (
-    //             prev.map((row, index) => {
-    //                 return index == rowIndex ? { ...row, [name]: value }
-    //                     : row
-    //             })
-    //         ))
-    //         setNewRowData((prev) => ({ ...prev, [name]: value }));
-    //     }
-
-    //     const deleteRowHandler = (rowData: InvoiceItemModel) => {
-    //         setData((prev) => prev.filter((f) => f != rowData))
-    //     }
+    const [newRow, setNewRow] = useState<boolean>(true)
 
 
-    //     return (<>
-    //         <div id="customerPage" className={`flex-1 rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 relative  `}>
-    //             <div className="max-w-full overflow-x-auto">
-    //                 <table className="w-full table-auto">
-    //                     <thead>
-    //                         <tr className="bg-gray-2 text-left dark:bg-meta-4">
-    //                             {
-    //                                 ["Item", "Quantity", "Unite Price", ""].map((col) => {
-    //                                     return (
-    //                                         <>
-    //                                             <th className="min-w-[220px] py-4 px-4 font-medium text-black text-center dark:text-white xl:pl-11">
-    //                                                 {col}
-    //                                             </th>
-    //                                         </>
-    //                                     )
-    //                                 })
-    //                             }
-    //                         </tr>
-    //                     </thead>
-    //                     <tbody>
-    //                         {data.map((invoice, key) => (
-    //                             <tr key={key}>
-    //                                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11 text-center">
-    //                                     <select id="" className="text-black dark:text-white bg-white dark:bg-boxdark border outline-none p-2 rounded-lg w-full "
-    //                                         onChange={(event) => inputEditRowData(event, key)}
-    //                                         value={invoice.item_id}>
-    //                                         <option value={invoice.item_id}>{invoice.item_id}</option>
-    //                                         <option value={1}>{"1"}</option>
-    //                                         <option value={2}>{"2"}</option>
-    //                                         <option value={3}>{"3"}</option>
-    //                                         <option value={4}>{"4"}</option>
-    //                                     </select>
-    //                                 </td>
-
-    //                                 <td className={`  border-b border-[#eee] py-5 px-4 dark:border-strokedark text-center`}>
-    //                                     <input type="text" className="text-black dark:text-white bg-transparent border outline-none p-2 rounded-lg"
-    //                                         onChange={(event) => inputEditRowData(event, key)}
-    //                                         value={invoice.quantity} />
-    //                                     {/* <p className="text-black dark:text-white">
-    //                                         {invoice}
-    //                                     </p> */}
-    //                                 </td>
-
-    //                                 <td className={`  border-b border-[#eee] py-5 px-4 dark:border-strokedark text-center`}>
-    //                                     <input type="text" className="text-black dark:text-white bg-transparent border outline-none p-2 rounded-lg"
-    //                                         onChange={(event) => inputEditRowData(event, key)}
-    //                                         value={invoice.unite_price} />
-    //                                 </td>
-
-    //                                 {/* Actions */}
-    //                                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark text-end">
-    //                                     <div className="flex items-center justify-end felx-row space-x-3.5 gap-4 ">
-    //                                         <button className="hover:text-primary" onClick={() => {
-    //                                             copyLineHandler(key)
-    //                                         }}>
-    //                                             <BsArrowReturnRight />
-    //                                         </button>
-    //                                         <button className="hover:text-primary" onClick={() => {
-    //                                             deleteRowHandler(invoice)
-    //                                         }}>
-    //                                             <AiOutlineDelete />
-    //                                         </button>
-
-    //                                     </div>
-    //                                 </td>
-    //                                 {/* Actions */}
-    //                             </tr>
-    //                         ))}
-    //                         {
-    //                             newRow &&
-    //                             <tr key={-1}>
-    //                                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11 text-center">
-    //                                     <select
-    //                                         name={myTools.propToString<InvoiceItemModel>().item_id + ""}
-    //                                         id=""
-    //                                         onChange={inputNewRowData}
-    //                                         value={newRowData.item_id}
-    //                                         className="text-black dark:text-white bg-white dark:bg-boxdark border outline-none p-2 rounded-lg w-full " >
-    //                                         <option value={1}>{"1"}</option>
-    //                                         <option value={2}>{"2"}</option>
-    //                                         <option value={3}>{"3"}</option>
-    //                                         <option value={4}>{"4"}</option>
-    //                                     </select>
-    //                                 </td>
-
-    //                                 <td className={`  border-b border-[#eee] py-5 px-4 dark:border-strokedark text-center`}>
-    //                                     <input type="text" name={myTools.propToString<InvoiceItemModel>().quantity + ""} value={newRowData.quantity} onChange={inputNewRowData} className="text-black dark:text-white bg-transparent border outline-none p-2 rounded-lg" />
-    //                                     {/* <p className="text-black dark:text-white">
-    //                                 {invoice}
-    //                             </p> */}
-    //                                 </td>
-
-    //                                 <td className={`  border-b border-[#eee] py-5 px-4 dark:border-strokedark text-center`}>
-    //                                     <input type="text" name={myTools.propToString<InvoiceItemModel>().unite_price + ""} value={newRowData.unite_price} onChange={inputNewRowData} className="text-black dark:text-white bg-transparent border outline-none p-2 rounded-lg" />
-    //                                 </td>
-
-    //                                 {/* Actions */}
-    //                                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark text-end">
-    //                                     <div className="flex items-center justify-end felx-row space-x-3.5 gap-4 ">
-    //                                         <button className="hover:text-primary" onClick={() => {
-    //                                             saveNewRowDate()
-    //                                         }}>
-    //                                             <AiOutlineSave />
-    //                                         </button>
-    //                                         <button className="hover:text-primary" onClick={() => {
-    //                                             setNewRow(false)
-    //                                         }}>
-    //                                             <AiOutlineDelete />
-    //                                         </button>
-    //                                     </div>
-    //                                 </td>
-    //                                 {/* Actions */}
-    //                             </tr>
-    //                         }
-    //                     </tbody>
-    //                 </table>
-    //                 {
-
-    //                     !newRow && <button className="flex flex-row items-center gap-2 cursor-pointer" onClick={() => {
-    //                         setNewRow(true)
-    //                     }}>
-    //                         <IoMdAddCircleOutline />
-    //                         <h1>{"Add another line"}</h1>
-    //                     </button>
-    //                 }
-    //             </div>
-    //         </div>
-    //     </>)
-    // }
-    function ItemsTable() {
-
-        const getDataHandler = () => {
-
-            setLoading(true)
-            ItemService.getAll().then((response: any) => {
-                const res: GetAllJsonR = response.data;
-                setItems(res.data)
-            }).catch((error: any) => {
-                httpErrorHandler(error, {
-                    onStatusCode: function (status: number): void {
-                        const res: GetAllJsonR = error.response.data;
-                        switch (status) {
-                            case 404:
-                                new MyToast("Sorry, the requested resource could not be found. Please check your API endpoint or try again late").error()
-                                break;
-                            default:
-                                new MyToast(res.message).error()
-                                break;
-                        }
-                    },
-
-                })
-            }).finally(() => {
-                setLoading(false)
-            })
-        }
-
-        useEffect(() => {
-            getDataHandler()
-        }, [])
-
-        const myTools = MyTools()
-
-
-        const [loading, setLoading] = useState<boolean>(false);
-
-        const [items, setItems] = useState<Item[]>([]);
-
-
-
-        const [newRowData, setNewRowData] = useState<TableItemModel>({});
-
-        const [newRow, setNewRow] = useState<boolean>(false)
-
-
-        const getnextRowId = (): number => {
-            return container.tableItems.reduce((max, item) => {
-                if (item.rowId != undefined && item.rowId > max) {
-                    return item.rowId;
-                } else {
-                    return max;
-                }
-            }, 0);
-        }
-        const saveNewRowDate = () => {
-
-            container.setTableItems((prev) => [...prev, { ...newRowData, rowId: getnextRowId() }]);
-            setNewRow(false)
-            setNewRowData({})
-        }
-
-
-        const copyLineHandler = (lineIndex: number) => {
-            const index = lineIndex;
-            const rowdata: TableItemModel = container.tableItems[lineIndex];
-
-            // use reduce method to get maximum id value
-            const newData = [
-                ...container.tableItems.slice(0, index),
-                {
-                    ...rowdata,
-                    rowdata: getnextRowId()
+    const getDataHandler = useCallback(() => {
+        setLoading(true)
+        ItemService.getAll().then((response: any) => {
+            const res: GetAllJsonR = response.data;
+            setItems(res.data)
+            setNewRowData((prev) => ({ ...prev, category_id: res.data[0].id }))
+        }).catch((error: any) => {
+            httpErrorHandler(error, {
+                onStatusCode: function (status: number): void {
+                    const res: GetAllJsonR = error.response.data;
+                    switch (status) {
+                        case 404:
+                            new MyToast("Sorry, the requested resource could not be found. Please check your API endpoint or try again late").error()
+                            break;
+                        default:
+                            new MyToast(res.message).error()
+                            break;
+                    }
                 },
-                ...container.tableItems.slice(index)
-            ];
-            container.setTableItems(newData)
-        }
 
-        const inputNewRowData = (event: any) => {
-            const type: React.HTMLInputTypeAttribute = event.target.type
-            const name = event.target.name;
-            var value = type == "checkbox" ? event.target.checked : event.target.value;
-            if (type != "checkbox" && (value == "" || value == null)) {
-                value = undefined;
-            }
-            setNewRowData((prev) => ({ ...prev, [name]: value }));
-        }
-
-        const inputEditRowData = (event: any, rowId: number) => {
-            const type: React.HTMLInputTypeAttribute = event.target.type
-            const name = event.target.name;
-            var value = type == "checkbox" ? event.target.checked : event.target.value;
-            if (type != "checkbox" && (value == "" || value == null)) {
-                value = undefined;
-            }
-            container.setTableItems((prev) => (
-                prev.map((row, index) => {
-                    return row.rowId == rowId ? { ...row, [name]: value }
-                        : row
-                })
-            ))
-            setNewRowData((prev) => ({ ...prev, [name]: value }));
-        }
-
-        const deleteRowHandler = (rowData: TableItemModel) => {
-            container.setTableItems((prev) => prev.filter((f) => f.rowId != rowData.rowId))
-        }
-
-        const canSaveNewRow: boolean = React.useMemo(() => {
-            return (newRowData.item !== undefined && newRowData.quantity !== undefined && newRowData.unitPrice !== undefined)
-        }, [newRowData])
+            })
+        }).finally(() => {
+            setLoading(false)
+        })
+    }, [])
 
 
-        useEffect(() => {
-            if (newRowData.item != undefined) {
-                setNewRowData((prev) => ({ ...prev, quantity: 1 + "" }))
-                setNewRowData((prev) => ({ ...prev, unite_price: items.filter((cf) => cf.id == newRowData.item)[0]?.price1! + "" }))
+    useEffect(() => {
+        getDataHandler()
+    }, [getDataHandler])
+
+
+    const getnextRowId = (): number => {
+        return props.data.reduce((max, item) => {
+            if (item.rowId != undefined && item.rowId > max) {
+                return item.rowId;
             } else {
-                setNewRowData((prev) => ({ ...prev, quantity: "" }))
-                setNewRowData((prev) => ({ ...prev, unite_price: "" }))
+                return max;
             }
+        }, 0) + 1;
+    }
 
-        }, [newRowData.item])
+    const getItemPrice = (invoice: TableItems): string => {
 
+        return items.filter((cf) => cf.id == invoice.item)[0].price1! + ""
+    }
 
+    const ALL_ID = "";
+
+    //---------------------
+    // DATA
+    //  
+    const copyLineHandler = (rowId: number) => {
+        const rowdata: TableItems = props.data.filter((f) => f.rowId == rowId)[0];
+        props.saveHandler({ ...rowdata, rowId: getnextRowId() }, props.data.indexOf(rowdata))
+    }
+    const inputEditRowData = (event: any, rowId: number) => {
+        const type: React.HTMLInputTypeAttribute = event.target.type
+        const name = event.target.name;
+        var value = type == "checkbox" ? event.target.checked : event.target.value;
+        if (type != "checkbox" && (value == "" || value == null)) {
+            value = undefined;
+        }
+        const newData: TableItems = {
+            ...props.data.filter((df) => df.rowId == rowId)[0], [name]: value
+        };
+        props.editHandler(newData)
+    }
+    const deleteRowHandler = (rowData: TableItems) => {
+        props.deleteHandler(rowData)
+    }
+    const recoverItemPrice = (rowId: number) => {
+        const item = props.data.filter((df) => df.rowId == rowId)[0];
+        const newData: TableItems = {
+            ...props.data.filter((df) => df.rowId == rowId)[0],
+            unitPrice: getItemPrice(item)
+        };
+        props.editHandler(newData)
+    }
+
+    //---------------------
+    // NEW ROW
+    //
+    const canSaveNewRow: boolean = useMemo(() => {
+        return (newRowData.item !== undefined && newRowData.quantity !== undefined && newRowData.unitPrice !== undefined)
+    }, [newRowData])
+
+    const saveNewRowDate = () => {
+        props.saveHandler({ ...newRowData, rowId: getnextRowId() })
+        setNewRowData({ item: items[0].id })
+    }
+
+    const inputNewRowData = (event: any) => {
+        const type: React.HTMLInputTypeAttribute = event.target.type
+        const name = event.target.name;
+        var value = type == "checkbox" ? event.target.checked : event.target.value;
+        if (type != "checkbox" && (value == "" || value == null || value == ALL_ID)) {
+            value = undefined;
+        }
+        setNewRowData((prev) => ({ ...prev, [name]: value }));
+    }
+
+    const deleteNewRowHandler = () => {
+        setNewRowData({})
+    }
+
+    const recoverNewRowItemPrice = () => {
+
+        setNewRowData((prev) => ({ ...prev, unite_price: getItemPrice(newRowData), is_free: false }))
+    }
+
+    return useMemo(() => {
         return (<>
             <div id="customerPage" className={`flex-1 rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 relative  `}>
                 <div className="max-w-full overflow-x-auto">
@@ -428,7 +316,7 @@ const CreateCustomer = () => {
                         <thead>
                             <tr className="bg-gray-2 text-left dark:bg-meta-4">
                                 {
-                                    ["NO", "Invoice Item", "Quantity", "Price", ""].map((col) => {
+                                    ["Number", "Item", "Quantity", "Unit Price", ""].map((col) => {
                                         return (
                                             <>
                                                 <th className="min-w-[220px] py-4 px-4 font-medium text-black text-center dark:text-white xl:pl-11">
@@ -441,15 +329,15 @@ const CreateCustomer = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {container.tableItems.map((invoice, key) => {
+                            {props.data.map((invoice, key) => {
                                 return <tr key={invoice.rowId}>
                                     <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11 text-center">
-                                        {key + 1}
+                                        <h1>{key + 1}</h1>
                                     </td>
                                     <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11 text-center">
-                                        <select id="" name={myTools.propToString<TableItemModel>().item + ""} className="text-black dark:text-white bg-white dark:bg-boxdark border outline-none p-2 rounded-lg w-full "
+                                        <select id="" name={myTools.propToString<TableItems>().item + ""} className="text-black dark:text-white bg-white dark:bg-boxdark border outline-none p-2 rounded-lg w-full "
                                             onChange={(event) => inputEditRowData(event, invoice.rowId!)}
-                                            value={invoice.item}>
+                                            value={invoice.item == undefined ? "" : invoice.item}>
                                             {
                                                 items.map((c, key) => {
                                                     return <option key={key} value={c.id}>{c.name}</option>
@@ -459,17 +347,24 @@ const CreateCustomer = () => {
                                     </td>
 
                                     <td className={`  border-b border-[#eee] py-5 px-4 dark:border-strokedark text-center`}>
-                                        <input type="text" name={myTools.propToString<TableItemModel>().quantity + ""} className="text-black dark:text-white bg-transparent border outline-none p-2 rounded-lg"
+                                        <input type="number" name={myTools.propToString<TableItems>().quantity + ""} className="text-black dark:text-white bg-transparent border outline-none p-2 rounded-lg"
                                             onChange={(event) => inputEditRowData(event, invoice.rowId!)}
                                             value={invoice.quantity}
                                         />
                                     </td>
 
                                     <td className={`  border-b border-[#eee] py-5 px-4 dark:border-strokedark text-center`}>
-                                        <input type="text" name={myTools.propToString<TableItemModel>().unitPrice + ""} className="text-black dark:text-white bg-transparent border outline-none p-2 rounded-lg"
-                                            onChange={(event) => inputEditRowData(event, invoice.rowId!)}
-                                            value={invoice.unitPrice}
-                                        />
+                                        <div className="flex">
+                                            <input type="number" name={myTools.propToString<TableItems>().unitPrice + ""} className="text-black dark:text-white bg-transparent border outline-none p-2 rounded-lg"
+                                                onChange={(event) => inputEditRowData(event, invoice.rowId!)}
+                                                value={invoice.unitPrice}
+                                            />
+                                            <button onClick={() => { recoverItemPrice(Number(invoice.rowId)) }}>
+                                                <ToolTip tooltip="إعادة تعين سعر المنتج">
+                                                    <PiArrowClockwiseLight className={`text-success text-xl ms-2 !cursor-pointer`} />
+                                                </ToolTip>
+                                            </button>
+                                        </div>
                                     </td>
 
                                     {/* Actions */}
@@ -485,43 +380,53 @@ const CreateCustomer = () => {
                                             }}>
                                                 <AiOutlineDelete />
                                             </button>
-
                                         </div>
                                     </td>
                                     {/* Actions */}
                                 </tr>
                             })}
                             {
-                                newRow &&
+                                (!props.hiddenNewRow && newRow) &&
                                 <tr key={-1}>
-
-
-                                    <td className={`  border-b border-[#eee] py-5 px-4 dark:border-strokedark text-center`}>
-                                        {container.tableItems.length + 1}
-                                    </td>
-
                                     <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11 text-center">
-                                        <select id="" name={myTools.propToString<TableItemModel>().item + ""} className="text-black dark:text-white bg-white dark:bg-boxdark border outline-none p-2 rounded-lg w-full "
-                                            onChange={inputNewRowData}
-                                            value={newRowData.item}>
+                                        <h1>{props.data.length + 1}</h1>
+                                    </td>
+                                    <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11 text-center">
+                                        {
+                                            loading ?
+                                                <h1>{"loading items.."}</h1>
+                                                : <select id="" name={myTools.propToString<TableItems>().item + ""} className="text-black dark:text-white bg-white dark:bg-boxdark border outline-none p-2 rounded-lg w-full "
+                                                    onChange={inputNewRowData}
+                                                    value={newRowData.item}>
+                                                    {
+                                                        items.map((c, key) => {
+                                                            return <option key={key} value={c.id}>{c.name}</option>
+                                                        })
+                                                    }
+                                                </select>
+                                        }
+
+                                    </td>
+
+                                    <td className={`  border-b border-[#eee] py-5 px-4 dark:border-strokedark text-center`}>
+                                        <input type="number" name={myTools.propToString<TableItems>().quantity + ""} value={newRowData.quantity} onChange={inputNewRowData} className="text-black dark:text-white bg-transparent border outline-none p-2 rounded-lg" />
+                                        {/* <p className="text-black dark:text-white">
+                                {invoice}
+                            </p> */}
+                                    </td>
+
+                                    <td className={`  border-b border-[#eee] py-5 px-4 dark:border-strokedark text-center`}>
+                                        <div className="flex">
+                                            <input type="number" value={newRowData.unitPrice} name={myTools.propToString<TableItems>().unitPrice + ""} onChange={inputNewRowData} className="text-black dark:text-white bg-transparent border outline-none p-2 rounded-lg" />
                                             {
-                                                items.map((c, key) => {
-                                                    return <option key={key} value={c.id}>{c.name}</option>
-                                                })
+                                                <button onClick={recoverNewRowItemPrice}>
+                                                    <ToolTip tooltip="إعادة تعين سعر المنتج">
+                                                        <PiArrowClockwiseLight className={`text-success text-xl ms-2 !cursor-pointer`} />
+                                                    </ToolTip>
+                                                </button>
                                             }
-                                        </select>
+                                        </div>
                                     </td>
-
-
-                                    <td className={`  border-b border-[#eee] py-5 px-4 dark:border-strokedark text-center`}>
-                                        <input type="text" name={myTools.propToString<TableItemModel>().quantity + ""} value={newRowData.quantity} onChange={inputNewRowData} className="text-black dark:text-white bg-transparent border outline-none p-2 rounded-lg" />
-
-                                    </td>
-
-                                    <td className={`  border-b border-[#eee] py-5 px-4 dark:border-strokedark text-center`}>
-                                        <input type="text" value={newRowData.unitPrice} name={myTools.propToString<TableItemModel>().unitPrice + ""} onChange={inputNewRowData} className="text-black dark:text-white bg-transparent border outline-none p-2 rounded-lg" />
-                                    </td>
-
 
                                     {/* Actions */}
                                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark text-end">
@@ -533,9 +438,8 @@ const CreateCustomer = () => {
                                                     <AiOutlineSave />
                                                 </button>
                                             }
-
                                             <button className="hover:text-primary" onClick={() => {
-                                                setNewRow(false)
+                                                // setNewRow(false)
                                             }}>
                                                 <AiOutlineDelete />
                                             </button>
@@ -546,22 +450,17 @@ const CreateCustomer = () => {
                             }
                         </tbody>
                     </table>
-                    <div className="flex flex-row justify-between items-center">
-                        {
+                    {
 
-                            !newRow && <button className="flex flex-row items-center gap-2 cursor-pointer mt-2" onClick={() => {
-                                setNewRow(true)
-                            }}>
-                                <IoMdAddCircleOutline />
-                                <h1>{"Add New Line"}</h1>
-                            </button>
-                        }
-                        <h1>{container.tableItemsTotalValue}</h1>
-                    </div>
+                        !newRow && <button className="flex flex-row items-center gap-2 cursor-pointer mt-2" onClick={deleteNewRowHandler}>
+                            <IoMdAddCircleOutline />
+                            <h1>{"إضافة سطر"}</h1>
+                        </button>
+                    }
                 </div>
             </div>
         </>)
-    }
+    }, [props.data, newRowData, newRow, canSaveNewRow, newRow, items])
 }
 
 

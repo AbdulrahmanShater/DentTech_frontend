@@ -19,7 +19,7 @@ export default function CreateContainer() {
 
     const [loading, setLoading] = useState<boolean>(false);
 
-    const [tableItems, setTableItems] = useState<TableItemModel[]>([])
+    // const [tableItems, setTableItems] = useState<TableItemModel[]>([])
 
     const [data, setData] = useState<CreateInterface | undefined>();
 
@@ -27,12 +27,13 @@ export default function CreateContainer() {
 
     const tableItemsTotalValue: number = useMemo(() => {
         var total = 0;
-        for (let index = 0; index < tableItems.length; index++) {
-            const element = tableItems[index];
-            total += (Number(element.quantity) * Number(element.unitPrice))
-        }
+        if (data?.invoiceItems)
+            for (let index = 0; index < data.invoiceItems.length; index++) {
+                const element = data.invoiceItems[index];
+                total += (Number(element.quantity) * Number(element.unitPrice))
+            }
         return total;
-    }, [tableItems])
+    }, [data?.invoiceItems])
 
 
 
@@ -86,7 +87,7 @@ export default function CreateContainer() {
             new MyToast("No Data To Save!").warning()
             return;
         };
-        const validate = CreateValidation({ ...data, invoiceItems: tableItems });
+        const validate = CreateValidation({ ...data });
         if (validate !== undefined) {
             setErrors(validate)
             return;
@@ -153,11 +154,13 @@ export default function CreateContainer() {
         submitHandler,
         backHandlerHandler,
         data,
+        setData,
         tableItemsTotalValue,
+        // tableItemsTotalValue,
         errors,
         loading,
         canSaveEditData,
-        tableItems,
-        setTableItems,
+        // tableItems,
+        // setTableItems,
     }
 }

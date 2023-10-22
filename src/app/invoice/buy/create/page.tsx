@@ -19,6 +19,7 @@ import { Item } from "@/models/item";
 import ItemService from "@/api/services/ItemService";
 import { GetAllJsonR } from "@/api/interface/item";
 import ToolTip from "@/components/ToolTip";
+import { MySelect } from "@/components/Input";
 
 const CreateCustomer = () => {
 
@@ -32,16 +33,17 @@ const CreateCustomer = () => {
                 <Header
                     onClickSave={container.canSaveEditData ? container.submitHandler : undefined}
                     backHanlder={container.backHandlerHandler} />
-                <div className="flex gap-3 h-full">
+                <div className="flex gap-3 h-fit">
                     <TableThree inputs={[
                         {
                             lableText: "Customer",
                             error: container.errors?.customer,
-                            input: <MyItemInput
+                            input: <MySelect
                                 className="w-72"
                                 name={myTools.propToString<CreateInterface>().customer + ""}
                                 onChange={container.inputHandeler}
                                 value={container.data == undefined ? "" : container.data.customer!}
+                                options={container.customers.map((c) => ({ title: c.firstName + " " + c.lastName, value: c.id }))}
                             />
                         },
                         {
@@ -49,6 +51,7 @@ const CreateCustomer = () => {
                             error: container.errors?.invoiceDate,
                             input: <MyItemInput
                                 className="w-72"
+                                type="date"
                                 name={myTools.propToString<CreateInterface>().invoiceDate + ""}
                                 onChange={container.inputHandeler}
                                 value={container.data == undefined ? "" : container.data.invoiceDate!}
@@ -74,16 +77,6 @@ const CreateCustomer = () => {
                                 value={container.data == undefined ? "" : container.data.reference!}
                             />
                         },
-                        {
-                            lableText: "Discount",
-                            error: container.errors?.discount,
-                            input: <MyItemInput
-                                className="w-72"
-                                name={myTools.propToString<CreateInterface>().discount + ""}
-                                onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.discount!}
-                            />
-                        },
                     ]} />
 
                 </div>
@@ -93,13 +86,20 @@ const CreateCustomer = () => {
                     })}
                     hiddenNewRow={false}
                     hiddenSelectAll={false}
+                    priceStage={
+                        (container.priceStage == undefined || container.priceStage == 1) ?
+                            "price1" : container.priceStage == 2 ? "price2" :
+                                container.priceStage == 3 ? "price3" :
+                                    container.priceStage == 4 ? "price4" :
+                                        "price1"
+                    }
                     saveHandler={(data, atIndex) => {
 
                         if (container.data == undefined || container.data?.invoiceItems == undefined) {
-                            container.setData((prev) => ({ ...prev, items: [data] }))
+                            container.setData((prev) => ({ ...prev, invoiceItems: [data] }))
                         } else {
                             container.setData((prev) => ({
-                                ...prev, items:
+                                ...prev, invoiceItems:
                                     atIndex == undefined ?
                                         [...prev?.invoiceItems!, data] :
                                         [
@@ -113,11 +113,11 @@ const CreateCustomer = () => {
                         }
                     }}
                     deleteHandler={(data) => {
-                        container.setData((prev) => ({ ...prev, items: prev?.invoiceItems?.filter((f) => Number(f.rowId) != Number(data.rowId)) }))
+                        container.setData((prev) => ({ ...prev, invoiceItems: prev?.invoiceItems?.filter((f) => Number(f.rowId) != Number(data.rowId)) }))
                     }}
                     editHandler={(data) => {
                         container.setData((prev) => ({
-                            ...prev, items: prev?.invoiceItems?.map((item) => {
+                            ...prev, invoiceItems: prev?.invoiceItems?.map((item) => {
                                 return Number(item.rowId) == Number(data.rowId) ? data : item
                             })
                         }))
@@ -125,42 +125,60 @@ const CreateCustomer = () => {
                 />
 
                 {/* summary table */}
-                <div id="customerPage" className={`flex-1 rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 relative  `}>
-                    <div className="max-w-full overflow-x-auto">
-                        <table className="w-full table-auto">
-                            <thead>
-                                <tr className="bg-gray-2 text-left dark:bg-meta-4">
-                                    {
-                                        ["Total"].map((col) => {
-                                            return (
-                                                <>
-                                                    <th className="min-w-[220px] py-4 px-4 font-medium text-black text-center dark:text-white xl:pl-11">
-                                                        {col}
-                                                    </th>
-                                                </>
-                                            )
-                                        })
-                                    }
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr >
-                                    <td className={`  border-b border-[#eee] py-5 px-4 dark:border-strokedark text-center`}>
-                                        <ToolTip tooltip={"هذا الحق يعبر عن مجموع عناصر الجدول ولايمكن تغيره يدوياً"}>
-                                            <input
-                                                type="text"
+                <div className={`h-fit flex-1 rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 relative  `}>
+                    {/* <div className="max-w-full overflow-x-auto"> */}
+                    <table className="w-full table-auto h-fit">
+                        <thead>
+                            <tr className="bg-gray-2 text-left dark:bg-meta-4">
+                                {
+                                    ["Sub Total", "Discount", "Total"].map((col) => {
+                                        return (
+                                            <>
+                                                <th className="min-w-[220px] py-4 px-4 font-medium text-black text-center dark:text-white xl:pl-11">
+                                                    {col}
+                                                </th>
+                                            </>
+                                        )
+                                    })
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr >
+                                <td className={`  border-b border-[#eee] py-5 px-4 dark:border-strokedark text-center`}>
+                                    <ToolTip tooltip={"this value is represent selected items values"}>
+                                        <input
+                                            type="text"
+                                            className="disabled:bg-graydark text-center text-black dark:text-white bg-transparent border outline-none p-2 disabled:bg-gray-300 rounded-lg cursor-not-allowed"
+                                            value={container.subTotalValue}
+                                            disabled
+                                        />
+                                    </ToolTip>
+                                </td>
+                                <td className={`  border-b border-[#eee] py-5 px-4 dark:border-strokedark text-center`}>
+                                    <input
+                                        type="number"
+                                        name={myTools.propToString<CreateInterface>().discount + ""}
+                                        onChange={container.inputHandeler}
+                                        className="text-center text-black dark:text-white bg-transparent border outline-none p-2 disabled:bg-gray-300 rounded-lg"
+                                        value={container.discountValue}
+                                    />
+                                </td>
+                                <td className={`  border-b border-[#eee] py-5 px-4 dark:border-strokedark text-center`}>
+                                    <ToolTip tooltip={"this value is represent subtotal minuse of discount"}>
+                                        <input
+                                            type="text"
+                                            className="disabled:bg-graydark text-center text-black dark:text-white bg-transparent border outline-none p-2 disabled:bg-gray-300 rounded-lg cursor-not-allowed"
+                                            value={container.totalValue}
+                                            disabled
+                                        />
+                                    </ToolTip>
+                                </td>
 
-                                                className="text-center text-black dark:text-white bg-transparent border outline-none p-2 disabled:bg-gray-300 rounded-lg cursor-not-allowed"
-                                                value={container.tableItemsTotalValue}
-                                                disabled
-                                            />
-                                        </ToolTip>
-                                    </td>
-
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {/* </div> */}
                 </div>
             </div>
         </Applayout>
@@ -175,6 +193,8 @@ interface ItemsTableProps {
     deleteHandler: (data: TableItems) => void,
     hiddenNewRow: boolean,
     hiddenSelectAll: boolean,
+    priceStage: "price1" | "price2" | "price3" | "price4",
+    error?: string,
 
 }
 interface TableItems extends InvoiceItemInterface {
@@ -197,12 +217,14 @@ function ItemsTable(props: ItemsTableProps) {
     const [newRow, setNewRow] = useState<boolean>(true)
 
 
+
+
     const getDataHandler = useCallback(() => {
         setLoading(true)
         ItemService.getAll().then((response: any) => {
             const res: GetAllJsonR = response.data;
             setItems(res.data)
-            setNewRowData((prev) => ({ ...prev, category_id: res.data[0].id }))
+            setNewRowData((prev) => ({ ...prev, item: res.data[0].id }))
         }).catch((error: any) => {
             httpErrorHandler(error, {
                 onStatusCode: function (status: number): void {
@@ -284,6 +306,13 @@ function ItemsTable(props: ItemsTableProps) {
         return (newRowData.item !== undefined && newRowData.quantity !== undefined && newRowData.unitPrice !== undefined)
     }, [newRowData])
 
+    useEffect(() => {
+        if (newRowData.item !== undefined) {
+            setNewRowData((prev) => ({
+                ...prev, unitPrice: items.filter((f) => f.id == newRowData.item)[0][props.priceStage].toString()
+            }))
+        }
+    }, [newRowData.item])
     const saveNewRowDate = () => {
         props.saveHandler({ ...newRowData, rowId: getnextRowId() })
         setNewRowData({ item: items[0].id })
@@ -310,6 +339,7 @@ function ItemsTable(props: ItemsTableProps) {
 
     return useMemo(() => {
         return (<>
+            <GridItem error={props.error} name="" children={undefined} />
             <div id="customerPage" className={`flex-1 rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 relative  `}>
                 <div className="max-w-full overflow-x-auto">
                     <table className="w-full table-auto">
@@ -417,10 +447,15 @@ function ItemsTable(props: ItemsTableProps) {
 
                                     <td className={`  border-b border-[#eee] py-5 px-4 dark:border-strokedark text-center`}>
                                         <div className="flex">
-                                            <input type="number" value={newRowData.unitPrice} name={myTools.propToString<TableItems>().unitPrice + ""} onChange={inputNewRowData} className="text-black dark:text-white bg-transparent border outline-none p-2 rounded-lg" />
+                                            <input
+                                                type="number"
+                                                value={newRowData.unitPrice}
+                                                name={myTools.propToString<TableItems>().unitPrice + ""}
+                                                onChange={inputNewRowData}
+                                                className="text-black dark:text-white bg-transparent border outline-none p-2 rounded-lg" />
                                             {
                                                 <button onClick={recoverNewRowItemPrice}>
-                                                    <ToolTip tooltip="إعادة تعين سعر المنتج">
+                                                    <ToolTip tooltip="reset item price">
                                                         <PiArrowClockwiseLight className={`text-success text-xl ms-2 !cursor-pointer`} />
                                                     </ToolTip>
                                                 </button>
@@ -432,17 +467,24 @@ function ItemsTable(props: ItemsTableProps) {
                                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark text-end">
                                         <div className="flex items-center justify-end felx-row space-x-3.5 gap-4 ">
                                             {
-                                                canSaveNewRow && <button className="hover:text-primary" onClick={() => {
-                                                    saveNewRowDate()
-                                                }}>
-                                                    <AiOutlineSave />
-                                                </button>
+                                                canSaveNewRow &&
+                                                <ToolTip tooltip="save new row ">
+                                                    <button className="hover:text-primary" onClick={() => {
+                                                        saveNewRowDate()
+                                                    }}>
+                                                        <AiOutlineSave />
+                                                    </button>
+                                                </ToolTip>
                                             }
-                                            <button className="hover:text-primary" onClick={() => {
-                                                // setNewRow(false)
-                                            }}>
-                                                <AiOutlineDelete />
-                                            </button>
+
+                                            <ToolTip tooltip="close enter row ">
+                                                <button className="hover:text-primary" onClick={() => {
+                                                    // setNewRow(false)
+                                                }}>
+                                                    <AiOutlineDelete />
+                                                </button>
+                                            </ToolTip>
+
                                         </div>
                                     </td>
                                     {/* Actions */}

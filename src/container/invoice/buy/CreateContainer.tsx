@@ -1,12 +1,15 @@
 import { CreateER, CreateInterface, CreateJsonR, InvoiceItemInterface } from "@/api/interface/invoice/buy";
+import CustomerService from "@/api/services/CustomerService";
 import BuyInvoiceService from "@/api/services/invoice/BuyService";
 import { CreateValidation } from "@/api/validation/invoice/buy";
 import { ConfirmDialog } from "@/components/MyDialog/Confirm";
 import MyTools from "@/hooks/MyTools";
 import { httpErrorHandler } from "@/hooks/httpErrorHandler";
 import MyToast from "@/hooks/toast";
-import { useEffect, useState, useMemo } from "react"
+import { useEffect, useState, useMemo, useCallback } from "react"
 import { AiFillSave } from "react-icons/ai";
+import { GetAllJsonR } from "@/api/interface/customer";
+import { Customer } from "@/models/customer";
 
 
 export interface TableItemModel extends InvoiceItemInterface {
@@ -19,13 +22,28 @@ export default function CreateContainer() {
 
     const [loading, setLoading] = useState<boolean>(false);
 
+    const [loadingGetCustomers, setLoadingGetCustomers] = useState<boolean>(false);
+
+
     // const [tableItems, setTableItems] = useState<TableItemModel[]>([])
 
     const [data, setData] = useState<CreateInterface | undefined>();
 
+    const [customers, setCustomers] = useState<Customer[]>([]);
+
     const [errors, setErrors] = useState<CreateER | undefined>();
 
-    const tableItemsTotalValue: number = useMemo(() => {
+    const discountValue: number = useMemo(() => {
+        var discount = 0;
+        if (data?.discount != undefined) {
+            discount = data?.discount;
+        }
+        return discount;
+    }, [data?.discount])
+
+
+    const subTotalValue: number = useMemo(() => {
+        console.log(data?.invoiceItems)
         var total = 0;
         if (data?.invoiceItems)
             for (let index = 0; index < data.invoiceItems.length; index++) {
@@ -34,6 +52,11 @@ export default function CreateContainer() {
             }
         return total;
     }, [data?.invoiceItems])
+
+
+    const totalValue: number = useMemo(() => {
+        return subTotalValue - discountValue;
+    }, [subTotalValue, discountValue])
 
 
 
@@ -49,6 +72,13 @@ export default function CreateContainer() {
     }, [data])
 
 
+    const priceStage: number | undefined = useMemo(() => {
+        if (data?.customer == undefined) return undefined;
+        const customer: Customer | undefined = customers.filter((f) => f.id.toString() == data.customer?.toString())[0];
+        if (customer == undefined) return undefined;
+        return customer.company!.price_stage;
+    }, [data?.customer])
+
 
     const inputHandeler = (event: any) => {
         var value = event.target.value;
@@ -61,7 +91,6 @@ export default function CreateContainer() {
     }
 
     const submitHandler = (props: { reInter: boolean }) => {
-
         if (props.reInter) {
 
             ConfirmDialog({
@@ -82,17 +111,20 @@ export default function CreateContainer() {
     }
 
     const saveHandler = (props: { reInter: boolean, clearData: boolean }) => {
-
-        if (data == undefined) {
+        console.log(data)
+        const newData: CreateInterface = { ...data, discount: discountValue }
+        if (newData == undefined) {
             new MyToast("No Data To Save!").warning()
             return;
         };
-        const validate = CreateValidation({ ...data });
+        const validate = CreateValidation(newData);
         if (validate !== undefined) {
             setErrors(validate)
             return;
         }
-        BuyInvoiceService.create(data)
+        alert("validate...")
+        console.log(validate)
+        BuyInvoiceService.create({ ...data, discount: discountValue })
             .then(response => {
                 const res: CreateJsonR = response.data;
                 new MyToast(res.message).success();
@@ -149,15 +181,63 @@ export default function CreateContainer() {
         })
     }
 
+    const getCustomersHandler = () => {
+        setLoadingGetCustomers(true)
+        CustomerService.getAll()
+            .then(response => {
+                const res: GetAllJsonR = response.data;
+                setCustomers(res.data)
+                if (res.data.length > 0) {
+                    setData((prev) => ({ ...prev, customer: res.data[0].id }))
+                }
+                new MyToast(res.message).success();
+            })
+            .catch((error) => {
+
+                httpErrorHandler(error, {
+                    onStatusCode: function (status: number): void {
+                        const res: GetAllJsonR = error.response.data;
+                        switch (status) {
+                            case 404:
+                                new MyToast("Sorry, the requested resource could not be found. Please check your API endpoint or try again late").error()
+                                break;
+                            case 500:
+                                break;
+                            default:
+                                new MyToast(res.message).error()
+                                break;
+                        }
+                    },
+
+                })
+            }).finally(() => {
+                setLoading(false)
+                setLoadingGetCustomers(false)
+            });
+    }
+
+    const onload = useCallback(() => {
+        getCustomersHandler();
+    }, [])
+    useEffect(() => {
+        onload()
+    }, [onload])
+
     return {
         inputHandeler,
         submitHandler,
         backHandlerHandler,
         data,
+        customers,
         setData,
-        tableItemsTotalValue,
+        totalValue,
+        subTotalValue,
+        discountValue,
+
+        priceStage,
         // tableItemsTotalValue,
         errors,
+        loadingGetCustomers,
         loading,
         canSaveEditData,
         // tableItems,

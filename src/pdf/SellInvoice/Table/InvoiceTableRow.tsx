@@ -41,7 +41,8 @@ const InvoiceTableRow = (props: { items: SellInvoiceItem[] }) => {
     const rows = items.map((item, index) =>
         <View style={styles.row} key={index.toString()}>
             <Text style={styles.noCol}>{index+1}</Text>
-            <Text style={styles.descriptionCol}>{""}</Text>
+            <Text style={styles.headerCol}>{item.item.name}</Text>
+            <Text style={styles.descriptionCol}>{item.item.description}</Text>
             <Text style={styles.headerCol}>{item.quantity}</Text>
             <Text style={styles.headerCol}>{0}</Text>
             <Text style={styles.headerCol}>{item.unitPrice}</Text>

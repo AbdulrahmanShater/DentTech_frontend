@@ -2,7 +2,7 @@ import React from 'react';
 import { Page, Document, Image, StyleSheet, PDFViewer, View, Text, PDFDownloadLink } from '@react-pdf/renderer';
 
 import InvoiceFooter from './InvoiceFooter';
-import invoiceHeaderImg from './invoiceHeader.png'
+// import invoiceHeaderImg from './invoiceHeader.png'
 import InvoiceHeaderInfo from './InvoiceHeaderInfo';
 import InvoiceItemsTable from './InvoiceItemsTable'
 import InvoiceNo from './InvoiceNo'
@@ -52,7 +52,7 @@ export default function SellInvoicePdf(props: { invoice: SellInvoice }) {
     return <Document>
         <Page size="A4" style={styles.page}>
             <View style={styles.imageSection}>
-                <Image style={styles.invoiceHeaderImg} src={invoiceHeaderImg + ""}  />
+                <Image style={styles.invoiceHeaderImg} src={'/logo/invoiceHeader.png'}  />
                 <InvoiceTitle title='Sell Invoice' trn={invoice.invoiceNumber} />
             </View>
             <InvoiceNo invoice={invoice} />

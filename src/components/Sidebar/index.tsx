@@ -191,6 +191,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
               },
               {
+                title: "Sell Invoice",
+                href: "/invoice/sell",
+                icon: <LiaFileInvoiceSolid />,
+                items: [],
+
+              },
+              {
                 title: "Payments",
                 href: "/payments",
                 icon: <MdOutlinePayments />,

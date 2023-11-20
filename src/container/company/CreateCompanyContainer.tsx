@@ -5,8 +5,7 @@ import { ConfirmDialog } from "@/components/MyDialog/Confirm";
 import MyTools from "@/hooks/MyTools";
 import { httpErrorHandler } from "@/hooks/httpErrorHandler";
 import MyToast from "@/hooks/toast";
-import { Company } from "@/models/company";
-import { useEffect, useState, useMemo } from "react"
+import {useState, useMemo } from "react"
 import { AiFillSave } from "react-icons/ai";
 
 export default function CreateCompanyContainer() {
@@ -29,7 +28,7 @@ export default function CreateCompanyContainer() {
             }
         }
         return false;
-    }, [data])
+    }, [data,myTools])
 
 
 

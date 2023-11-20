@@ -23,7 +23,6 @@ export function CreateValidation(data: CreateInterface): CreateER | undefined {
 
     if (data.invoiceDate == undefined) invoiceDate = "invoiceDate is required"
 
-    console.log(data.invoiceItems)
 
     if (data.invoiceItems == undefined || data.invoiceItems.length == 0) invoiceItems = "invoiceItems is required"
 

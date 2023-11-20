@@ -8,7 +8,27 @@ const URL = async () => {
 
     const ITEM_URL_PREFIX = "" + "/item"
 
+    const PAYMENT_URL_PREFIX = "" + "/payment"
+
+
     const BUY_INVOICE_URL_PREFIX = "" + "/buy-invoice"
+    const SELL_INVOICE_URL_PREFIX = "" + "/sell-invoice"
+
+
+    const PAYMENT_URL = {
+        GET_ALL: PAYMENT_URL_PREFIX,
+        CREATE: PAYMENT_URL_PREFIX,
+    };
+
+
+    const SELL_INVOICE_URL = {
+        GET_ALL: SELL_INVOICE_URL_PREFIX,
+        GET_UNPAID: SELL_INVOICE_URL_PREFIX + "/company",
+        GET_BY_ID: SELL_INVOICE_URL_PREFIX,
+        CREATE: SELL_INVOICE_URL_PREFIX,
+        UPDATE: SELL_INVOICE_URL_PREFIX,
+        DELETE: SELL_INVOICE_URL_PREFIX,
+    };
 
 
     const BUY_INVOICE_URL = {
@@ -30,9 +50,13 @@ const URL = async () => {
 
     const COMPANY_URL = {
         GET_ALL: COMPANY_URL_PREFIX,
+
         CREATE: COMPANY_URL_PREFIX,
         UPDATE: COMPANY_URL_PREFIX,
         DELETE: COMPANY_URL_PREFIX,
+
+
+
     };
 
     const CUSTOMER_URL = {
@@ -40,6 +64,8 @@ const URL = async () => {
         CREATE: CUSTOMER_URL_PREFIX,
         UPDATE: CUSTOMER_URL_PREFIX,
         DELETE: CUSTOMER_URL_PREFIX,
+        GET_BUYERS: CUSTOMER_URL_PREFIX + "/" + "buyers",
+        GET_VENDORS: CUSTOMER_URL_PREFIX + "/" + "vendors",
     };
 
     const AUTH_URL = {
@@ -52,7 +78,9 @@ const URL = async () => {
         CUSTOMER_URL,
         AUTH_URL,
         ITEM_URL,
-        BUY_INVOICE_URL
+        BUY_INVOICE_URL,
+        SELL_INVOICE_URL,
+        PAYMENT_URL,
     }
 }
 

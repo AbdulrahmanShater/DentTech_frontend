@@ -6,6 +6,7 @@ import { CreateCompanyInterface, EditCompanyInterface, DeleteCompanyInterface } 
 const getAll = async () => {
     return (await http()).put((await URL()).COMPANY_URL.GET_ALL);
 };
+
 const getById = async (data: { id: number }) => {
     return (await http()).post((await URL()).COMPANY_URL.GET_ALL + "/" + data.id);
 };
@@ -23,7 +24,7 @@ const trash = async (data: DeleteCompanyInterface) => {
 };
 
 const CompanyService = {
-    create, update, trash, getAll,getById
+    create, update, trash, getAll,getById,
 };
 
 

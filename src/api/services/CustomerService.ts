@@ -20,9 +20,14 @@ const update = async (data: EditCustomerInterface) => {
 const trash = async (data: DeleteCustomerInterface) => {
     return (await http()).delete((await URL()).CUSTOMER_URL.DELETE + "/" + data.id);
 };
-
+const getBuyers = async () => {
+    return (await http()).put((await URL()).CUSTOMER_URL.GET_BUYERS);
+};
+const getVendors = async () => {
+    return (await http()).put((await URL()).CUSTOMER_URL.GET_VENDORS);
+};
 const CustomerService = {
-    create, update, trash, getAll, getById
+    create, update, trash, getAll, getById, getBuyers, getVendors
 };
 
 

@@ -69,7 +69,7 @@ export default function CreateContainer() {
             }
         }
         return false;
-    }, [data])
+    }, [data, myTools])
 
 
     const priceStage: number | undefined = useMemo(() => {
@@ -77,7 +77,7 @@ export default function CreateContainer() {
         const customer: Customer | undefined = customers.filter((f) => f.id.toString() == data.customer?.toString())[0];
         if (customer == undefined) return undefined;
         return customer.company!.price_stage;
-    }, [data?.customer])
+    }, [data?.customer, customers])
 
 
     const inputHandeler = (event: any) => {
@@ -183,7 +183,7 @@ export default function CreateContainer() {
 
     const getCustomersHandler = () => {
         setLoadingGetCustomers(true)
-        CustomerService.getAll()
+        CustomerService.getVendors()
             .then(response => {
                 const res: GetAllJsonR = response.data;
                 setCustomers(res.data)

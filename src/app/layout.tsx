@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import { ToastContainer } from 'react-toastify'
 import { Provider } from 'react-redux';
 import store from '@/redux/store';
+import 'devextreme/dist/css/dx.light.css';
 const inter = Inter({ subsets: ['latin'] })
 
 const metadata: Metadata = {
@@ -17,15 +18,16 @@ const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 
 
-  const [loading, setLoading] = useState<boolean>(true);
+  // const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    setTimeout(() => setLoading(false), 1000);
+    // setTimeout(() => setLoading(false), 1000);
   }, []);
 
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} demo-container`} id="root" >
         <div className="dark:bg-boxdark-2 dark:text-bodydark min-h-screen">
           {loading ?
             <>

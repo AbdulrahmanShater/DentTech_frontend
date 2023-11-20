@@ -1,3 +1,7 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [],
+  "rules": {}
 }
+// {
+//   "extends": "next/core-web-vitals"
+// }

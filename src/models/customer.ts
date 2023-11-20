@@ -3,16 +3,16 @@ export type CustomerCompany = {
   id: number;
   name: string;
   tel: string;
-  poBox: string,
+  poBox: string | null,
   email: string;
   address: string;
-  credit: string;
-  debit: string;
-  balance: string;
-  status: string;
+  credit: string | number;
+  debit: string | number;
+  balance: string | number;
+  status: string | null;
   vendor: boolean,
   price_stage: number,
-  payments: string,
+  payments: string | null,
   trn: string;
 };
 

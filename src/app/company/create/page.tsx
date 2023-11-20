@@ -1,16 +1,13 @@
 "use client";
-import Link from "next/link";
-import { AiFillSave, AiOutlineArrowLeft, AiOutlineInfoCircle, AiOutlinePlus, AiOutlineSave, AiOutlineArrowRight } from "react-icons/ai";
-import React, { InputHTMLAttributes, useRef } from "react";
+import { AiOutlineArrowLeft, AiOutlineSave } from "react-icons/ai";
+import React, {  } from "react";
 import CreateCompanyContainer from "@/container/company/CreateCompanyContainer";
 import { MyItemInput } from "@/components/Input/Input";
 import MyTools from "@/hooks/MyTools";
-import ToolTip from "@/components/ToolTip";
 import Applayout from "@/components/layout/Applayout";
 import IconButton from "@/components/Button/IconButton";
 import GridItem from "@/components/GridItem";
 import { CreateCompanyInterface } from "@/api/interface/company";
-
 
 const CreateCompany = () => {
 
@@ -96,8 +93,6 @@ const CreateCompany = () => {
     </>)
 }
 
-
-
 interface MyInputsInterface {
     lableText: string,
     error?: string,
@@ -122,55 +117,6 @@ const TableThree = (props: { inputs: MyInputsInterface[], title?: string }) => {
         </div>
     );
 };
-
-// const TableThree = (props: { inputsProps: MyInputsInterface[] }) => {
-
-//     return (
-//         // <div className={`flex-1 rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1`}>
-//         //     <div className="max-w-full overflow-x-auto flex flex-row flex-wrap items-center gap-7 gap-x-14"
-//         //     // className="max-w-full overflow-x-auto grid grid-cols-[max-content,1fr,max-content,1fr] items-center gap-7 gap-x-14"
-//         //     >
-//         <div className={`h-full flex-1 rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1`}>
-//             <div className="h-full  max-w-full overflow-x-auto grid xs:grid-cols-input_grid-xs md:grid-cols-input_grid-md   items-center gap-7 gap-x-14">
-//                 {
-//                     props.inputsProps.map((inp) => {
-//                         return (<>
-//                             <GridItem name={inp.lableText} error={inp.error}>
-//                                 <MyItemInput {...inp} error={inp.error} />
-//                             </GridItem>
-//                         </>)
-//                     })
-//                 }
-//             </div>
-//         </div>
-//     );
-// };
-
-// const GridItem = (props: { error?: string, name: string, children: React.ReactNode }) => {
-//     return (
-//         <>
-//             <div className="flex flex-row items-center justify-start">
-//                 {
-//                     props.error &&
-//                     <ToolTip tooltip={props.error}>
-//                         <div className="w-5 h-5 text-danger">
-//                             {
-//                                 props.error && <AiOutlineInfoCircle />
-//                             }
-//                         </div>
-//                     </ToolTip>
-//                 }
-//                 <div className="flex flex-row items-center justify-between flex-1">
-//                     <label htmlFor="">{props.name}</label>
-//                     {props.children}
-//                 </div>
-//             </div>
-//         </>
-//     );
-// };
-
-
-
 
 const Header = (props: { onClickSave?: (props: { reInter: boolean }) => void, backHanlder?: () => void }) => {
     return (<>
@@ -200,4 +146,5 @@ const Header = (props: { onClickSave?: (props: { reInter: boolean }) => void, ba
         </div>
     </>)
 }
+
 export default CreateCompany;

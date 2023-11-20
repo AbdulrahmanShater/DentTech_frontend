@@ -110,51 +110,13 @@ export default function MyTools() {
     }
 
 
-    /**
-     * 
-     * @param prop dateime 
-     * @returns 
-     */
-    function CountDownTimer(prop: { targetDate: Date }) {
-        const { targetDate } = prop;
-
-        useEffect(() => {
-            const intervalId = setInterval(() => {
-                setRemainingTime(calculateRemainingTime());
-            }, 1000);
-
-            return () => {
-                clearInterval(intervalId);
-            };
-        }, []);
-        const calculateRemainingTime = () => {
-            const currentDate = new Date();
-            const difference = targetDate.getTime() - currentDate.getTime();
-
-            if (difference > 0) {
-                const seconds = Math.floor((difference / 1000) % 60);
-                const minutes = Math.floor((difference / 1000 / 60) % 60);
-                const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
-                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-
-                return { days, hours, minutes, seconds };
-            }
-
-            return { days: 0, hours: 0, minutes: 0, seconds: 0 };
-        };
-        const [remainingTime, setRemainingTime] = useState(calculateRemainingTime());
-
-        return {
-            remainingTime
-        }
-    }
+   
 
     return {
         isValidDate,
         propToString,
         getObjectValueByKey,
         encryptEmail,
-        CountDownTimer,
         isValidEmailRGX,
         objectIsUndefined,
         areAllValuesUndefined,

@@ -8,6 +8,7 @@ import IconButton from "@/components/Button/IconButton";
 import GridItem from "@/components/GridItem";
 import { CreateCustomerInterface } from "@/api/interface/customer";
 import CreateContainer from "@/container/customer/CreateContainer";
+import { MySelect } from "@/components/Input";
 
 const CreateCustomer = () => {
 
@@ -46,11 +47,12 @@ const CreateCustomer = () => {
                         {
                             lableText: "Company",
                             error: container.errors?.company,
-                            input: <MyItemInput
+                            input: <MySelect
                                 className="w-72"
                                 name={myTools.propToString<CreateCustomerInterface>().company + ""}
                                 onChange={container.inputHandeler}
                                 value={container.data == undefined ? "" : container.data.company!}
+                                options={container.companies.map((c) => ({ title: c.name, value: c.id }))}
                             />
                         },
                         {

@@ -8,7 +8,7 @@ import Link from "next/link";
 import { Customer } from "../../../../models/customer";
 import DropdownFilter from "../../DropdownFilter";
 import { AiOutlineArrowLeft, AiOutlineEdit, AiOutlineInfoCircle, AiOutlinePlus, AiOutlineSave } from "react-icons/ai";
-import { MyItemInput } from '@/components/Input';
+import { MyItemInput, MySelect } from '@/components/Input';
 import MyTools from '@/hooks/MyTools';
 import Applayout from '@/components/layout/Applayout';
 import IconButton from '@/components/Button/IconButton';
@@ -64,11 +64,12 @@ export default function EditCustomer() {
                         {
                             lableText: "Company",
                             error: container.errors?.company,
-                            input: <MyItemInput
+                            input: <MySelect
                                 className="w-72"
                                 name={myTools.propToString<EditCustomerInterface>().company + ""}
                                 onChange={container.inputHandeler}
                                 value={container.data == undefined ? "" : container.data.company!}
+                                options={container.companies.map((c) => ({ title: c.name, value: c.id }))}
                             />
                         },
                         {

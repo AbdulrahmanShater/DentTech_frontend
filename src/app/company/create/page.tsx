@@ -47,7 +47,7 @@ const CreateCompany = () => {
                         },
                         {
                             lableText: "poBox",
-                            error: container.errors?.tel,
+                            error: container.errors?.poBox,
                             input: <MyItemInput
                                 className="w-72"
                                 name={myTools.propToString<CreateCompanyInterface>().poBox + ""}
@@ -57,7 +57,7 @@ const CreateCompany = () => {
                         },
                         {
                             lableText: "Email",
-                            error: container.errors?.tel,
+                            error: container.errors?.email,
                             input: <MyItemInput
                                 className="w-72"
                                 name={myTools.propToString<CreateCompanyInterface>().email + ""}
@@ -67,7 +67,7 @@ const CreateCompany = () => {
                         },
                         {
                             lableText: "Address",
-                            error: container.errors?.tel,
+                            error: container.errors?.address,
                             input: <MyItemInput
                                 className="w-72"
                                 name={myTools.propToString<CreateCompanyInterface>().address + ""}
@@ -77,7 +77,7 @@ const CreateCompany = () => {
                         },
                         {
                             lableText: "Trn",
-                            error: container.errors?.tel,
+                            error: container.errors?.trn,
                             input: <MyItemInput
                                 className="w-72"
                                 name={myTools.propToString<CreateCompanyInterface>().trn + ""}

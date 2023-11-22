@@ -5,7 +5,7 @@ import { ConfirmDialog } from "@/components/MyDialog/Confirm";
 import MyTools from "@/hooks/MyTools";
 import { httpErrorHandler } from "@/hooks/httpErrorHandler";
 import MyToast from "@/hooks/toast";
-import {useState, useMemo } from "react"
+import { useState, useMemo } from "react"
 import { AiFillSave } from "react-icons/ai";
 
 export default function CreateCompanyContainer() {
@@ -28,7 +28,7 @@ export default function CreateCompanyContainer() {
             }
         }
         return false;
-    }, [data,myTools])
+    }, [data, myTools])
 
 
 
@@ -64,13 +64,14 @@ export default function CreateCompanyContainer() {
     }
 
     const saveHandler = (props: { reInter: boolean, clearData: boolean }) => {
-
-        const validate = CreateValidation(data);
+        const newData = { ...data, vendor: false, price_stage: 1 }
+        const validate = CreateValidation(newData);
         if (validate !== undefined) {
+            console.log(validate)
             setErrors(validate)
             return;
         }
-        CompanyService.create(data)
+        CompanyService.create(newData)
             .then(response => {
                 const res: CreateJsonR = response.data;
                 new MyToast(res.message).success();

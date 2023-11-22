@@ -1,12 +1,15 @@
+import { GetAllJsonR } from "@/api/interface/company";
 import { CreateCustomerER, CreateCustomerInterface, CreateJsonR } from "@/api/interface/customer/create"
+import CompanyService from "@/api/services/CompanyService";
 import CustomerService from "@/api/services/CustomerService";
 import { CreateValidation } from "@/api/validation/customer";
 import { ConfirmDialog } from "@/components/MyDialog/Confirm";
 import MyTools from "@/hooks/MyTools";
 import { httpErrorHandler } from "@/hooks/httpErrorHandler";
 import MyToast from "@/hooks/toast";
+import { Company } from "@/models/company";
 import { Customer } from "@/models/customer";
-import { useEffect, useState, useMemo } from "react"
+import { useEffect, useState, useMemo, useCallback } from "react"
 import { AiFillSave } from "react-icons/ai";
 
 export default function CreateContainer() {
@@ -17,6 +20,7 @@ export default function CreateContainer() {
 
 
     const [data, setData] = useState<CreateCustomerInterface | undefined>(undefined);
+    const [companies, setCompanies] = useState<Company[]>([]);
 
     const [errors, setErrors] = useState<CreateCustomerER | undefined>();
 
@@ -31,6 +35,18 @@ export default function CreateContainer() {
         return false;
     }, [data])
 
+    let mounted = false;
+
+    const onload = useCallback(() => {
+        if (!mounted) {
+            getCompaniesHandler()
+            mounted = true;
+        }
+    }, []);
+
+    useEffect(() => {
+        onload()
+    }, [onload])
 
 
     const inputHandeler = (event: any) => {
@@ -42,6 +58,37 @@ export default function CreateContainer() {
         setErrors(undefined)
         setData((prev) => ({ ...prev, [name]: value }));
     }
+
+    const getCompaniesHandler = () => {
+        CompanyService.getAll()
+            .then(response => {
+                const res: GetAllJsonR = response.data;
+                setCompanies(res.data)
+                new MyToast(res.message).success();
+            })
+            .catch((error) => {
+
+                httpErrorHandler(error, {
+                    onStatusCode: function (status: number): void {
+                        const res: GetAllJsonR = error.response.data;
+                        switch (status) {
+                            case 404:
+                                new MyToast("Sorry, the requested resource could not be found. Please check your API endpoint or try again late").error()
+                                break;
+                            case 500:
+                                break;
+                            default:
+                                new MyToast(res.message).error()
+                                break;
+                        }
+                    },
+
+                })
+            }).finally(() => {
+                setLoading(false)
+            });
+    }
+
 
     const submitHandler = (props: { reInter: boolean }) => {
 
@@ -139,6 +186,7 @@ export default function CreateContainer() {
         data,
         errors,
         loading,
+        companies,
         canSaveEditData,
     }
 }

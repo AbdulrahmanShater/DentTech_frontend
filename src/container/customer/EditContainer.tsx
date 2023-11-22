@@ -1,11 +1,14 @@
+import { GetAllJsonR } from "@/api/interface/company";
 import { UpdateJsonR, EditCustomerInterface, EditCustomerInterfaceER } from "@/api/interface/customer/edit"
 import { GetOneJsonR } from "@/api/interface/customer/get";
+import CompanyService from "@/api/services/CompanyService";
 import CustomerService from "@/api/services/CustomerService";
 import { EditValidation } from "@/api/validation/customer";
 import { ConfirmDialog } from "@/components/MyDialog/Confirm";
 import MyTools from "@/hooks/MyTools";
 import { httpErrorHandler } from "@/hooks/httpErrorHandler";
 import MyToast from "@/hooks/toast";
+import { Company } from "@/models/company";
 import { Customer } from "@/models/customer";
 import { useEffect, useState, useMemo, useCallback } from "react"
 import { AiFillSave } from "react-icons/ai";
@@ -21,6 +24,9 @@ export default function EditContainer(props: { customer_id: number }) {
     const [errors, setErrors] = useState<EditCustomerInterfaceER | undefined>();
 
     const [customer, setCustomer] = useState<Customer | null>(null);
+
+    const [companies, setCompanies] = useState<Company[]>([]);
+
 
     const canSaveEditData = useMemo(() => {
         if (data !== undefined) {
@@ -49,6 +55,35 @@ export default function EditContainer(props: { customer_id: number }) {
         }
     }, [props.customer_id])
 
+    const getCompaniesHandler = () => {
+        CompanyService.getAll()
+            .then(response => {
+                const res: GetAllJsonR = response.data;
+                setCompanies(res.data)
+                new MyToast(res.message).success();
+            })
+            .catch((error) => {
+
+                httpErrorHandler(error, {
+                    onStatusCode: function (status: number): void {
+                        const res: GetAllJsonR = error.response.data;
+                        switch (status) {
+                            case 404:
+                                new MyToast("Sorry, the requested resource could not be found. Please check your API endpoint or try again late").error()
+                                break;
+                            case 500:
+                                break;
+                            default:
+                                new MyToast(res.message).error()
+                                break;
+                        }
+                    },
+
+                })
+            }).finally(() => {
+                setLoading(false)
+            });
+    }
 
     const getCustomerHandler = () => {
         CustomerService.getById({ id: props.customer_id })
@@ -169,6 +204,7 @@ export default function EditContainer(props: { customer_id: number }) {
         loading,
         customer,
         canSaveEditData,
+        companies,
         backHandlerHandler,
 
     }

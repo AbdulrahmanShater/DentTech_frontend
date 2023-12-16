@@ -157,14 +157,14 @@ export default function ItemPage() {
     };
     const TableThree = () => {
         return (
-            <>
+            <div className="w-full overflow-x-auto">
                 <MaterialReactTable
                     columns={columns}
                     data={container.data}
                     enableColumnResizing
                     enableGrouping
                     enableStickyFooter
-                    enableColumnActions={false}
+                    enableColumnActions={true}
                     enableColumnDragging={true}
                     enableStickyHeader={true}
                     enableColumnOrdering={true}
@@ -209,7 +209,7 @@ export default function ItemPage() {
                         </div>
                     }}
                 />
-            </>
+            </div>
         )
     }
     const Header = () => {

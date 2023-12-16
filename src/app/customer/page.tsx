@@ -10,6 +10,7 @@ import Applayout from "@/components/layout/Applayout";
 import CustomersContainer from "@/container/customer/CustomersContainer";
 import { MRT_ColumnDef, MaterialReactTable } from "material-react-table";
 import MyTools from "@/hooks/MyTools";
+import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 export default function CustomerPage() {
 
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | undefined>(undefined);
@@ -17,6 +18,12 @@ export default function CustomerPage() {
     const container = CustomersContainer();
 
     const myTools = MyTools();
+
+    const [selectedFilterIsVendor, setSelectedFilterIsVendor] = useState<'true' | 'false'>('true');
+
+    const handleChange = (event: SelectChangeEvent) => {
+        setSelectedFilterIsVendor(event.target.value as any);
+    };
 
     const columns = useMemo<MRT_ColumnDef<Customer>[]>(
         () => [
@@ -172,7 +179,22 @@ export default function CustomerPage() {
             <div className="flex flex-row justify-between">
 
                 {/* Toggle */}
-                <DropdownFilter />
+                {/* <DropdownFilter /> */}
+                <Box sx={{ minWidth: 120 }}>
+                    <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Filter</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={String(selectedFilterIsVendor)}
+                            label="Filter"
+                            onChange={handleChange}
+                        >
+                            <MenuItem value={'true'}>Vendor</MenuItem>
+                            <MenuItem value={'false'}>Clients</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Box>
                 {/* Toggle */}
 
                 {/* buttons */}
@@ -192,10 +214,10 @@ export default function CustomerPage() {
     }
     const TableThree = () => {
         return (
-            <>
+            <div className="w-full overflow-x-auto">
                 <MaterialReactTable
                     columns={columns}
-                    data={container.data}
+                    data={container.data.filter((f) => (f.company?.vendor ? 'true' : 'false') == selectedFilterIsVendor)}
                     enableColumnResizing
                     enableGrouping
                     enableStickyFooter
@@ -284,7 +306,7 @@ export default function CustomerPage() {
                         </div>
                     }}
                 />
-            </>
+            </div>
         )
     }
 

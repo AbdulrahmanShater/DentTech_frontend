@@ -10,6 +10,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css'
 import Applayout from "@/components/layout/Applayout";
 import { MRT_ColumnDef, MaterialReactTable } from "material-react-table";
 import MyTools from "@/hooks/MyTools";
+import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 export default function CompanyPage() {
 
     const [selectedCompany, setSelectedCompany] = useState<Company | undefined>(undefined);
@@ -18,6 +19,11 @@ export default function CompanyPage() {
 
     const myTools = MyTools();
 
+    const [selectedFilterIsVendor, setSelectedFilterIsVendor] = useState<'true' | 'false'>('true');
+
+    const handleChange = (event: SelectChangeEvent) => {
+        setSelectedFilterIsVendor(event.target.value as any);
+    };
 
     const columns = useMemo<MRT_ColumnDef<Company>[]>(
         () => [
@@ -209,14 +215,14 @@ export default function CompanyPage() {
 
     const TableThree = () => {
         return (
-            <>
+            <div className="w-full overflow-x-auto">
                 <MaterialReactTable
                     columns={columns}
-                    data={container.data}
+                    data={container.data.filter((f) => (f.vendor ? 'true' : 'false') == selectedFilterIsVendor)}
                     enableColumnResizing
                     enableGrouping
                     enableStickyFooter
-                    enableColumnActions={false}
+                    enableColumnActions={true}
                     enableColumnDragging={true}
                     enableStickyHeader={true}
                     enableColumnOrdering={true}
@@ -301,15 +307,33 @@ export default function CompanyPage() {
                         </div>
                     }}
                 />
-            </>
+            </div>
         )
     }
+
+
+
     const Header = () => {
         return (<>
             <div className="flex flex-row justify-between">
 
                 {/* Toggle */}
-                <DropdownFilter />
+                {/* <DropdownFilter /> */}
+                <Box sx={{ minWidth: 120 }}>
+                    <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Filter</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={String(selectedFilterIsVendor)}
+                            label="Filter"
+                            onChange={handleChange}
+                        >
+                            <MenuItem value={'true'}>Vendor</MenuItem>
+                            <MenuItem value={'false'}>Clients</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Box>
                 {/* Toggle */}
 
                 {/* buttons */}

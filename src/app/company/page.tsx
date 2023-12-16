@@ -3,18 +3,65 @@ import Link from "next/link";
 import { Company } from "../../models/company";
 import DropdownFilter from "./DropdownFilter";
 import { AiOutlineDelete, AiOutlineEdit, AiOutlineInfoCircle, AiOutlinePlus } from "react-icons/ai";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import CompanyContainer from "@/container/company/CompanyContainer";
 import { confirmAlert } from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css'
 import Applayout from "@/components/layout/Applayout";
+import { MRT_ColumnDef, MaterialReactTable } from "material-react-table";
+import MyTools from "@/hooks/MyTools";
 export default function CompanyPage() {
 
     const [selectedCompany, setSelectedCompany] = useState<Company | undefined>(undefined);
 
     const container = CompanyContainer();
 
-    const TableThree = () => {
+    const myTools = MyTools();
+
+
+    const columns = useMemo<MRT_ColumnDef<Company>[]>(
+        () => [
+            {
+                header: 'Invoice Number',
+                accessorKey: myTools.propToString<Company>().name,
+            },
+            {
+                header: 'Debit',
+                accessorKey: myTools.propToString<Company>().debit + "",
+                Cell: ({ renderedCellValue, row }) => {
+                    return Number(renderedCellValue).toLocaleString();
+                }
+            },
+            {
+                header: 'Credit',
+                accessorKey: myTools.propToString<Company>().credit + "",
+                Cell: ({ renderedCellValue, row }) => {
+                    return Number(renderedCellValue).toLocaleString();
+                }
+            },
+            {
+                header: 'Balance',
+                accessorKey: myTools.propToString<Company>().balance + "",
+                Cell: ({ renderedCellValue, row }) => {
+                    return Number(renderedCellValue).toLocaleString();
+                }
+            },
+            {
+                header: 'Status',
+                accessorKey: myTools.propToString<Company>().status + "",
+                Cell: ({ renderedCellValue, row }) => {
+                    const isPaid: boolean = Boolean(renderedCellValue);
+                    return <p className={`text-white dark:text-white ${isPaid ? 'bg-success' : 'bg-danger'}  w-fit rounded-xl px-4 py-1`}>
+                        {`${isPaid ? 'Paid' : 'Not Paid'}`}
+                    </p>
+                }
+            },
+        ],
+        [container.data],
+    );
+
+
+    const TableThreeOld = () => {
         return (
             <div id="companyPage" className={`flex-1 rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 relative  `}>
                 <div className="max-w-full overflow-x-auto">
@@ -159,6 +206,104 @@ export default function CompanyPage() {
             </div>
         );
     };
+
+    const TableThree = () => {
+        return (
+            <>
+                <MaterialReactTable
+                    columns={columns}
+                    data={container.data}
+                    enableColumnResizing
+                    enableGrouping
+                    enableStickyFooter
+                    enableColumnActions={false}
+                    enableColumnDragging={true}
+                    enableStickyHeader={true}
+                    enableColumnOrdering={true}
+                    enableDensityToggle={false}
+                    enableEditing={false}
+                    enableRowActions={false}
+                    muiPaginationProps={{
+                        rowsPerPageOptions: [5, 10, 20, 25, 50, 100],
+                        shape: 'rounded',
+                        variant: 'outlined',
+                        color: 'primary',
+                    }}
+                    paginationDisplayMode={'pages'}
+                    positionActionsColumn='last'
+                    layoutMode='grid'
+                    columnFilterDisplayMode='popover'
+                    muiToolbarAlertBannerChipProps={{ color: 'primary' }}
+                    muiTableContainerProps={{ sx: { maxHeight: 700 } }}
+                    state={
+                        {
+                            isLoading: container.loading,
+                        }
+                    }
+                    renderRowActions={({ cell, row, table,
+                    }) => {
+                        const company = row.original;
+                        return <div className="flex items-center felx-row space-x-3.5">
+                            <Link href={`/company/edit/${company?.id}`} >
+                                <button className="hover:text-primary" >
+                                    <AiOutlineEdit />
+                                </button>
+                            </Link>
+                            <button className="hover:text-primary" onClick={() => { setSelectedCompany(company) }}>
+                                <AiOutlineInfoCircle />
+                            </button>
+                            <button className="hover:text-primary" onClick={() => {
+                                confirmAlert({
+                                    title: 'Are you sure?',
+                                    message: 'want to delete this Company!?',
+                                    buttons: [
+                                        {
+                                            label: 'Yes',
+                                            onClick: () => alert('Click Yes')
+                                        },
+                                        {
+                                            label: 'No',
+                                            onClick: () => alert('Click No')
+                                        }
+                                    ],
+                                    customUI: (customUiOptions) => {
+                                        return (<>
+                                            <div className='custom-ui text-[#666] bg-white rounded-xl p-8 shadow-dialog flex flex-col items-center gap-4 w-max'>
+                                                <div className="w-20 h-20 text-6xl border-[4px] border-danger text-danger rounded-full flex flex-row items-center justify-center">
+                                                    <AiOutlineDelete />
+                                                </div>
+                                                <h1 className="text-xl font-bold text-danger">{customUiOptions.title}</h1>
+                                                <p>{customUiOptions.message}</p>
+
+                                                <div className="flex flex-row items-center justify-evenly w-full">
+                                                    <button
+                                                        className="border rounded-lg cursor-pointer bg-danger text-white px-4 py-2 animate-pulse"
+                                                        onClick={customUiOptions.onClose}>No</button>
+
+                                                    <button
+                                                        className="border rounded-lg cursor-pointer border-danger text-danger bg-white px-4 py-2"
+                                                        onClick={() => {
+                                                            customUiOptions.onClose()
+                                                            container.submitDeleteHandler({ id: company.id })
+                                                        }}
+                                                    >
+                                                        Yes, Delete it!
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </>)
+                                    },
+                                });
+                            }}>
+                                <AiOutlineDelete />
+                            </button>
+
+                        </div>
+                    }}
+                />
+            </>
+        )
+    }
     const Header = () => {
         return (<>
             <div className="flex flex-row justify-between">

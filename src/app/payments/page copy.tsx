@@ -2,54 +2,19 @@
 import Link from "next/link";
 import DropdownFilter from "./DropdownFilter";
 import { AiOutlineDelete, AiOutlineEdit, AiOutlineInfoCircle, AiOutlinePlus } from "react-icons/ai";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import 'react-confirm-alert/src/react-confirm-alert.css'
 import Applayout from "@/components/layout/Applayout";
 import { Payment } from "@/models/payment";
 import PaymentContainer from "@/container/payment/PaymentContainer";
 import { SellInvoice } from "@/models/invoice/sellInvoice";
-import { MRT_ColumnDef, MaterialReactTable } from "material-react-table";
-import MyTools from "@/hooks/MyTools";
 export default function InvoicePage() {
 
     const [selectedPayment, setSelectedPayment] = useState<SellInvoice | undefined>(undefined);
 
     const container = PaymentContainer();
-    const myTools = MyTools();
 
-    const columns = useMemo<MRT_ColumnDef<SellInvoice>[]>(
-        () => [
-            {
-                header: 'Number',
-                accessorKey: myTools.propToString<SellInvoice>().id + "",
-            },
-            {
-                header: 'Invoice Number',
-                accessorKey: myTools.propToString<SellInvoice>().invoiceNumber,
-            },
-            {
-                header: 'Paid',
-                accessorKey: myTools.propToString<SellInvoice>().paid + "",
-                Cell: ({ renderedCellValue, row }) => {
-                    const isPaid: boolean = Boolean(renderedCellValue);
-                    return <p className={`text-white dark:text-white ${isPaid ? 'bg-success' : 'bg-danger'}  w-fit rounded-xl px-4 py-1`}>
-                        {`${isPaid ? 'Paid' : 'Not Paid'}`}
-                    </p>
-                }
-            },
-            {
-                header: 'Total',
-                accessorKey: myTools.propToString<SellInvoice>().total + "",
-                Cell: ({ renderedCellValue, row }) => {
-                    return Number(renderedCellValue).toLocaleString();
-                }
-            },
-        ],
-        [container.data],
-    );
-
-
-    const TableThreeOld = () => {
+    const TableThree = () => {
         return (
             <div id="customerPage" className={`flex-1 rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 relative  `}>
                 <div className="max-w-full overflow-x-auto">
@@ -100,6 +65,7 @@ export default function InvoicePage() {
                                     </td>
 
 
+
                                     {/* Actions */}
                                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                                         <div className="flex items-center felx-row space-x-3.5">
@@ -128,63 +94,6 @@ export default function InvoicePage() {
             </div>
         );
     };
-    const TableThree = () => {
-        return (
-            <>
-                <MaterialReactTable
-                    columns={columns}
-                    data={container.data}
-                    enableColumnResizing
-                    enableGrouping
-                    enableStickyFooter
-                    enableColumnActions={false}
-                    enableColumnDragging={true}
-                    enableStickyHeader={true}
-                    enableColumnOrdering={true}
-                    enableDensityToggle={false}
-                    enableEditing={false}
-                    enableRowActions={false}
-                    muiPaginationProps={{
-                        rowsPerPageOptions: [5, 10, 20, 25, 50, 100],
-                        shape: 'rounded',
-                        variant: 'outlined',
-                        color: 'primary',
-                    }}
-                    paginationDisplayMode={'pages'}
-                    positionActionsColumn='last'
-                    layoutMode='grid'
-                    columnFilterDisplayMode='popover'
-                    muiToolbarAlertBannerChipProps={{ color: 'primary' }}
-                    muiTableContainerProps={{ sx: { maxHeight: 700 } }}
-                    state={
-                        {
-                            isLoading: container.loading,
-                        }
-                    }
-                    renderRowActions={({ cell, row, table,
-                    }) => {
-                        const payment = row.original;
-                        return <div className="flex items-center felx-row space-x-3.5">
-                            <Link href={`/payment/edit/${payment?.id}`} >
-                                <button className="hover:text-primary" >
-                                    <AiOutlineEdit />
-                                </button>
-                            </Link>
-                            {/* <button className="hover:text-primary" onClick={() => { setSelectedCustomer(payment) }}>
-                                <AiOutlineInfoCircle />
-                            </button> */}
-                            {/* <button className="hover:text-primary" onClick={() => {
-                                container.submitDeleteHandler({ id: payment.id })
-                            }}>
-                                <AiOutlineDelete />
-                            </button> */}
-
-                        </div>
-                    }}
-                />
-            </>
-        )
-    }
     const Header = () => {
         return (<>
             <div className="flex flex-row justify-between">

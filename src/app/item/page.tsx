@@ -2,18 +2,66 @@
 import Link from "next/link";
 import { Item } from "../../models/item";
 import { AiOutlineDelete, AiOutlineEdit, AiOutlineInfoCircle, AiOutlinePlus } from "react-icons/ai";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { confirmAlert } from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css'
 import Applayout from "@/components/layout/Applayout";
 import ItemsContainer from "@/container/item/ItemsContainer";
+import MyTools from "@/hooks/MyTools";
+import { MRT_ColumnDef, MaterialReactTable } from "material-react-table";
 export default function ItemPage() {
 
     const [selectedItem, setSelectedItem] = useState<Item | undefined>(undefined);
 
     const container = ItemsContainer();
 
-    const TableThree = () => {
+    const myTools = MyTools();
+
+
+    const columns = useMemo<MRT_ColumnDef<Item>[]>(
+        () => [
+            {
+                header: 'Name',
+                accessorKey: myTools.propToString<Item>().name,
+            },
+            {
+                header: 'Description',
+                accessorKey: myTools.propToString<Item>().description + "",
+            },
+            {
+                header: 'Price1',
+                accessorKey: myTools.propToString<Item>().price1 + "",
+                Cell: ({ renderedCellValue, row }) => {
+                    return Number(renderedCellValue).toLocaleString();
+                }
+            },
+            {
+                header: 'Price2',
+                accessorKey: myTools.propToString<Item>().price2 + "",
+                Cell: ({ renderedCellValue, row }) => {
+                    return Number(renderedCellValue).toLocaleString();
+                }
+            },
+            {
+                header: 'Price3',
+                accessorKey: myTools.propToString<Item>().price3 + "",
+                Cell: ({ renderedCellValue, row }) => {
+                    return Number(renderedCellValue).toLocaleString();
+                }
+            },
+            {
+                header: 'Price4',
+                accessorKey: myTools.propToString<Item>().price4 + "",
+                Cell: ({ renderedCellValue, row }) => {
+                    return Number(renderedCellValue).toLocaleString();
+                }
+            },
+
+        ],
+        [container.data],
+    );
+
+    const TableThreeOld = () => {
         return (
             <div id="itemPage" className={`flex-1 rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 relative  `}>
                 <div className="max-w-full overflow-x-auto">
@@ -107,6 +155,63 @@ export default function ItemPage() {
             </div>
         );
     };
+    const TableThree = () => {
+        return (
+            <>
+                <MaterialReactTable
+                    columns={columns}
+                    data={container.data}
+                    enableColumnResizing
+                    enableGrouping
+                    enableStickyFooter
+                    enableColumnActions={false}
+                    enableColumnDragging={true}
+                    enableStickyHeader={true}
+                    enableColumnOrdering={true}
+                    enableDensityToggle={false}
+                    enableEditing={false}
+                    enableRowActions={false}
+                    muiPaginationProps={{
+                        rowsPerPageOptions: [5, 10, 20, 25, 50, 100],
+                        shape: 'rounded',
+                        variant: 'outlined',
+                        color: 'primary',
+                    }}
+                    paginationDisplayMode={'pages'}
+                    positionActionsColumn='last'
+                    layoutMode='grid'
+                    columnFilterDisplayMode='popover'
+                    muiToolbarAlertBannerChipProps={{ color: 'primary' }}
+                    muiTableContainerProps={{ sx: { maxHeight: 700 } }}
+                    state={
+                        {
+                            isLoading: container.loading,
+                        }
+                    }
+                    renderRowActions={({ cell, row, table,
+                    }) => {
+                        const item = row.original;
+                        return <div className="flex items-center felx-row space-x-3.5">
+                            <Link href={`/item/edit/${item?.id}`} >
+                                <button className="hover:text-primary" >
+                                    <AiOutlineEdit />
+                                </button>
+                            </Link>
+                            <button className="hover:text-primary" onClick={() => { setSelectedItem(item) }}>
+                                <AiOutlineInfoCircle />
+                            </button>
+                            <button className="hover:text-primary" onClick={() => {
+                                container.submitDeleteHandler({ id: item.id })
+                            }}>
+                                <AiOutlineDelete />
+                            </button>
+
+                        </div>
+                    }}
+                />
+            </>
+        )
+    }
     const Header = () => {
         return (<>
             <div className="flex flex-row justify-between">

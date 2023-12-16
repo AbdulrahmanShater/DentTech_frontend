@@ -19,7 +19,7 @@ export default function HomeContainer() {
     const getRatingsHandler = useCallback(() => {
 
         setLoading(true)
-        const beginDate = dayjs(filterData.beginDate).format('YYYY-MM/-D');
+        const beginDate = dayjs(filterData.beginDate).format('YYYY-MM-D');
         const endDate = dayjs(filterData.endDate).format('YYYY-MM-DD');
         RatingService.getAll({
             companyId: filterData.companyId,

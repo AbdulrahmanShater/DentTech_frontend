@@ -152,7 +152,7 @@ export default function ReportPage() {
 
                     <DatePicker
                         label="Begin date"
-                        format='YYYY/MM/DD'
+                        format='YYYY-MM-DD'
                         value={container.filterData.beginDate}
                         onChange={(e) => {
                             const value = e == null ? undefined : e;
@@ -166,9 +166,10 @@ export default function ReportPage() {
                             },
                         }}
                     />
+
                     <DatePicker
                         label="End date"
-                        format='YYYY/MM/DD'
+                        format='YYYY-MM-DD'
                         value={container.filterData.endDate}
                         onChange={(e) => {
                             const value = e == null ? undefined : e;
@@ -182,6 +183,7 @@ export default function ReportPage() {
                             },
                         }}
                     />
+
                     <div className="flex flex-row items-center gap-4 text-white bg-primary rounded-lg p-2 cursor-pointer border-[1px] font-bold"
                         onClick={container.getRatingsHandler}>
                         <FaFilter className=' w-6 h-6 ' />

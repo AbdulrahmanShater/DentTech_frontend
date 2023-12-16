@@ -8,6 +8,15 @@ import { ToastContainer } from 'react-toastify'
 import { Provider } from 'react-redux';
 import store from '@/redux/store';
 import 'devextreme/dist/css/dx.light.css';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import createCache from '@emotion/cache';
+import { CacheProvider } from '@emotion/react';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import rtlPlugin from 'stylis-plugin-rtl';
+import { prefixer } from 'stylis';
+
+
 const inter = Inter({ subsets: ['latin'] })
 
 const metadata: Metadata = {
@@ -25,6 +34,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     // setTimeout(() => setLoading(false), 1000);
   }, []);
 
+  const theme = createTheme({
+    direction: 'rtl', // Both here and <body dir="rtl">
+  });
+  // Create rtl cache
+  const cacheRtl = createCache({
+    key: 'muirtl',
+    stylisPlugins: [prefixer, rtlPlugin],
+  });
+
   return (
     <html lang="en">
       <body className={`${inter.className} demo-container`} id="root" >
@@ -35,8 +53,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </> :
             <>
               <Provider store={store}>
-                <ToastContainer />
-                {children}
+                <CacheProvider value={cacheRtl}>
+                  <ThemeProvider theme={theme}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <ToastContainer />
+                      {children}
+                    </LocalizationProvider>
+                  </ThemeProvider>
+                </CacheProvider>
               </Provider>
             </>
           }

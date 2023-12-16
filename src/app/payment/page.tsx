@@ -7,6 +7,8 @@ import { useState } from "react";
 import 'react-confirm-alert/src/react-confirm-alert.css'
 import Applayout from "@/components/layout/Applayout";
 import PaymentContainer from "@/container/payment/PaymentContainer";
+import { SellInvoice } from "@/models/invoice/sellInvoice";
+import { Customer } from "@/models/customer";
 export default function InvoicePage() {
 
     const [selectedCustomer, setSelectedCustomer] = useState<SellInvoice | undefined>(undefined);
@@ -72,14 +74,14 @@ export default function InvoicePage() {
                                                     <AiOutlineEdit />
                                                 </button>
                                             </Link>
-                                            <button className="hover:text-primary" onClick={() => { setSelectedCustomer(payment) }}>
+                                            {/* <button className="hover:text-primary" onClick={() => { setSelectedCustomer(payment) }}>
                                                 <AiOutlineInfoCircle />
-                                            </button>
-                                            <button className="hover:text-primary" onClick={() => {
+                                            </button> */}
+                                            {/* <button className="hover:text-primary" onClick={() => {
                                                 container.submitDeleteHandler({ id: payment.id })
                                             }}>
                                                 <AiOutlineDelete />
-                                            </button>
+                                            </button> */}
 
                                         </div>
                                     </td>

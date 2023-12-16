@@ -5,12 +5,13 @@ import { ConfirmDialog } from "@/components/MyDialog/Confirm";
 import { AiOutlineDelete } from "react-icons/ai";
 import PaymentService from "@/api/services/PaymentService";
 import { GetAllJsonR } from "@/api/interface/payment";
-import { Payment } from "@/models/company";
+import { Payment } from "@/models/payment";
+import { SellInvoice } from "@/models/invoice/sellInvoice";
 
 export default function SellInvoiceContainer() {
 
 
-    const [data, setData] = useState<Payment[]>([]);
+    const [data, setData] = useState<SellInvoice[]>([]);
 
     const [loading, setLoading] = useState<false>(false);
 

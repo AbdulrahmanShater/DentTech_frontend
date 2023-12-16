@@ -113,7 +113,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         <nav className="mt-5 py-4 px-4 lg:mt-9 lg:px-6">
 
 
-          <SideBarGroupProps
+          {/* <SideBarGroupProps
             title=""
             pathname={pathname}
             setSidebarExpanded={(value) => {
@@ -126,11 +126,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 href: "/",
                 icon: <BiHomeAlt />,
                 items: [],
-
               },
-
             ]}
-          />
+          /> */}
 
           <SideBarGroupProps
             title=""
@@ -142,7 +140,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             items={[
               {
                 title: "Company",
-                href: "/company",
+                href: "/",
+                // href: "/company",
                 icon: <RiBuilding2Line />,
                 items: [
                   // {

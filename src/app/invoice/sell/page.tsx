@@ -13,6 +13,7 @@ import SellInvoicePdf from "@/pdf/SellInvoice";
 import { IoIosClose } from "react-icons/io";
 import MyTools from "@/hooks/MyTools";
 import { MRT_ColumnDef, MaterialReactTable } from "material-react-table";
+import { CardPdf } from "@/pdf/Card";
 export default function InvoicePage() {
 
     const [selectedCustomer, setSelectedCustomer] = useState<SellInvoice | undefined>(undefined);
@@ -283,6 +284,20 @@ export default function InvoicePage() {
                             </div>
                         </div>
 
+                        {selectedCustomer &&
+                            <>
+                                <PDFViewer width="100%" height="400" className="app" >
+                                    <CardPdf
+                                        client={selectedCustomer.user.company?.name || ''}
+                                        doctor={`${selectedCustomer.user.firstName} ${selectedCustomer.user.lastName}`}
+                                        patient={String(selectedCustomer.patientName)}
+                                        fileNo={String(selectedCustomer.fileNumber)}
+                                        orderNo={selectedCustomer.invoiceNumber}
+                                        issueddate={selectedCustomer.invoiceDate}
+                                    />
+                                </PDFViewer>
+                            </>
+                        }
 
                         {selectedCustomer &&
                             <>

@@ -140,8 +140,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             items={[
               {
                 title: "Company",
-                href: "/",
-                // href: "/company",
+                // href: "/",
+                href: "/company",
                 icon: <RiBuilding2Line />,
                 items: [
                   // {

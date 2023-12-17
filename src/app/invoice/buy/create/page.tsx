@@ -57,16 +57,16 @@ const CreateCustomer = () => {
                                 value={container.data == undefined ? "" : container.data.invoiceDate!}
                             />
                         },
-                        {
-                            lableText: "Number",
-                            error: container.errors?.invoiceNumber,
-                            input: <MyItemInput
-                                className="w-72"
-                                name={myTools.propToString<CreateInterface>().invoiceNumber + ""}
-                                onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.invoiceNumber!}
-                            />
-                        },
+                        // {
+                        //     lableText: "Number",
+                        //     error: container.errors?.invoiceNumber,
+                        //     input: <MyItemInput
+                        //         className="w-72"
+                        //         name={myTools.propToString<CreateInterface>().invoiceNumber + ""}
+                        //         onChange={container.inputHandeler}
+                        //         value={container.data == undefined ? "" : container.data.invoiceNumber!}
+                        //     />
+                        // },
                         {
                             lableText: "Reference",
                             error: container.errors?.reference,
@@ -134,7 +134,8 @@ const CreateCustomer = () => {
                                     ["Sub Total", "Discount", "Total"].map((col) => {
                                         return (
                                             <>
-                                                <th className="min-w-[220px] py-4 px-4 font-medium text-black text-center dark:text-white xl:pl-11">
+                                                {/* text-black text-center dark:text-white */}
+                                                <th className="min-w-[220px] py-4 px-4 font-medium text-gray text-center xl:pl-11">
                                                     {col}
                                                 </th>
                                             </>

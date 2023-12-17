@@ -136,5 +136,6 @@ export default function CreateCompanyContainer() {
         errors,
         loading,
         canSaveEditData,
+        setData,
     }
 }

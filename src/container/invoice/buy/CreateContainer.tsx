@@ -122,8 +122,6 @@ export default function CreateContainer() {
             setErrors(validate)
             return;
         }
-        alert("validate...")
-        console.log(validate)
         BuyInvoiceService.create({ ...data, discount: discountValue })
             .then(response => {
                 const res: CreateJsonR = response.data;

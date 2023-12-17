@@ -1,6 +1,6 @@
 "use client";
 import { AiOutlineArrowLeft, AiOutlineSave } from "react-icons/ai";
-import React, {  } from "react";
+import React, { } from "react";
 import CreateCompanyContainer from "@/container/company/CreateCompanyContainer";
 import { MyItemInput } from "@/components/Input/Input";
 import MyTools from "@/hooks/MyTools";
@@ -8,14 +8,13 @@ import Applayout from "@/components/layout/Applayout";
 import IconButton from "@/components/Button/IconButton";
 import GridItem from "@/components/GridItem";
 import { CreateCompanyInterface } from "@/api/interface/company";
+import { Box, FormControl, FormHelperText, InputLabel, MenuItem, Select } from "@mui/material";
 
 const CreateCompany = () => {
 
     const container = CreateCompanyContainer();
 
     const myTools = MyTools();
-
-
 
     return (<>
         <Applayout>
@@ -25,6 +24,50 @@ const CreateCompany = () => {
                     backHanlder={container.backHandlerHandler} />
                 <div className="flex gap-3 h-full">
                     <TableThree inputs={[
+                        {
+                            lableText: "Is Vendor",
+                            error: container.errors?.vendor,
+                            input: <Box sx={{ minWidth: 120 }}>
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-label"></InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select-ps"
+                                        value={String(container.data == undefined ? undefined : container.data.vendor ? 'true' : 'false')}
+                                        label="Is Vendor"
+                                        onChange={(event) => {
+                                            container.setData((prev) => ({ ...prev, vendor: event.target.value == 'true' ? true : false }))
+                                        }}>
+                                        <MenuItem value={'true'}>Yes</MenuItem>
+                                        <MenuItem value={'false'}>No</MenuItem>
+                                    </Select>
+                                    <FormHelperText>{container.errors?.vendor}</FormHelperText>
+                                </FormControl>
+                            </Box>
+                        },
+                        {
+                            lableText: "Price Stage",
+                            error: container.errors?.price_stage,
+                            input: <Box sx={{ minWidth: 120 }}>
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-label-ps"></InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label-ps"
+                                        id="demo-simple-select-ps"
+                                        value={Number(container.data.price_stage)}
+                                        label="Price Stage"
+                                        onChange={(event) => {
+                                            container.setData((prev) => ({ ...prev, price_stage: Number(event.target.value) }))
+                                        }}>
+                                        <MenuItem value={1}>Price Stage 1</MenuItem>
+                                        <MenuItem value={2}>Price Stage 2</MenuItem>
+                                        <MenuItem value={3}>Price Stage 3</MenuItem>
+                                        <MenuItem value={4}>Price Stage 4</MenuItem>
+                                    </Select>
+                                    <FormHelperText>{container.errors?.price_stage}</FormHelperText>
+                                </FormControl>
+                            </Box>
+                        },
                         {
                             lableText: "Name",
                             error: container.errors?.name,

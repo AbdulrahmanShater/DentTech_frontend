@@ -56,16 +56,16 @@ const CreateCustomer = () => {
                                 value={container.data == undefined ? "" : container.data.invoiceDate!}
                             />
                         },
-                        {
-                            lableText: "Number",
-                            error: container.errors?.invoiceNumber,
-                            input: <MyItemInput
-                                className="w-72"
-                                name={myTools.propToString<CreateInterface>().invoiceNumber + ""}
-                                onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.invoiceNumber!}
-                            />
-                        },
+                        // {
+                        //     lableText: "Number",
+                        //     error: container.errors?.invoiceNumber,
+                        //     input: <MyItemInput
+                        //         className="w-72"
+                        //         name={myTools.propToString<CreateInterface>().invoiceNumber + ""}
+                        //         onChange={container.inputHandeler}
+                        //         value={container.data == undefined ? "" : container.data.invoiceNumber!}
+                        //     />
+                        // },
                         {
                             lableText: "Reference",
                             error: container.errors?.reference,

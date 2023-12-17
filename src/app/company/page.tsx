@@ -159,16 +159,6 @@ export default function CompanyPage() {
                                                 confirmAlert({
                                                     title: 'Are you sure?',
                                                     message: 'want to delete this Company!?',
-                                                    buttons: [
-                                                        {
-                                                            label: 'Yes',
-                                                            onClick: () => alert('Click Yes')
-                                                        },
-                                                        {
-                                                            label: 'No',
-                                                            onClick: () => alert('Click No')
-                                                        }
-                                                    ],
                                                     customUI: (customUiOptions) => {
                                                         return (<>
                                                             <div className='custom-ui text-[#666] bg-white rounded-xl p-8 shadow-dialog flex flex-col items-center gap-4 w-max'>
@@ -262,16 +252,6 @@ export default function CompanyPage() {
                                 confirmAlert({
                                     title: 'Are you sure?',
                                     message: 'want to delete this Company!?',
-                                    buttons: [
-                                        {
-                                            label: 'Yes',
-                                            onClick: () => alert('Click Yes')
-                                        },
-                                        {
-                                            label: 'No',
-                                            onClick: () => alert('Click No')
-                                        }
-                                    ],
                                     customUI: (customUiOptions) => {
                                         return (<>
                                             <div className='custom-ui text-[#666] bg-white rounded-xl p-8 shadow-dialog flex flex-col items-center gap-4 w-max'>

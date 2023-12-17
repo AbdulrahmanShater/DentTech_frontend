@@ -9,7 +9,7 @@ import { useEffect, useState, useMemo, useCallback } from "react"
 import { AiFillSave } from "react-icons/ai";
 import { GetAllJsonR } from "@/api/interface/company";
 import { GetAllJsonR as GetAllJsonR_SellInvoice } from "@/api/interface/invoice/sell";
-import { Company } from "@/models/payment";
+import { Company } from "@/models/company";
 import PaymentService from "@/api/services/PaymentService";
 import { SellInvoice } from "@/models/invoice/sellInvoice";
 import SellInvoiceService from "@/api/services/invoice/SellService";
@@ -138,8 +138,8 @@ export default function CreatePaymentContainer() {
             setErrors(validate)
             return;
         }
-        alert("validate...")
-        console.log(validate)
+        // alert("validate...")
+        // console.log(validate)
         PaymentService.create(dataToSave)
             .then(response => {
                 const res: CreateJsonR = response.data;

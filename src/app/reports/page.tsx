@@ -13,7 +13,7 @@ import {
     DialogContentText,
     DialogTitle,
     TextField,
-    Backdrop, SpeedDial, SpeedDialAction
+    Backdrop, SpeedDial, SpeedDialAction, List, ListItem, ListItemButton, ListItemText, ListItemIcon, Checkbox
 } from '@mui/material';
 import { SiMicrosoftexcel } from 'react-icons/si';
 import { IoCloseOutline } from 'react-icons/io5';
@@ -265,6 +265,42 @@ export default function ReportPage() {
             </SpeedDial>
         </Applayout>
     )
+
+
+    function SelectCompanyDialog({ open, onClose, onSelect }:
+        { open: boolean, onClose: () => void, onSelect: (props: { customerId: number, userId: number }) => void }
+    ) {
+        return (<>
+            <Dialog onClose={onClose} open={open}>
+                <DialogTitle>Set backup account</DialogTitle>
+                <List sx={{ pt: 0 }}>
+                    {containerCompany.data.map((company) => {
+                        const labelId = `checkbox-list-label-${company.id}`;
+
+                        return (
+                            <ListItem
+                                key={company.id}
+                                disablePadding
+                            >
+                                <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
+                                    <ListItemIcon>
+                                        <Checkbox
+                                            edge="start"
+                                            checked={checked.indexOf(value) !== -1}
+                                            tabIndex={-1}
+                                            disableRipple
+                                            inputProps={{ 'aria-labelledby': labelId }}
+                                        />
+                                    </ListItemIcon>
+                                    <ListItemText id={labelId} primary={company.name} />
+                                </ListItemButton>
+                            </ListItem>
+                        );
+                    })}
+                </List>
+            </Dialog>
+        </>)
+    }
 }
 interface ExcelExportDialogProps {
     open: boolean,
@@ -321,3 +357,4 @@ function ExcelExportDialog(props: ExcelExportDialogProps) {
         </DialogActions>
     </Dialog>
 }
+

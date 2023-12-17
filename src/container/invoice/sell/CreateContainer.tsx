@@ -123,8 +123,8 @@ export default function CreateContainer() {
             setErrors(validate)
             return;
         }
-        alert("validate...")
-        console.log(validate)
+        // alert("validate...")
+        // console.log(validate)
         SellInvoiceService.create({ ...data, discount: discountValue })
             .then(response => {
                 const res: CreateJsonR = response.data;

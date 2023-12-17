@@ -47,6 +47,7 @@ const CreateCustomer = () => {
                             error: container.errors?.customer,
                             input: <Autocomplete
                                 disablePortal
+                                className="w-full"
                                 value={selectedCustomer == undefined ? null : {
                                     id: selectedCustomer.id,
                                     label: `${selectedCustomer.firstName} ${selectedCustomer.lastName}`

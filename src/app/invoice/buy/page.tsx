@@ -161,21 +161,16 @@ export default function InvoicePage() {
                     }
                     renderRowActions={({ cell, row, table,
                     }) => {
-                        const payment = row.original;
+                        const invoice = row.original;
                         return <div className="flex items-center felx-row space-x-3.5">
-                            <Link href={`/payment/edit/${payment?.id}`} >
-                                <button className="hover:text-primary" >
-                                    <AiOutlineEdit />
-                                </button>
-                            </Link>
-                            {/* <button className="hover:text-primary" onClick={() => { setSelectedCustomer(payment) }}>
+                            <button className="hover:text-primary" onClick={() => { setSelectedCustomer(invoice) }}>
                                 <AiOutlineInfoCircle />
-                            </button> */}
-                            {/* <button className="hover:text-primary" onClick={() => {
-                                container.submitDeleteHandler({ id: payment.id })
+                            </button>
+                            <button className="hover:text-primary" onClick={() => {
+                                container.submitDeleteHandler({ id: invoice.id })
                             }}>
                                 <AiOutlineDelete />
-                            </button> */}
+                            </button>
 
                         </div>
                     }}

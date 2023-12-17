@@ -44,6 +44,7 @@ const CreateCustomer = () => {
                             lableText: "Customer",
                             error: container.errors?.customer,
                             input: <Autocomplete
+                                className="w-full"
                                 disablePortal
                                 value={selectedCustomer == undefined ? null : {
                                     id: selectedCustomer.id,
@@ -189,7 +190,6 @@ const CreateCustomer = () => {
                         }))
                     }}
                 />
-
                 {/* summary table */}
                 <div className={`h-fit flex-1 rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 relative  `}>
                     {/* <div className="max-w-full overflow-x-auto"> */}
@@ -226,7 +226,7 @@ const CreateCustomer = () => {
                                         type="number"
                                         name={myTools.propToString<CreateInterface>().discount + ""}
                                         onChange={container.inputHandeler}
-                                        className="text-center text-gray bg-transparent border outline-none p-2 disabled:bg-gray-300 rounded-lg"
+                                        className="text-center text-black bg-transparent border outline-none p-2 disabled:bg-gray-300 rounded-lg"
                                         value={container.discountValue}
                                     />
                                 </td>

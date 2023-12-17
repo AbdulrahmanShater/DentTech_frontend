@@ -7,7 +7,7 @@ export function CreateValidation(data: CreateInterface): CreateER | undefined {
 
 
     var discount: string | undefined = undefined;
-    var invoiceNumber: string | undefined = undefined;
+    // var invoiceNumber: string | undefined = undefined;
     var reference: string | undefined = undefined;
     var customer: string | undefined = undefined;
     var invoiceItems: string | undefined = undefined;
@@ -15,7 +15,7 @@ export function CreateValidation(data: CreateInterface): CreateER | undefined {
 
     if (data.discount == undefined) discount = "discount is required"
 
-    if (data.invoiceNumber == undefined) invoiceNumber = "invoiceNumber is required"
+    // if (data.invoiceNumber == undefined) invoiceNumber = "invoiceNumber is required"
 
     if (data.reference == undefined) reference = "reference is required"
 
@@ -28,7 +28,7 @@ export function CreateValidation(data: CreateInterface): CreateER | undefined {
 
     const validate: CreateER = {
         discount: discount,
-        invoiceNumber: invoiceNumber,
+        // invoiceNumber: invoiceNumber,
         reference: reference,
         customer: customer,
         invoiceItems: invoiceItems,

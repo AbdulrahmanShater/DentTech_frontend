@@ -4,7 +4,7 @@ import { GetReportInterface } from "../interface/report";
 
 
 const getAll = async (data: GetReportInterface) => {
-    return (await http()).put(`${(await URL()).SELL_INVOICE_URL.GET_ALL}?companyId=${data.companyId}&beginDate=${data.beginDate}&endDate=${data.endDate}`);
+    return (await http()).put(`${(await URL()).SELL_INVOICE_URL.GET_ALL}?companyId=${data.companyId}&userId=${data.userId}&beginDate=${data.beginDate}&endDate=${data.endDate}`);
 };
 
 const ReportService = {

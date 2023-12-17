@@ -218,7 +218,7 @@ export default function CompanyPage() {
                     enableColumnOrdering={true}
                     enableDensityToggle={false}
                     enableEditing={false}
-                    enableRowActions={false}
+                    enableRowActions={true}
                     muiPaginationProps={{
                         rowsPerPageOptions: [5, 10, 20, 25, 50, 100],
                         shape: 'rounded',

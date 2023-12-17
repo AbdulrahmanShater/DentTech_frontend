@@ -223,7 +223,7 @@ export default function ReportPage() {
                     enableColumnOrdering={true}
                     enableDensityToggle={false}
                     enableEditing={false}
-                    enableRowActions={false}
+                    enableRowActions={true}
                     renderTopToolbarCustomActions={({ table }) => (
                         <div className="flex flex-row items-center gap-4">
                             <div className="flex flex-row items-center gap-4 text-white bg-success rounded-lg p-2 cursor-pointer border-[1px] font-bold"

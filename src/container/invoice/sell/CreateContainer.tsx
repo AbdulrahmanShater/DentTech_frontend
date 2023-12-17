@@ -75,7 +75,7 @@ export default function CreateContainer() {
 
     const priceStage: number | undefined = useMemo(() => {
         if (data?.customer == undefined) return undefined;
-        const customer: Customer | undefined = customers.filter((f) => f.id.toString() == data.customer?.toString())[0];
+        const customer: Customer | undefined = customers.find((f) => Number(f.id) == Number(data.customer));
         if (customer == undefined) return undefined;
         return customer.company!.price_stage;
     }, [data?.customer])

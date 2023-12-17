@@ -135,7 +135,7 @@ const CreateCustomer = () => {
                                         return (
                                             <>
                                                 {/* text-black text-center dark:text-white */}
-                                                <th className="min-w-[220px] py-4 px-4 font-medium text-gray text-center xl:pl-11">
+                                                <th className="min-w-[220px] py-4 px-4 font-medium text-black  dark:text-white text-center xl:pl-11">
                                                     {col}
                                                 </th>
                                             </>
@@ -150,7 +150,7 @@ const CreateCustomer = () => {
                                     <ToolTip tooltip={"this value is represent selected items values"}>
                                         <input
                                             type="text"
-                                            className="disabled:bg-graydark text-center text-black dark:text-white bg-transparent border outline-none p-2 disabled:bg-gray-300 rounded-lg cursor-not-allowed"
+                                            className="disabled:bg-graydark text-center text-gray bg-transparent border outline-none p-2 disabled:bg-gray-300 rounded-lg cursor-not-allowed"
                                             value={container.subTotalValue}
                                             disabled
                                         />
@@ -169,7 +169,7 @@ const CreateCustomer = () => {
                                     <ToolTip tooltip={"this value is represent subtotal minuse of discount"}>
                                         <input
                                             type="text"
-                                            className="disabled:bg-graydark text-center text-black dark:text-white bg-transparent border outline-none p-2 disabled:bg-gray-300 rounded-lg cursor-not-allowed"
+                                            className="disabled:bg-graydark text-center text-gray bg-transparent border outline-none p-2 disabled:bg-gray-300 rounded-lg cursor-not-allowed"
                                             value={container.totalValue}
                                             disabled
                                         />

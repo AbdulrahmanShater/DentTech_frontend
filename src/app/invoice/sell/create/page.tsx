@@ -126,10 +126,11 @@ const CreateCustomer = () => {
                     hiddenNewRow={false}
                     hiddenSelectAll={false}
                     priceStage={
-                        (container.priceStage == undefined || container.priceStage == 1) ?
-                            "price1" : container.priceStage == 2 ? "price2" :
-                                container.priceStage == 3 ? "price3" :
-                                    container.priceStage == 4 ? "price4" :
+                        (container.priceStage == undefined ||
+                            Number(container.priceStage) == 1) ?
+                            "price1" : Number(container.priceStage) == 2 ? "price2" :
+                                Number(container.priceStage) == 3 ? "price3" :
+                                    Number(container.priceStage) == 4 ? "price4" :
                                         "price1"
                     }
                     saveHandler={(data, atIndex) => {
@@ -199,7 +200,7 @@ const CreateCustomer = () => {
                                         type="number"
                                         name={myTools.propToString<CreateInterface>().discount + ""}
                                         onChange={container.inputHandeler}
-                                        className="text-center text-black dark:text-white bg-transparent border outline-none p-2 disabled:bg-gray-300 rounded-lg"
+                                        className="text-center text-gray bg-transparent border outline-none p-2 disabled:bg-gray-300 rounded-lg"
                                         value={container.discountValue}
                                     />
                                 </td>
@@ -207,7 +208,7 @@ const CreateCustomer = () => {
                                     <ToolTip tooltip={"this value is represent subtotal minuse of discount"}>
                                         <input
                                             type="text"
-                                            className="disabled:bg-graydark text-center text-black dark:text-white bg-transparent border outline-none p-2 disabled:bg-gray-300 rounded-lg cursor-not-allowed"
+                                            className="disabled:bg-graydark text-center text-gray bg-transparent border outline-none p-2 disabled:bg-gray-300 rounded-lg cursor-not-allowed"
                                             value={container.totalValue}
                                             disabled
                                         />
@@ -348,7 +349,9 @@ function ItemsTable(props: ItemsTableProps) {
     useEffect(() => {
         if (newRowData.item !== undefined) {
             setNewRowData((prev) => ({
-                ...prev, unitPrice: items.filter((f) => f.id == newRowData.item)[0][props.priceStage].toString()
+                // [props.priceStage].toString()
+                ...prev, unitPrice: items.find((f) => f.id == newRowData.item)![props.priceStage].toString()
+                // ...prev, unitPrice: items.filter((f) => f.id == newRowData.item)[0][props.priceStage].toString()
             }))
         }
     }, [newRowData.item])
@@ -541,9 +544,8 @@ function ItemsTable(props: ItemsTableProps) {
                 </div>
             </div>
         </>)
-    }, [props.data, newRowData, newRow, canSaveNewRow, newRow, items])
+    }, [props, newRowData, newRow, canSaveNewRow, newRow, items])
 }
-
 
 
 interface MyInputsInterface {

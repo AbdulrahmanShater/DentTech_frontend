@@ -150,6 +150,27 @@ export default function ReportPage() {
                             />}
                     />
 
+                    <Autocomplete
+                        disablePortal
+                        id="combo-box-demo"
+                        options={
+                            selectedCompany == undefined ? [] :
+                                selectedCompany!.users.map((value) => ({ label: `${value.firstName} ${value.lastName}`, id: value.id }))
+                        }
+                        onChange={(event, value) => {
+                            const v = value == null ? undefined : value.id;
+                            container.setFilterDate((prev) => ({ ...prev, userId: v }))
+                        }}
+                        sx={{ width: 200 }}
+                        noOptionsText="No Account"
+                        renderInput={(params) =>
+                            <TextField {...params}
+                                error={!!container.errors.userId}
+                                helperText={container.errors.userId}
+                                label="Account"
+                            />}
+                    />
+
                     <DatePicker
                         label="Begin date"
                         format='YYYY-MM-DD'
@@ -267,40 +288,40 @@ export default function ReportPage() {
     )
 
 
-    function SelectCompanyDialog({ open, onClose, onSelect }:
-        { open: boolean, onClose: () => void, onSelect: (props: { customerId: number, userId: number }) => void }
-    ) {
-        return (<>
-            <Dialog onClose={onClose} open={open}>
-                <DialogTitle>Set backup account</DialogTitle>
-                <List sx={{ pt: 0 }}>
-                    {containerCompany.data.map((company) => {
-                        const labelId = `checkbox-list-label-${company.id}`;
+    // function SelectCompanyDialog({ open, onClose, onSelect }:
+    //     { open: boolean, onClose: () => void, onSelect: (props: { customerId: number, userId: number }) => void }
+    // ) {
+    //     return (<>
+    //         <Dialog onClose={onClose} open={open}>
+    //             <DialogTitle>Set backup account</DialogTitle>
+    //             <List sx={{ pt: 0 }}>
+    //                 {containerCompany.data.map((company) => {
+    //                     const labelId = `checkbox-list-label-${company.id}`;
 
-                        return (
-                            <ListItem
-                                key={company.id}
-                                disablePadding
-                            >
-                                <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
-                                    <ListItemIcon>
-                                        <Checkbox
-                                            edge="start"
-                                            checked={checked.indexOf(value) !== -1}
-                                            tabIndex={-1}
-                                            disableRipple
-                                            inputProps={{ 'aria-labelledby': labelId }}
-                                        />
-                                    </ListItemIcon>
-                                    <ListItemText id={labelId} primary={company.name} />
-                                </ListItemButton>
-                            </ListItem>
-                        );
-                    })}
-                </List>
-            </Dialog>
-        </>)
-    }
+    //                     return (
+    //                         <ListItem
+    //                             key={company.id}
+    //                             disablePadding
+    //                         >
+    //                             <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
+    //                                 <ListItemIcon>
+    //                                     <Checkbox
+    //                                         edge="start"
+    //                                         checked={checked.indexOf(value) !== -1}
+    //                                         tabIndex={-1}
+    //                                         disableRipple
+    //                                         inputProps={{ 'aria-labelledby': labelId }}
+    //                                     />
+    //                                 </ListItemIcon>
+    //                                 <ListItemText id={labelId} primary={company.name} />
+    //                             </ListItemButton>
+    //                         </ListItem>
+    //                     );
+    //                 })}
+    //             </List>
+    //         </Dialog>
+    //     </>)
+    // }
 }
 interface ExcelExportDialogProps {
     open: boolean,

@@ -1,3 +1,5 @@
+import { Customer } from "./customer";
+
 export type Company = {
   id: number;
   name: string;
@@ -11,7 +13,7 @@ export type Company = {
   status: string;
   vendor: boolean,
   price_stage: number,
-  users: [],
+  users: Customer[],
   payments: string,
   trn: string;
 };

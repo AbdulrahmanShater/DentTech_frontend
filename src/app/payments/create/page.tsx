@@ -1,6 +1,6 @@
 "use client";
 import { AiOutlineArrowLeft, AiOutlineSave } from "react-icons/ai";
-import React, { } from "react";
+import React, { useMemo } from "react";
 import { MyItemInput } from "@/components/Input/Input";
 import MyTools from "@/hooks/MyTools";
 import Applayout from "@/components/layout/Applayout";
@@ -21,6 +21,8 @@ import DataGrid, {
 import { SelectBox } from 'devextreme-react/select-box';
 import themes from 'devextreme/ui/themes';
 import { SellInvoice } from "@/models/invoice/sellInvoice";
+import { Autocomplete, TextField } from "@mui/material";
+import { Company } from "@/models/company";
 
 
 const CreatePayment = () => {
@@ -28,6 +30,10 @@ const CreatePayment = () => {
     const container = CreatePaymentContainer();
 
     const myTools = MyTools();
+
+    const selectedCompany: Company | undefined = useMemo(() => {
+        return container.companies.find((f) => Number(f.id) === container.selectedCompanyId)
+    }, [container.selectedCompanyId, container.companies])
 
     return (<>
         <Applayout>
@@ -38,15 +44,37 @@ const CreatePayment = () => {
                 <div className="flex gap-3 h-fit">
                     <TableThree inputs={[
                         {
-                            lableText: "Customer",
-                            input: <MySelect
-                                className="w-72"
-                                onChange={(e) => {
-                                    container.setSelectedCompanyId(Number(e.target.value))
-                                }}
-                                value={container.selectedCompanyId}
-                                options={container.companies.map((c) => ({ title: c.name, value: c.id }))}
-                            />
+                            lableText: "Company",
+                            input:
+                                <Autocomplete
+                                    disablePortal
+                                    value={selectedCompany == undefined ? null : {
+                                        id: selectedCompany.id,
+                                        label: selectedCompany.name
+                                    }}
+                                    options={
+                                        container.companies.map((value) => ({ label: value.name, id: value.id }))
+                                    }
+                                    onChange={(event, value) => {
+                                        container.setSelectedCompanyId(Number(value?.id))
+                                        // container.setData((prev) => ({ ...prev, customer: (value == null ? undefined : Number(value?.id)) }))
+                                    }}
+                                    noOptionsText="No Customers"
+                                    renderInput={(params) =>
+                                        <TextField {...params}
+                                            // error={!!container.errors?.customer}
+                                            // helperText={container.errors?.customer}
+                                            label="Customer"
+                                        />}
+                                />
+                            // <MySelect
+                            //     className="w-72"
+                            //     onChange={(e) => {
+                            //         container.setSelectedCompanyId(Number(e.target.value))
+                            //     }}
+                            //     value={container.selectedCompanyId}
+                            //     options={container.companies.map((c) => ({ title: c.name, value: c.id }))}
+                            // />
                         },
                         {
                             lableText: "Date",
@@ -112,7 +140,7 @@ const CreatePayment = () => {
                     {/* <FilterRow visible={true} /> */}
                     <Paging defaultPageSize={10} />
 
-                    <Column dataField={myTools.propToString<SellInvoice>().invoiceNumber + ""}  caption="Invoice Number" />
+                    <Column dataField={myTools.propToString<SellInvoice>().invoiceNumber + ""} caption="Invoice Number" />
                     <Column dataField={myTools.propToString<SellInvoice>().invoiceDate + ""} dataType="date" caption="Invoice Date" />
                     <Column dataField={myTools.propToString<SellInvoice>().total + ""} dataType="number" caption="Invoice Total" />
                     {/* <Column dataField="city" />

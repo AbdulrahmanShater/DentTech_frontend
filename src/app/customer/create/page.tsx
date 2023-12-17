@@ -1,6 +1,6 @@
 "use client";
 import { AiOutlineArrowLeft, AiOutlineSave } from "react-icons/ai";
-import React, { } from "react";
+import React, { useMemo } from "react";
 import { MyItemInput } from "@/components/Input/Input";
 import MyTools from "@/hooks/MyTools";
 import Applayout from "@/components/layout/Applayout";
@@ -9,6 +9,8 @@ import GridItem from "@/components/GridItem";
 import { CreateCustomerInterface } from "@/api/interface/customer";
 import CreateContainer from "@/container/customer/CreateContainer";
 import { MySelect } from "@/components/Input";
+import { Autocomplete, TextField } from "@mui/material";
+import { Company } from "@/models/company";
 
 const CreateCustomer = () => {
 
@@ -16,6 +18,10 @@ const CreateCustomer = () => {
 
     const myTools = MyTools();
 
+
+    const selectedCompany: Company | undefined = useMemo(() => {
+        return container.companies.find((f) => Number(f.id) === container.data?.company)
+    }, [container.data?.company, container.companies])
     return (<>
         <Applayout>
             <div className="flex flex-col gap-5 h-full ">
@@ -47,13 +53,33 @@ const CreateCustomer = () => {
                         {
                             lableText: "Company",
                             error: container.errors?.company,
-                            input: <MySelect
-                                className="w-72"
-                                name={myTools.propToString<CreateCustomerInterface>().company + ""}
-                                onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.company!}
-                                options={container.companies.map((c) => ({ title: c.name, value: c.id }))}
+                            input: <Autocomplete
+                                disablePortal
+                                value={selectedCompany == undefined ? null : {
+                                    id: selectedCompany.id,
+                                    label: selectedCompany.name
+                                }}
+                                options={
+                                    container.companies.map((value) => ({ label: value.name, id: value.id }))
+                                }
+                                onChange={(event, value) => {
+                                    container.setData((prev) => ({ ...prev, company: (value == null ? undefined : Number(value?.id)) }))
+                                }}
+                                noOptionsText="No Company"
+                                renderInput={(params) =>
+                                    <TextField {...params}
+                                        error={!!container.errors?.company}
+                                        helperText={container.errors?.company}
+                                        label="Company"
+                                    />}
                             />
+                            // <MySelect
+                            //     className="w-72"
+                            //     name={myTools.propToString<CreateCustomerInterface>().company + ""}
+                            //     onChange={container.inputHandeler}
+                            //     value={container.data == undefined ? "" : container.data.company!}
+                            //     options={container.companies.map((c) => ({ title: c.name, value: c.id }))}
+                            // />
                         },
                         {
                             lableText: "Tel",

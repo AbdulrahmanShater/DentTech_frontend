@@ -20,12 +20,19 @@ import ItemService from "@/api/services/ItemService";
 import { GetAllJsonR } from "@/api/interface/item";
 import ToolTip from "@/components/ToolTip";
 import { MySelect } from "@/components/Input";
+import { Autocomplete, TextField } from "@mui/material";
+import { Customer } from "@/models/customer";
 
 const CreateCustomer = () => {
 
     const container = CreateContainer();
 
     const myTools = MyTools();
+
+    const selectedCustomer: Customer | undefined = useMemo(() => {
+        return container.customers.find((f) => Number(f.id) === container.data?.customer)
+    }, [container.data?.customer, container.customers])
+
 
     return (<>
         <Applayout>
@@ -38,13 +45,33 @@ const CreateCustomer = () => {
                         {
                             lableText: "Customer",
                             error: container.errors?.customer,
-                            input: <MySelect
-                                className="w-72"
-                                name={myTools.propToString<CreateInterface>().customer + ""}
-                                onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.customer!}
-                                options={container.customers.map((c) => ({ title: c.firstName + " " + c.lastName, value: c.id }))}
+                            input: <Autocomplete
+                                disablePortal
+                                value={selectedCustomer == undefined ? null : {
+                                    id: selectedCustomer.id,
+                                    label: `${selectedCustomer.firstName} ${selectedCustomer.lastName}`
+                                }}
+                                options={
+                                    container.customers.map((value) => ({ label: `${value.firstName} ${value.lastName}`, id: value.id }))
+                                }
+                                onChange={(event, value) => {
+                                    container.setData((prev) => ({ ...prev, customer: (value == null ? undefined : Number(value?.id)) }))
+                                }}
+                                noOptionsText="No Customers"
+                                renderInput={(params) =>
+                                    <TextField {...params}
+                                        error={!!container.errors?.customer}
+                                        helperText={container.errors?.customer}
+                                        label="Customer"
+                                    />}
                             />
+                            // <MySelect
+                            //     className="w-72"
+                            //     name={myTools.propToString<CreateInterface>().customer + ""}
+                            //     onChange={container.inputHandeler}
+                            //     value={container.data == undefined ? "" : container.data.customer!}
+                            //     options={container.customers.map((c) => ({ title: c.firstName + " " + c.lastName, value: c.id }))}
+                            // />
                         },
                         {
                             lableText: "Date",

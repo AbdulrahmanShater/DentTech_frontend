@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams, useRouter } from 'next/navigation'
-import { InputHTMLAttributes, useEffect, useState } from 'react';
+import { InputHTMLAttributes, useEffect, useMemo, useState } from 'react';
 
 
 import Link from "next/link";
@@ -15,6 +15,8 @@ import IconButton from '@/components/Button/IconButton';
 import { EditCustomerInterface } from '@/api/interface/customer';
 import GridItem from '@/components/GridItem';
 import EditContainer from '@/container/customer/EditContainer';
+import { Autocomplete, TextField } from '@mui/material';
+import { Company } from '@/models/company';
 
 export default function EditCustomer() {
 
@@ -25,6 +27,10 @@ export default function EditCustomer() {
     const container = EditContainer({ customer_id: Number(id) });
 
     const myTools = MyTools();
+
+    const selectedCompany: Company | undefined = useMemo(() => {
+        return container.companies.find((f) => Number(f.id) === container.data?.company)
+    }, [container.data?.company, container.companies])
 
 
     if (container.customer == null) {
@@ -64,13 +70,33 @@ export default function EditCustomer() {
                         {
                             lableText: "Company",
                             error: container.errors?.company,
-                            input: <MySelect
-                                className="w-72"
-                                name={myTools.propToString<EditCustomerInterface>().company + ""}
-                                onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.company!}
-                                options={container.companies.map((c) => ({ title: c.name, value: c.id }))}
+                            input: <Autocomplete
+                                disablePortal
+                                value={selectedCompany == undefined ? null : {
+                                    id: selectedCompany.id,
+                                    label: selectedCompany.name
+                                }}
+                                options={
+                                    container.companies.map((value) => ({ label: value.name, id: value.id }))
+                                }
+                                onChange={(event, value) => {
+                                    container.setData((prev) => ({ ...prev, company: (value == null ? undefined : Number(value?.id)) }))
+                                }}
+                                noOptionsText="No Company"
+                                renderInput={(params) =>
+                                    <TextField {...params}
+                                        error={!!container.errors?.company}
+                                        helperText={container.errors?.company}
+                                        label="Company"
+                                    />}
                             />
+                            // <MySelect
+                            //     className="w-72"
+                            //     name={myTools.propToString<EditCustomerInterface>().company + ""}
+                            //     onChange={container.inputHandeler}
+                            //     value={container.data == undefined ? "" : container.data.company!}
+                            //     options={container.companies.map((c) => ({ title: c.name, value: c.id }))}
+                            // />
                         },
                         {
                             lableText: "Tel",

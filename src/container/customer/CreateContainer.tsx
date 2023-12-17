@@ -19,7 +19,7 @@ export default function CreateContainer() {
     const [loading, setLoading] = useState<boolean>(false);
 
 
-    const [data, setData] = useState<CreateCustomerInterface | undefined>(undefined);
+    const [data, setData] = useState<CreateCustomerInterface>({});
     const [companies, setCompanies] = useState<Company[]>([]);
 
     const [errors, setErrors] = useState<CreateCustomerER | undefined>();
@@ -130,7 +130,7 @@ export default function CreateContainer() {
                     document.location.replace("/")
                 }
                 if (props.clearData) {
-                    setData(undefined)
+                    setData({})
                 }
             })
             .catch((error) => {
@@ -188,5 +188,6 @@ export default function CreateContainer() {
         loading,
         companies,
         canSaveEditData,
+        setData,
     }
 }

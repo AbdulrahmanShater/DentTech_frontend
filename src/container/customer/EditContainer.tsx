@@ -206,6 +206,7 @@ export default function EditContainer(props: { customer_id: number }) {
         canSaveEditData,
         companies,
         backHandlerHandler,
+        setData,
 
     }
 }

@@ -11,7 +11,8 @@ import { SellInvoice } from "@/models/invoice/sellInvoice";
 export default function SellInvoiceContainer() {
 
 
-    const [data, setData] = useState<SellInvoice[]>([]);
+    const [data, setData] = useState<Payment[]>([]);
+    // const [data, setData] = useState<SellInvoice[]>([]);
 
     const [loading, setLoading] = useState<false>(false);
 

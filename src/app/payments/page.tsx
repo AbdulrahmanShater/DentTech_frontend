@@ -12,34 +12,34 @@ import { MRT_ColumnDef, MaterialReactTable } from "material-react-table";
 import MyTools from "@/hooks/MyTools";
 export default function InvoicePage() {
 
-    const [selectedPayment, setSelectedPayment] = useState<SellInvoice | undefined>(undefined);
+    const [selectedPayment, setSelectedPayment] = useState<Payment | undefined>(undefined);
 
     const container = PaymentContainer();
     const myTools = MyTools();
 
-    const columns = useMemo<MRT_ColumnDef<SellInvoice>[]>(
+    const columns = useMemo<MRT_ColumnDef<Payment>[]>(
         () => [
             {
                 header: 'Number',
-                accessorKey: myTools.propToString<SellInvoice>().id + "",
+                accessorKey: myTools.propToString<Payment>().id + "",
             },
             {
-                header: 'Invoice Number',
-                accessorKey: myTools.propToString<SellInvoice>().invoiceNumber,
+                header: 'Payment Number',
+                accessorKey: myTools.propToString<Payment>().paymentNumber,
             },
+            // {
+            //     header: 'Paid',
+            //     accessorKey: myTools.propToString<Payment>().paid + "",
+            //     Cell: ({ renderedCellValue, row }) => {
+            //         const isPaid: boolean = Boolean(renderedCellValue);
+            //         return <p className={`text-white dark:text-white ${isPaid ? 'bg-success' : 'bg-danger'}  w-fit rounded-xl px-4 py-1`}>
+            //             {`${isPaid ? 'Paid' : 'Not Paid'}`}
+            //         </p>
+            //     }
+            // },
             {
-                header: 'Paid',
-                accessorKey: myTools.propToString<SellInvoice>().paid + "",
-                Cell: ({ renderedCellValue, row }) => {
-                    const isPaid: boolean = Boolean(renderedCellValue);
-                    return <p className={`text-white dark:text-white ${isPaid ? 'bg-success' : 'bg-danger'}  w-fit rounded-xl px-4 py-1`}>
-                        {`${isPaid ? 'Paid' : 'Not Paid'}`}
-                    </p>
-                }
-            },
-            {
-                header: 'Total',
-                accessorKey: myTools.propToString<SellInvoice>().total + "",
+                header: 'Amount',
+                accessorKey: myTools.propToString<Payment>().amount! + "",
                 Cell: ({ renderedCellValue, row }) => {
                     return Number(renderedCellValue).toLocaleString();
                 }
@@ -83,19 +83,19 @@ export default function InvoicePage() {
 
                                     <td className={`${selectedPayment != undefined ? 'hidden' : 'table-cell'}  border-b border-[#eee] py-5 px-4 dark:border-strokedark`}>
                                         <p className="text-black dark:text-white">
-                                            {invoice.invoiceNumber}
+                                            {invoice.paymentNumber}
                                         </p>
                                     </td>
 
                                     <td className={`${selectedPayment != undefined ? 'hidden' : 'table-cell'}  border-b border-[#eee] py-5 px-4 dark:border-strokedark`}>
                                         <p className="text-black dark:text-white">
-                                            {invoice.invoiceDate}
+                                            {invoice.paymentDate}
                                         </p>
                                     </td>
 
                                     <td className={`${selectedPayment != undefined ? 'hidden' : 'table-cell'}  border-b border-[#eee] py-5 px-4 dark:border-strokedark`}>
                                         <p className="text-black dark:text-white">
-                                            {invoice.total}
+                                            {invoice.amount}
                                         </p>
                                     </td>
 

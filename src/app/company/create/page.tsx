@@ -20,7 +20,7 @@ const CreateCompany = () => {
         <Applayout>
             <div className="flex flex-col gap-5 h-full ">
                 <Header
-                    onClickSave={container.canSaveEditData ? container.submitHandler : undefined}
+                    onClickSave={container.submitHandler}
                     backHanlder={container.backHandlerHandler} />
                 <div className="flex gap-3 h-full">
                     <TableThree inputs={[

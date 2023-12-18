@@ -55,7 +55,8 @@ export default function EditContainer(props: { item_id: number }) {
             .then(response => {
                 const res: GetOneJsonR = response.data;
                 setItem(res.data)
-                setData((prev) => ({ ...res.data, company: res.data.company?.id }));
+                // setData((prev) => ({ ...res.data, company: res.data.company?.id }));
+                setData((prev) => ({}));
                 new MyToast(res.message).success();
             })
             .catch((error) => {

@@ -161,7 +161,7 @@ const TableThree = (props: { inputs: MyInputsInterface[], title?: string }) => {
     );
 };
 
-const Header = (props: { onClickSave?: (props: { reInter: boolean }) => void, backHanlder?: () => void }) => {
+const Header = (props: { onClickSave?: (props: { reInter: boolean }) => void, backHanlder: () => void }) => {
     return (<>
         <div className="flex flex-row justify-between">
 

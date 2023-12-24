@@ -11,16 +11,16 @@ const styles = StyleSheet.create({
     }
 });
 
-export default function SellInvoicePdf(props: { invoice: SellInvoice }) {
 
-    const { invoice } = props;
+interface InvoicePdfProp { invoice: SellInvoice, type: "customer" | "customer_patient" }
+export default function SellInvoicePdf(props: InvoicePdfProp) {
+
     return <Document>
-        <SellInvoicePdfPage invoice={invoice} />
+        <SellInvoicePdfPage {...props} />
     </Document>
 };
 
-export function SellInvoicePdfPage(props: { invoice: SellInvoice }) {
-
+export function SellInvoicePdfPage(props: InvoicePdfProp) {
     const { invoice } = props;
     return <Page size="A4" style={
         {
@@ -47,10 +47,21 @@ export function SellInvoicePdfPage(props: { invoice: SellInvoice }) {
                 marginLeft: 'auto',
                 marginRight: 'auto'
             }} src={'/logo/invoiceHeader.png'} />
-            <InvoiceTitle title='Sell Invoice' trn={invoice.invoiceNumber} />
+            <InvoiceTitle title='Tax Invoice' trn={String(invoice.user.company?.trn)} />
         </View>
 
         {/* Invoice Number */}
+        <View style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            gap: "4px",
+            marginTop: 10,
+        }}>
+            <Text >{"No: "}</Text>
+            <Text >{invoice.invoiceNumber}</Text>
+        </View >
+
+
         <View style={{
             flexDirection: 'row',
             justifyContent: 'flex-end',
@@ -61,8 +72,9 @@ export function SellInvoicePdfPage(props: { invoice: SellInvoice }) {
             <Text >{invoice.invoiceDate}</Text>
         </View >
 
+
         {/* Invoice Header Info (Customer Info & Patient Info)*/}
-        <InvoiceHeaderInfo invoice={invoice} />
+        <InvoiceHeaderInfo {...props} />
 
         {/* Table */}
         <InvoiceItemsTable invoice={invoice} />
@@ -83,7 +95,7 @@ export function SellInvoicePdfPage(props: { invoice: SellInvoice }) {
 };
 
 
-const InvoiceHeaderInfo = ({ invoice }: { invoice: SellInvoice }) => {
+const InvoiceHeaderInfo = ({ invoice, type }: InvoicePdfProp) => {
 
     const styles = StyleSheet.create({
         outerContainer: {
@@ -91,13 +103,13 @@ const InvoiceHeaderInfo = ({ invoice }: { invoice: SellInvoice }) => {
             width: "100%",
             justifyContent: "space-between",
             gap: "4px",
-            marginTop: 0,
+            marginVertical: 2
         },
         innerContainer: {
             flexDirection: 'column',
             alignItems: "flex-start",
             border: "1px #000000 solid",
-            width: "100%",
+            width: "50%",
             padding: "5px",
         },
         innerContainerHeader: {
@@ -120,6 +132,7 @@ const InvoiceHeaderInfo = ({ invoice }: { invoice: SellInvoice }) => {
 
     return <Fragment>
         <View style={styles.outerContainer}>
+
             <View style={styles.innerContainer}>
                 <Text style={styles.innerContainerHeader}>{"Customer Info:"}</Text>
 
@@ -144,25 +157,27 @@ const InvoiceHeaderInfo = ({ invoice }: { invoice: SellInvoice }) => {
                     <Text >{`${invoice.user.company?.tel}`}</Text>
                 </View >
             </View >
-            <View style={styles.innerContainer}>
-                <Text style={styles.innerContainerHeader}>{"Doctor & Patient Info:"}</Text>
-                <View style={styles.innerContainerText}>
-                    <Text >{"Doctor:"} </Text>
-                    <Text >{`${invoice.user.firstName} ${invoice.user.lastName}`}</Text>
-                </View >
-                <View style={styles.innerContainerText}>
-                    <Text >{"Patient:"} </Text>
-                    <Text >{invoice.patientName}</Text>
-                </View >
-                <View style={styles.innerContainerText}>
-                    <Text >{"File Number:"} </Text>
-                    <Text >{invoice.fileNumber}</Text>
-                </View >
-                <View style={styles.innerContainerText}>
-                    <Text >{"Job Order No:"}</Text>
-                    <Text >{invoice.jobOrder}</Text>
-                </View >
-            </View >
+            {
+                type == "customer_patient" ? <View style={styles.innerContainer}>
+                    <Text style={styles.innerContainerHeader}>{"Doctor & Patient Info:"}</Text>
+                    <View style={styles.innerContainerText}>
+                        <Text >{"Doctor:"} </Text>
+                        <Text >{`${invoice.user.firstName} ${invoice.user.lastName}`}</Text>
+                    </View >
+                    <View style={styles.innerContainerText}>
+                        <Text >{"Patient:"} </Text>
+                        <Text >{invoice.patientName}</Text>
+                    </View >
+                    <View style={styles.innerContainerText}>
+                        <Text >{"File Number:"} </Text>
+                        <Text >{invoice.fileNumber}</Text>
+                    </View >
+                    <View style={styles.innerContainerText}>
+                        <Text >{"Job Order No:"}</Text>
+                        <Text >{invoice.jobOrder}</Text>
+                    </View >
+                </View> : null
+            }
         </View >
     </Fragment>
 };
@@ -217,6 +232,7 @@ const InvoiceItemsTable = ({ invoice }: { invoice: SellInvoice }) => {
             textAlign: "center",
         },
     })
+
     return <Fragment>
         <View style={styles.table}>
             <View style={[styles.row, styles.bold, styles.header]}>
@@ -232,14 +248,18 @@ const InvoiceItemsTable = ({ invoice }: { invoice: SellInvoice }) => {
                 <View key={index.toString()} style={styles.row} wrap={false}>
                     <Text style={[styles.bold, styles.row1]}>{index + 1}</Text>
                     <Text style={styles.row2}>{item.item.name}</Text>
-                    <Text style={styles.row3}>{item.quantity}</Text>
-                    <Text style={[styles.row4, styles.bold]}></Text>
+                    <Text style={styles.row3}>{item.item.description}</Text>
+                    <Text style={styles.row4}>{item.quantity}</Text>
+                    <Text style={styles.row5}>{0}</Text>
+                    <Text style={[styles.row6, styles.bold]}>{Number((item.unitPrice).toFixed(2)).toLocaleString('en')}</Text>
                     <Text style={styles.row7}>{Number((item.unitPrice * item.quantity).toFixed(2)).toLocaleString('en')}</Text>
                 </View>
             ))}
         </View>
     </Fragment>
+
 }
+
 const InvoiceSummary = ({ invoice }: { invoice: SellInvoice }) => {
 
     const styles = StyleSheet.create({
@@ -320,6 +340,7 @@ const InvoiceTitle = ({ title, trn }: { title: string, trn: string }) => {
     const styles = StyleSheet.create({
 
         titleContainer: {
+            display: "flex",
             flexDirection: 'column',
             alignItems: "center",
             marginTop: 50,

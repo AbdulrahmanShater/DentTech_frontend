@@ -292,17 +292,21 @@ export default function InvoicePage() {
                                 </PDFViewer>
                             </>
                         }
-
                         {selectedCustomer &&
                             <>
                                 <PDFViewer width="100%" height="400" className="app" >
-                                    <SellInvoicePdf invoice={selectedCustomer!} />
+                                    <SellInvoicePdf invoice={selectedCustomer!} type="customer" />
                                 </PDFViewer>
                             </>
                         }
-
+                        {selectedCustomer &&
+                            <>
+                                <PDFViewer width="100%" height="400" className="app" >
+                                    <SellInvoicePdf invoice={selectedCustomer!} type="customer_patient" />
+                                </PDFViewer>
+                            </>
+                        }
                         {/* content */}
-
                     </div>
                     {/* invoice details */}
                 </div>

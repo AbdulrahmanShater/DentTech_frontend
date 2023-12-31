@@ -7,5 +7,9 @@ export interface LoginInterface {
 }
 export interface LoginInterfaceER extends LoginInterface {
 }
+export type LoginJsonRType = {
+    access_token: string,
+    refresh_token: string
+}
 
-export interface LoginJsonR extends BaseJsonResponse<{}, LoginInterfaceER> { }
+export interface LoginJsonR extends BaseJsonResponse<LoginJsonRType, LoginInterfaceER> { }

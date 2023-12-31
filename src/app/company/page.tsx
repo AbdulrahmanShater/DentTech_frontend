@@ -19,7 +19,7 @@ export default function CompanyPage() {
 
     const myTools = MyTools();
 
-    const [selectedFilterIsVendor, setSelectedFilterIsVendor] = useState<'true' | 'false'>('true');
+    const [selectedFilterIsVendor, setSelectedFilterIsVendor] = useState<'true' | 'false'>('false');
 
     const handleChange = (event: SelectChangeEvent) => {
         setSelectedFilterIsVendor(event.target.value as any);

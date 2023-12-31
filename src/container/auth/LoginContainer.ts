@@ -43,12 +43,12 @@ export default function LoginContainer() {
 
             return;
         }
-        AuthService.register({
+        AuthService.login({
             ...data,
-            firstname: "ahamd",
-            lastname: "sh",
-            role: 1,
-            company: 1
+            // firstname: "ahamd",
+            // lastname: "sh",
+            // role: 1,
+            // company: 1
         })
             .then(response => {
                 // const res: RegisterJsonR = response.data;

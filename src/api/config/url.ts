@@ -70,8 +70,8 @@ const URL = async () => {
 
     const AUTH_URL = {
         REGISTER: AUTH_URL_PREFIX + "/register",
+        LOGIN: AUTH_URL_PREFIX + "/login",
     };
-
 
     return {
         COMPANY_URL,

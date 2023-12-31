@@ -9,6 +9,7 @@ import Applayout from "@/components/layout/Applayout";
 import BuyInvoiceContainer from "@/container/invoice/buy/BuyInvoiceContainer";
 import MyTools from "@/hooks/MyTools";
 import { MRT_ColumnDef, MaterialReactTable } from "material-react-table";
+import { Customer, CustomerCompany } from "@/models/customer";
 export default function InvoicePage() {
 
     const [selectedCustomer, setSelectedCustomer] = useState<BuyInvoice | undefined>(undefined);
@@ -22,6 +23,10 @@ export default function InvoicePage() {
             {
                 header: 'Number',
                 accessorKey: myTools.propToString<BuyInvoice>().id + "",
+            },
+            {
+                header: 'Company',
+                accessorKey: myTools.propToString<BuyInvoice>().user + "." + myTools.propToString<Customer>().company + '.' + "." + myTools.propToString<CustomerCompany>().name,
             },
             {
                 header: 'Invoice Number',

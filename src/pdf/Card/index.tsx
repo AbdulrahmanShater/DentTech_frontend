@@ -2,8 +2,8 @@ import React from 'react';
 import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 
 // Define the custom size for the card
-const cardWidth = 200;
-const cardHeight = 300;
+const cardWidth = '10cm';
+const cardHeight = '5cm';
 
 // Create styles for the card
 const styles = StyleSheet.create({
@@ -63,36 +63,3 @@ export const CardPdf = ({ client, doctor, fileNo, issueddate, orderNo, patient }
         </Page>
     </Document>
 );
-// // Define the content of the card
-// export const CardPdf = ({ chruc, doctor, fileNo, issueddate, orderNo, patient }: { chruc: string, doctor: string, patient: string, fileNo: string, orderNo: string, issueddate: string }) => (
-//     <Document>
-//         <Page size={{ width: cardWidth, height: cardHeight }} style={styles.page} orientation='landscape'>
-//             <View style={styles.section}>
-//                 <View style={styles.content}>
-//                     <Text> {`Chruc:`}</Text>
-//                     <Text> {`${chruc}`}</Text>
-//                 </View>
-//                 <View style={styles.content}>
-//                     <Text> {`Doctor:`}</Text>
-//                     <Text> {`${doctor}`}</Text>
-//                 </View>
-//                 <View style={styles.content}>
-//                     <Text> {`Patient:`}</Text>
-//                     <Text> {`${patient}`}</Text>
-//                 </View>
-//                 <View style={styles.content}>
-//                     <Text> {`File No:`}</Text>
-//                     <Text> {`${fileNo}`}</Text>
-//                 </View>
-//                 <View style={styles.content}>
-//                     <Text> {`Order No:`}</Text>
-//                     <Text> {`${orderNo}`}</Text>
-//                 </View>
-//                 <View style={styles.content}>
-//                     <Text> {`Issued date:`}</Text>
-//                     <Text> {`${issueddate}`}</Text>
-//                 </View>
-//             </View>
-//         </Page>
-//     </Document>
-// );

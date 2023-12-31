@@ -14,6 +14,7 @@ import { IoIosClose } from "react-icons/io";
 import MyTools from "@/hooks/MyTools";
 import { MRT_ColumnDef, MaterialReactTable } from "material-react-table";
 import { CardPdf } from "@/pdf/Card";
+import { Customer, CustomerCompany } from "@/models/customer";
 export default function InvoicePage() {
 
     const [selectedCustomer, setSelectedCustomer] = useState<SellInvoice | undefined>(undefined);
@@ -27,6 +28,10 @@ export default function InvoicePage() {
             {
                 header: 'Number',
                 accessorKey: myTools.propToString<SellInvoice>().id + "",
+            },
+            {
+                header: 'Company',
+                accessorKey: myTools.propToString<SellInvoice>().user + "." + myTools.propToString<Customer>().company + '.' + "." + myTools.propToString<CustomerCompany>().name,
             },
             {
                 header: 'Invoice Number',

@@ -10,7 +10,7 @@ export default function AllInvoicesPdf({ invoices }: StatmentPdfType) {
 
     return <Document>
         {
-            invoices.map((invoice) => <SellInvoicePdfPage invoice={invoice} />)
+            invoices.map((invoice) => <SellInvoicePdfPage invoice={invoice} type='customer' />)
         }
     </Document>
 };

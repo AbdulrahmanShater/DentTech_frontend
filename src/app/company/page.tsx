@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Company } from "../../models/company";
+import { Company, CompanyStatusEnum } from "../../models/company";
 import DropdownFilter from "./DropdownFilter";
 import { AiOutlineDelete, AiOutlineEdit, AiOutlineInfoCircle, AiOutlinePlus } from "react-icons/ai";
 import { useMemo, useState } from "react";
@@ -57,8 +57,22 @@ export default function CompanyPage() {
                 accessorKey: myTools.propToString<Company>().status + "",
                 Cell: ({ renderedCellValue, row }) => {
                     const isPaid: boolean = Boolean(renderedCellValue);
-                    return <p className={`text-white dark:text-white ${isPaid ? 'bg-success' : 'bg-danger'}  w-fit rounded-xl px-4 py-1`}>
-                        {`${isPaid ? 'Paid' : 'Not Paid'}`}
+                    var color: string = "";
+                    switch (row.original.status) {
+                        case CompanyStatusEnum.Paid:
+                            color = "bg-success"
+                            break;
+                        case CompanyStatusEnum.Unpaid:
+                            color = "bg-danger"
+                            break;
+                        case CompanyStatusEnum.Owed:
+                            color = "bg-warning"
+                            break;
+                        default:
+                            break;
+                    }
+                    return <p className={`text-white dark:text-white ${color}  w-fit rounded-xl px-4 py-1`}>
+                        {row.original.status}
                     </p>
                 }
             },

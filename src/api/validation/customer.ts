@@ -26,7 +26,7 @@ export function CreateValidation(customer: CreateCustomerInterface): CreateCusto
     if (customer.email == undefined) email = "Email is required"
     else if (!myTools.isValidEmailRGX(customer.email)) email = "Email is invalid";
 
-    if (customer.password == undefined) password = "Password is required";
+    // if (customer.password == undefined) password = "Password is required";
 
     if (customer.company == undefined) company = "Company is required";
 

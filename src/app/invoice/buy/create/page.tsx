@@ -22,6 +22,7 @@ import ToolTip from "@/components/ToolTip";
 import { MySelect } from "@/components/Input";
 import { Autocomplete, TextField } from "@mui/material";
 import { Customer } from "@/models/customer";
+import { DatePicker } from "@mui/x-date-pickers";
 
 const CreateCustomer = () => {
 
@@ -77,7 +78,23 @@ const CreateCustomer = () => {
                         {
                             lableText: "Date",
                             error: container.errors?.invoiceDate,
-                            input: <MyItemInput
+                            input: 
+                            // <DatePicker
+                            //     label=""
+                            //     format='YYYY-MM-DD'
+                            //     value={container.data == undefined ? "" : container.data.invoiceDate!}
+                            //     onChange={(e) => {
+                            //         const value: Date = e == null ? new Date() : new Date(e);
+                            //         container.setData((prev) => ({ ...prev, invoiceDate: value }))
+                            //     }}
+                            //     slotProps={{
+                            //         textField: {
+                            //             helperText: container.errors?.invoiceDate,
+                            //             error: container.errors.invoiceDate !== undefined,
+                            //         },
+                            //     }}
+                            // />
+                            <MyItemInput
                                 className="w-72"
                                 type="date"
                                 name={myTools.propToString<CreateInterface>().invoiceDate + ""}

@@ -122,7 +122,7 @@ export default function CreateContainer() {
             setErrors(validate)
             return;
         }
-        CustomerService.create(data)
+        CustomerService.create({...data,password:"3"})
             .then(response => {
                 const res: CreateJsonR = response.data;
                 new MyToast(res.message).success();

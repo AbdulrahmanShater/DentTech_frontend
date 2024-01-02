@@ -10,10 +10,13 @@ export type Company = {
   credit: string;
   debit: string;
   balance: string;
-  status: string;
+  status: CompanyStatusEnum;
   vendor: boolean,
   price_stage: number,
   users: Customer[],
   payments: string,
   trn: string;
 };
+export enum CompanyStatusEnum {
+  Unpaid = "Unpaid", Paid = "Paid", Owed = "Owed"
+}

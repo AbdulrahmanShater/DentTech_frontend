@@ -54,6 +54,7 @@ const CreateCustomer = () => {
                             lableText: "Company",
                             error: container.errors?.company,
                             input: <Autocomplete
+                                className="!w-full"
                                 disablePortal
                                 value={selectedCompany == undefined ? null : {
                                     id: selectedCompany.id,
@@ -101,16 +102,16 @@ const CreateCustomer = () => {
                                 value={container.data == undefined ? "" : container.data.email!}
                             />
                         },
-                        {
-                            lableText: "Password",
-                            error: container.errors?.password,
-                            input: <MyItemInput
-                                className="w-72"
-                                name={myTools.propToString<CreateCustomerInterface>().password + ""}
-                                onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.password!}
-                            />
-                        },
+                        // {
+                        //     lableText: "Password",
+                        //     error: container.errors?.password,
+                        //     input: <MyItemInput
+                        //         className="w-72"
+                        //         name={myTools.propToString<CreateCustomerInterface>().password + ""}
+                        //         onChange={container.inputHandeler}
+                        //         value={container.data == undefined ? "" : container.data.password!}
+                        //     />
+                        // },
                     ]} />
 
                 </div>

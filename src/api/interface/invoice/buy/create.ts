@@ -12,7 +12,7 @@ export interface CreateInterface {
     customer?: number;
     invoiceNumber?: number;
     reference?: number;
-    invoiceDate?: number;
+    invoiceDate?: string;
     invoiceItems?: InvoiceItemInterface[];
 }
 export interface CreateER {

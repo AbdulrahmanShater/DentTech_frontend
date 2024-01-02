@@ -2,8 +2,8 @@ import React from 'react';
 import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 
 // Define the custom size for the card
-const cardWidth = '10cm';
-const cardHeight = '5cm';
+const cardWidth = "141.7311494708042";
+const cardHeight = "283.4622989416085";
 
 // Create styles for the card
 const styles = StyleSheet.create({

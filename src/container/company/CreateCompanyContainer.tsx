@@ -64,7 +64,8 @@ export default function CreateCompanyContainer() {
     }
 
     const saveHandler = (props: { reInter: boolean, clearData: boolean }) => {
-        const newData = { ...data, vendor: false, price_stage: 1 }
+        // const newData = { ...data, vendor: false, price_stage: 1 }
+        const newData = data;
         const validate = CreateValidation(newData);
         if (validate !== undefined) {
             console.log(validate)

@@ -10,6 +10,7 @@ import { useEffect, useState, useMemo, useCallback } from "react"
 import { AiFillSave } from "react-icons/ai";
 import { GetAllJsonR } from "@/api/interface/customer";
 import { Customer } from "@/models/customer";
+import dayjs from "dayjs";
 
 
 export interface TableItemModel extends InvoiceItemInterface {
@@ -27,11 +28,11 @@ export default function CreateContainer() {
 
     // const [tableItems, setTableItems] = useState<TableItemModel[]>([])
 
-    const [data, setData] = useState<CreateInterface | undefined>();
+    const [data, setData] = useState<CreateInterface>({});
 
     const [customers, setCustomers] = useState<Customer[]>([]);
 
-    const [errors, setErrors] = useState<CreateER | undefined>();
+    const [errors, setErrors] = useState<CreateER>({});
 
     const discountValue: number = useMemo(() => {
         var discount = 0;
@@ -86,7 +87,7 @@ export default function CreateContainer() {
         if (value == "" || value == null) {
             value = undefined;
         }
-        setErrors(undefined)
+        setErrors({})
         setData((prev) => ({ ...prev, [name]: value }));
     }
 
@@ -130,7 +131,7 @@ export default function CreateContainer() {
                     document.location.replace("/")
                 }
                 if (props.clearData) {
-                    setData(undefined)
+                    setData({})
                 }
             })
             .catch((error) => {
@@ -144,7 +145,7 @@ export default function CreateContainer() {
                                 break;
                             case 422:
                             case 400:
-                                setErrors(res.errors)
+                                setErrors(res.errors!)
                                 break;
                             case 500:
                                 break;

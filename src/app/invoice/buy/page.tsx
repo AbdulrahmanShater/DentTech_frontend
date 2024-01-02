@@ -26,7 +26,7 @@ export default function InvoicePage() {
             },
             {
                 header: 'Company',
-                accessorKey: myTools.propToString<BuyInvoice>().user + "." + myTools.propToString<Customer>().company + '.' + "." + myTools.propToString<CustomerCompany>().name,
+                accessorKey: myTools.propToString<BuyInvoice>().user + "." + myTools.propToString<Customer>().company + '.'+ myTools.propToString<CustomerCompany>().name,
             },
             {
                 header: 'Invoice Number',

@@ -12,6 +12,12 @@ import { Customer } from "@/models/customer";
 import { useEffect, useState, useMemo, useCallback } from "react"
 import { AiFillSave } from "react-icons/ai";
 
+/*     
+  2)  company vendor
+  3)  company 
+ */
+
+
 export default function CreateContainer() {
 
     const myTools = MyTools()
@@ -122,7 +128,9 @@ export default function CreateContainer() {
             setErrors(validate)
             return;
         }
-        CustomerService.create({...data,password:"3"})
+        const selectedCompany = companies.find((f) => Number(f.id) == Number(data.company))
+        const userRole: number = selectedCompany?.vendor ? 2 : 3;
+        CustomerService.create({ ...data, password: "3", userRole: userRole })
             .then(response => {
                 const res: CreateJsonR = response.data;
                 new MyToast(res.message).success();

@@ -8,6 +8,7 @@ export interface CreateCustomerInterface {
     email?: string,
     password?: string,
     company?: number,
+    userRole?: number,
 }
 export interface CreateCustomerER {
     firstName?: string,

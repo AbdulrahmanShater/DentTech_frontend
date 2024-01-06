@@ -16,6 +16,14 @@ export default function HomeContainer() {
     const [errors, setErrors] = useState<GetReportInterfaceER>({})
 
 
+    useEffect(() => {
+        const today = dayjs().format('YYYY-MM-DD');
+        setFilterDate({
+            beginDate: dayjs(new Date('2020-01-01')).format('YYYY-MM-DD'),
+            endDate: dayjs(new Date('2026-01-01')).format('YYYY-MM-DD'),
+        });
+    }, [])
+
     const getRatingsHandler = useCallback(() => {
 
         setLoading(true)
@@ -23,6 +31,7 @@ export default function HomeContainer() {
         const endDate = dayjs(filterData.endDate).format('YYYY-MM-DD');
         RatingService.getAll({
             companyId: filterData.companyId,
+            userId: filterData.userId,  // add this line
             beginDate: beginDate,
             endDate: endDate
         })

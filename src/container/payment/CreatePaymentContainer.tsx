@@ -13,6 +13,7 @@ import { Company } from "@/models/company";
 import PaymentService from "@/api/services/PaymentService";
 import { SellInvoice } from "@/models/invoice/sellInvoice";
 import SellInvoiceService from "@/api/services/invoice/SellService";
+import dayjs from "dayjs";
 
 
 export default function CreatePaymentContainer() {
@@ -33,7 +34,7 @@ export default function CreatePaymentContainer() {
 
     const [selectedCompanyId, setSelectedCompanyId] = useState<number>(-1);
 
-    const [errors, setErrors] = useState<CreateInterfaceER | undefined>();
+    const [errors, setErrors] = useState<CreateInterfaceER>({});
 
 
 
@@ -56,6 +57,11 @@ export default function CreatePaymentContainer() {
     }, [selectedInvoices])
 
 
+    useEffect(() => {
+        setData({
+            paymentDate: dayjs().format('YYYY-MM-DD')
+        });
+    }, [])
 
 
     useEffect(() => {
@@ -97,7 +103,7 @@ export default function CreatePaymentContainer() {
         if (value == "" || value == null) {
             value = undefined;
         }
-        setErrors(undefined)
+        setErrors({})
         setData((prev) => ({ ...prev, [name]: value }));
     }
 
@@ -135,7 +141,7 @@ export default function CreatePaymentContainer() {
         };
         const validate = CreateValidation(dataToSave);
         if (validate !== undefined) {
-            setErrors(validate)
+            setErrors(validate!)
             return;
         }
         // alert("validate...")
@@ -162,7 +168,7 @@ export default function CreatePaymentContainer() {
                                 break;
                             case 422:
                             case 400:
-                                setErrors(res.errors)
+                                setErrors(res.errors!)
                                 break;
                             case 500:
                                 break;

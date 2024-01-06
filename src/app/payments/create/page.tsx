@@ -23,6 +23,8 @@ import themes from 'devextreme/ui/themes';
 import { SellInvoice } from "@/models/invoice/sellInvoice";
 import { Autocomplete, TextField } from "@mui/material";
 import { Company } from "@/models/company";
+import { DatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
 
 const CreatePayment = () => {
@@ -79,13 +81,29 @@ const CreatePayment = () => {
                         {
                             lableText: "Date",
                             error: container.errors?.paymentDate,
-                            input: <MyItemInput
-                                className="w-72"
-                                type="date"
-                                name={myTools.propToString<CreateInterface>().paymentDate + ""}
-                                onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.paymentDate!}
+                            input: <DatePicker
+                                label="Invoice date"
+                                format='YYYY-MM-DD'
+                                value={dayjs(new Date(String(container.data?.paymentDate)))}
+                                onChange={(e) => {
+                                    const value = e == null ? undefined : e;
+                                    container.setData((prev) => ({ ...prev, invoiceDate: String(value) }))
+                                }}
+                                slotProps={{
+                                    textField: {
+                                        name: myTools.propToString<CreateInterface>().paymentDate + "",
+                                        helperText: container.errors.paymentDate,
+                                        error: container.errors.paymentDate !== undefined,
+                                    },
+                                }}
                             />
+                            // <MyItemInput
+                            //     className="w-72"
+                            //     type="date"
+                            //     name={myTools.propToString<CreateInterface>().paymentDate + ""}
+                            //     onChange={container.inputHandeler}
+                            //     value={container.data == undefined ? "" : container.data.paymentDate!}
+                            // />
                         },
                         {
                             lableText: "Number",

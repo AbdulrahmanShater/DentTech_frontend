@@ -12,7 +12,7 @@ export interface CreateInterface {
     customer?: number;
     invoiceNumber?: number;
     reference?: string;
-    invoiceDate?: number;
+    invoiceDate?: string;
     patientName?: string;
     fileNumber?: string;
     shade?: string;

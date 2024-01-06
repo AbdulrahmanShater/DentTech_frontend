@@ -30,6 +30,7 @@ import PrintIcon from '@mui/icons-material/Print';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import StatmentPdf, { StatmentPdfType } from '@/pdf/Statment';
 
+import dayjs from "dayjs";
 
 import { Company } from '@/models/company';
 import AllInvoicesPdf from '@/pdf/AllInvoices';
@@ -48,7 +49,7 @@ export default function ReportPage() {
 
     const selectedCompany = useMemo(() => {
         containerCompany.data.filter((f) => Number(f.id) == Number(container.filterData.companyId))[0]
-        if (containerCompany.data.length == 0 || container.filterData.companyId == undefined) return undefined;
+        if (containerCompany.data.length == 0 || container.filterData.companyId == undefined || container.filterData.companyId == null) return undefined;
         const company: Company[] = containerCompany.data.filter((f) => Number(f.id) == Number(container.filterData.companyId));
         return company.length == 0 ? undefined : company[0];
 
@@ -136,7 +137,7 @@ export default function ReportPage() {
                             containerCompany.data.map((value) => ({ label: value.name, id: value.id }))
                         }
                         onChange={(event, value) => {
-                            const v = value == null ? undefined : value.id;
+                            const v = value == null ? null : value.id;
                             container.setFilterDate((prev) => ({ ...prev, companyId: v }))
                         }}
                         sx={{ width: 200 }}
@@ -158,7 +159,7 @@ export default function ReportPage() {
                                 selectedCompany!.users.map((value) => ({ label: `${value.firstName} ${value.lastName}`, id: value.id }))
                         }
                         onChange={(event, value) => {
-                            const v = value == null ? undefined : value.id;
+                            const v = value == null ? null : value.id;
                             container.setFilterDate((prev) => ({ ...prev, userId: v }))
                         }}
                         sx={{ width: 200 }}
@@ -174,10 +175,12 @@ export default function ReportPage() {
                     <DatePicker
                         label="Begin date"
                         format='YYYY-MM-DD'
-                        value={container.filterData.beginDate}
+                        // value={container.filterData.beginDate}
+                        value={dayjs(new Date(String(container.filterData.beginDate)))}
                         onChange={(e) => {
                             const value = e == null ? undefined : e;
-                            container.setFilterDate((prev) => ({ ...prev, beginDate: value }))
+                            // console.log(value)
+                            container.setFilterDate((prev) => ({ ...prev, beginDate: String(value) }))
                         }}
                         slotProps={{
                             textField: {
@@ -191,10 +194,10 @@ export default function ReportPage() {
                     <DatePicker
                         label="End date"
                         format='YYYY-MM-DD'
-                        value={container.filterData.endDate}
+                        value={dayjs(new Date(String(container.filterData.endDate)))}
                         onChange={(e) => {
                             const value = e == null ? undefined : e;
-                            container.setFilterDate((prev) => ({ ...prev, endDate: value }))
+                            container.setFilterDate((prev) => ({ ...prev, endDate: String(value) }))
                         }}
                         slotProps={{
                             textField: {

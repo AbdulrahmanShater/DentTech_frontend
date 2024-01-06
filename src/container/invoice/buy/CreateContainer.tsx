@@ -34,6 +34,13 @@ export default function CreateContainer() {
 
     const [errors, setErrors] = useState<CreateER>({});
 
+
+    useEffect(() => {
+        setData({
+            invoiceDate: dayjs().format('YYYY-MM-DD')
+        });
+    }, [])
+
     const discountValue: number = useMemo(() => {
         var discount = 0;
         if (data?.discount != undefined) {
@@ -130,8 +137,11 @@ export default function CreateContainer() {
                 if (!props.reInter) {
                     document.location.replace("/")
                 }
+
                 if (props.clearData) {
-                    setData({})
+                    setData({
+                        invoiceDate: dayjs().format('YYYY-MM-DD')
+                    });
                 }
             })
             .catch((error) => {

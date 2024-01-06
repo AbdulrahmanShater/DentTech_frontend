@@ -21,6 +21,8 @@ import ToolTip from "@/components/ToolTip";
 import { MySelect } from "@/components/Input";
 import { Customer } from "@/models/customer";
 import { Autocomplete, TextField } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
 const CreateCustomer = () => {
 
@@ -75,13 +77,29 @@ const CreateCustomer = () => {
                         {
                             lableText: "Date",
                             error: container.errors?.invoiceDate,
-                            input: <MyItemInput
-                                className="w-72"
-                                type="date"
-                                name={myTools.propToString<CreateInterface>().invoiceDate + ""}
-                                onChange={container.inputHandeler}
-                                value={container.data == undefined ? "" : container.data.invoiceDate!}
+                            input: <DatePicker
+                                label="Invoice date"
+                                format='YYYY-MM-DD'
+                                value={dayjs(new Date(String(container.data.invoiceDate)))}
+                                onChange={(e) => {
+                                    const value = e == null ? undefined : e;
+                                    container.setData((prev) => ({ ...prev, invoiceDate: String(value) }))
+                                }}
+                                slotProps={{
+                                    textField: {
+                                        name: myTools.propToString<CreateInterface>().invoiceDate + "",
+                                        helperText: container.errors.invoiceDate,
+                                        error: container.errors.invoiceDate !== undefined,
+                                    },
+                                }}
                             />
+                            //  <MyItemInput
+                            //     className="w-72"
+                            //     type="date"
+                            //     name={myTools.propToString<CreateInterface>().invoiceDate + ""}
+                            //     onChange={container.inputHandeler}
+                            //     value={container.data == undefined ? "" : container.data.invoiceDate!}
+                            // />
                         },
                         // {
                         //     lableText: "Number",

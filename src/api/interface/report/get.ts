@@ -2,10 +2,12 @@ import { BaseJsonResponse } from "@/api/config/BaseJson";
 import { SellInvoice } from "@/models/invoice/sellInvoice";
 
 export interface GetReportInterface {
-    companyId?: number,
-    userId?: number,
+    companyId?: number | null,
+    userId?: number | null,
     beginDate?: string,
     endDate?: string,
+    // beginDate?: string,
+    // endDate?: string,
 }
 
 export interface GetReportInterfaceER {

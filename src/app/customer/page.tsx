@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Customer } from "../../models/customer";
+import { Customer, CustomerCompany } from "../../models/customer";
 import DropdownFilter from "./DropdownFilter";
 import { AiOutlineDelete, AiOutlineEdit, AiOutlineInfoCircle, AiOutlinePlus } from "react-icons/ai";
 import { useMemo, useState } from "react";
@@ -33,6 +33,10 @@ export default function CustomerPage() {
                 Cell: ({ renderedCellValue, row }) => {
                     return `${row.original.firstName} ${row.original.lastName}`;
                 }
+            },
+            {
+                header: 'Company',
+                accessorKey: myTools.propToString<Customer>().company + '.' + myTools.propToString<CustomerCompany>().name,
             },
             {
                 header: 'Email',
